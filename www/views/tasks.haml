@@ -1,0 +1,7 @@
+
+.ui.vertical.menu
+  - tasks = CombinationIndex.exec_exports + CombinationIndex.synchronous_exports + CombinationIndex.asynchronous_exports
+  - tasks.sort.each do |task|
+    - url = '/CombinationIndex/' << task.to_s
+    %a.item(href=url)= task.to_s
+

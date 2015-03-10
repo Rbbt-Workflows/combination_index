@@ -1,0 +1,104 @@
+- if job 
+  .job_control
+    = workflow_partial('job_result/job_control', workflow, task, locals)
+- ci_value = result
+- iii job.info
+- inputs = job.info[:inputs].dup
+
+- m, dm = CombinationIndex.m_dm(inputs[:dose_d1_1], inputs[:effect_d1_1], inputs[:dose_d1_2], inputs[:effect_d1_2])
+- inputs[:m_d1] = m
+- inputs[:dm_d1] = dm
+
+- m, dm = CombinationIndex.m_dm(inputs[:dose_d2_1], inputs[:effect_d2_1], inputs[:dose_d2_2], inputs[:effect_d2_2])
+- inputs[:m_d2] = m
+- inputs[:dm_d2] = dm
+
+
+%dl
+  %dt Combination Index value
+  %dd= ci_value
+  %dt Direction
+  %dd
+    - case
+    - when ci_value > 2.5
+      Strong Antagonism
+    - when ci_value > 1.5
+      Antagonism
+    - when ci_value > 0.5
+      Mild Antagonism
+    - when ci_value < 2.5
+      Strong Synergy
+    - when ci_value < 1.5
+      Synergy
+    - when ci_value < 0.5
+      Mild Synergy
+    - else
+      None
+
+
+:ruby
+  plot_script =<<-EOF
+    source('#{Rbbt.share.R["CI.R"].find}')
+
+    dose_d1_1 = #{R.ruby2R inputs[:dose_d1_1].to_f}
+    dose_d1_2 = #{R.ruby2R inputs[:dose_d1_2].to_f}
+    dose_d2_1 = #{R.ruby2R inputs[:dose_d2_1].to_f}
+    dose_d2_2 = #{R.ruby2R inputs[:dose_d2_2].to_f}
+    dose_d1_c = #{R.ruby2R inputs[:dose_c_d1].to_f}
+    dose_d2_c = #{R.ruby2R inputs[:dose_c_d2].to_f}
+    combination_dose = dose_d1_c + dose_d2_c
+
+    effect_d1_1 = #{R.ruby2R inputs[:effect_d1_1].to_f}
+    effect_d1_2 = #{R.ruby2R inputs[:effect_d1_2].to_f}
+    effect_d2_1 = #{R.ruby2R inputs[:effect_d2_1].to_f}
+    effect_d2_2 = #{R.ruby2R inputs[:effect_d2_2].to_f}
+    effect_c = #{R.ruby2R inputs[:effect_c].to_f}
+
+    dose_2 = #{R.ruby2R inputs[:dose_d2].to_f}
+    dm_1 = #{R.ruby2R inputs[:dm_d1].to_f}
+    dm_2 = #{R.ruby2R inputs[:dm_d2].to_f}
+    m_1 = #{R.ruby2R inputs[:m_d1].to_f}
+    m_2 = #{R.ruby2R inputs[:m_d2].to_f}
+
+    ratio_1 = 1 + dose_d2_c/dose_d1_c
+    ratio_2 = 1 + dose_d1_c/dose_d2_c
+
+    data.me_1 = CI.me_curve(m_1, dm_1)
+    data.me_2 = CI.me_curve(m_2, dm_2)
+    data.add = CI.add_curve(m_1, m_2, dm_1, dm_2, dose_d1_c, dose_d2_c)
+
+    data.me_1$Dose = data.me_1$Dose * ratio_1
+    data.me_2$Dose = data.me_2$Dose * ratio_2
+
+    ggplot(data.me_1) + 
+      geom_line(data=data.me_1, aes(x=Dose, y=Effect), col='red') +
+      geom_line(data=data.me_2, aes(x=Dose, y=Effect), col='blue') +
+      geom_line(data=data.add, aes(x=Dose, y=Effect), col='black') +
+      scale_x_log10(limits=c(min(c(data.me_1$Dose, data.me_2$Dose)),max(c(data.me_1$Dose, data.me_2$Dose)))) + annotation_logticks() +
+
+      geom_point(x=log10(combination_dose), y=effect_c, cex=5) +
+
+      geom_point(x=log10(dose_d1_1 * ratio_1), y=effect_d1_1, cex=5, col='red') +
+      geom_point(x=log10(dose_d1_2 * ratio_1), y=effect_d1_2, cex=5, col='red') +
+
+      geom_point(x=log10(dose_d2_1 * ratio_2), y=effect_d2_1, cex=5, col='blue') +
+      geom_point(x=log10(dose_d2_2 * ratio_2), y=effect_d2_2, cex=5, col='blue') 
+
+    #ggplot(data) + geom_point(aes(x=combination_doses, y=effects, col = names), cex=5) +
+      #scale_x_log10()
+
+  EOF
+
+.image.svg(style="height:5in;width:5in")
+  = R::SVG.ggplotSVG nil, plot_script, 5, 5, :R_method => :shell, :title => "M Dm plot"
+  .caption
+
+    Doses represent combination dosages following the ratio from the two drugs
+    (#{inputs[:dose_c_d1]} / #{inputs[:dose_c_d2]}).  The point represents the
+    combination dosage and effect. The red (drug 1) and blue (drug 2) lines
+    represent the response for each drug respectively if they where combined
+    with a neutral buffer at the same ratio. The black line represents the
+    additive effect. The combination dose/effect can be compared directly with
+    each drug separatedly and with the theoretical additive effect.
+
+

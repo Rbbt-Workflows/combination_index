@@ -1,0 +1,38 @@
+- if job 
+  .job_control
+    = workflow_partial('job_result/job_control', workflow, task, locals)
+- m, dm = result
+- inputs = job.info[:inputs]
+
+%dl
+  %dt M
+  %dd= m
+  %dt Dm
+  %dd= dm
+
+:ruby
+  plot_script =<<-EOF
+    source('#{Rbbt.share.R["CI.R"].find}')
+    m = #{R.ruby2R m.to_f}
+    dm = #{R.ruby2R dm.to_f}
+    dose_1 = #{R.ruby2R inputs[:dose_1].to_f}
+    effect_1 = #{R.ruby2R inputs[:effect_1].to_f}
+    dose_2 = #{R.ruby2R inputs[:dose_2].to_f}
+    effect_2 = #{R.ruby2R inputs[:effect_2].to_f}
+
+    doses = c(dm, dose_1, dose_2)
+    effects = c(0.5, effect_1, effect_2)
+    dose_names = c('Median', 'Dose 1', 'Dose 2')
+
+    data = data.frame(Dose=doses, Effect=effects, names=dose_names)
+
+    data.me = CI.me_curve(m, dm)
+
+    ggplot(data) + geom_point(aes(x=Dose, y=Effect, col = names), cex=5) + 
+      geom_line(data=data.me, aes(x=Dose, y=Effect)) + 
+      scale_x_log10(limits=c(min(data.me$Dose),max(data.me$Dose)))
+
+  EOF
+
+.image.svg(style="height:5in;width:5in")
+  = R::SVG.ggplotSVG nil, plot_script, 5, 5, :R_method => :shell, :title => "M Dm plot"

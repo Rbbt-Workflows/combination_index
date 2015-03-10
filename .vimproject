@@ -1,0 +1,33 @@
+CombinationIndex=/$PWD filter="*.rb" {
+ workflow.rb
+
+ lib=lib{
+  sinatra.rb
+  combination_index.rb
+ }
+ share=share{
+  R=R{
+   CI.R
+  }
+ }
+
+ www=www filter="*.haml *.js *.sass"{
+  views=views{
+   tasks.haml
+   CombinationIndex=CombinationIndex{
+    m_dm=m_dm{
+     job_result.haml
+    }
+    ci_value=ci_value{
+     job_result.haml
+    }
+    combination_index=combination_index{
+     job_result.haml
+    }
+    combination_index_batch=combination_index_batch{
+     job_result.haml
+    }
+   }
+  }
+ }
+}
