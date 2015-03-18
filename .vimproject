@@ -2,8 +2,18 @@ CombinationIndex=/$PWD filter="*.rb" {
  workflow.rb
 
  lib=lib{
-  sinatra.rb
   combination_index.rb
+  sinatra.rb
+  tasks=tasks{
+   CI.rb
+  }
+  rbbt=rbbt{
+   util=util{
+    R=R{
+     svg.rb
+    }
+   }
+  }
  }
  share=share{
   R=R{
@@ -14,6 +24,7 @@ CombinationIndex=/$PWD filter="*.rb" {
  www=www filter="*.haml *.js *.sass"{
   views=views{
    tasks.haml
+   layout.haml
    CombinationIndex=CombinationIndex{
     m_dm=m_dm{
      job_result.haml

@@ -42,7 +42,7 @@ module CombinationIndex
     dose
   end
 
-  def self.fit_m_dm(doses, effects, model_file = nil)
+  def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5)
     pairs = doses.zip(effects).sort_by{|d,e| d }
 
     dose1, effect1, dose2, effect2 = nil
@@ -54,27 +54,45 @@ module CombinationIndex
       R.eval 'library(drc)'
       model = R::Model.new "Bootstrap m dm #{Misc.digest(data.inspect)}", "Effect ~ Dose", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
       begin
-        model.fit(data,'drm', :fct => ":LL.3()")
+        model.fit(data,'drm', :fct => ":LL.5()")
         mean = Misc.mean effects
 
-        cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - 0.5).abs}.first
-        middle_dose1, middle_effect1, middle_dose2, middle_effect2 = cmp.flatten
 
-        effect1 = 0.4
-        effect2 = 0.6
+        #effect1 = 0.4
+        #effect2 = 0.6
+
+        #max_dose = pairs.collect{|p| p.first.to_f}.max
+        #min_dose = pairs.collect{|p| p.first.to_f}.min
+
+        #dose1 = adjust_dose(model, effect1, min_dose, max_dose)
+        #dose2 = adjust_dose(model, effect2, min_dose, max_dose)
+        #effect1 = model.predict(dose1)
+        #effect2= model.predict(dose2)
+
+        #zipped = pairs[0..-2].zip(pairs[1..-1])
+        ##sorted_zipped = zipped.reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}
+        #sorted_zipped = zipped.sort_by{|p1,p2| (p1.last - median_point).abs}
+        #cmp = sorted_zipped.first
+        #median_dose1, median_effect1, median_dose2, median_effect2 = cmp.flatten
+
+        effect1 = median_point * 0.8
+        effect2 = median_point * 1.2
+        effect1 = 0.05 if effect1 < 0.05
+        effect2 = 0.95 if effect2 > 0.95
 
         max_dose = pairs.collect{|p| p.first.to_f}.max
         min_dose = pairs.collect{|p| p.first.to_f}.min
 
         dose1 = adjust_dose(model, effect1, min_dose, max_dose)
         dose2 = adjust_dose(model, effect2, min_dose, max_dose)
+
         effect1 = model.predict(dose1)
         effect2= model.predict(dose2)
 
       rescue Exception
         Log.warn "Fit exception: #{$!.message}"
         Log.exception $!
-        cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - 0.5).abs}.first
+        cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}.first
         dose1, effect1, dose2, effect2 = cmp.flatten
       end
     else
@@ -232,5 +250,111 @@ module CombinationIndex
     [drug_info, combination_info]
   end
 
+  def self.import_expanded(tsv, scale, invert)
+    drug_info = {}
+    combination_info = {}
 
+    if scale
+      values = tsv.values.collect{|v| v[1] }.flatten.uniq.collect{|v| v.to_f}
+      max = values.max
+      min = values.min
+    end
+
+    tsv.through do |k,values|
+      if k.include? '-'
+        combination_info[k] ||= []
+        values.zip_fields.each do |doses, response|
+          blue_dose, red_dose = doses.split("-")
+          response = response.to_f
+          response = (response - min) / (max - min) if scale 
+          response = 1.0 - [1.0, response].min if invert
+          response = response.round(5)
+          combination_info[k] << [blue_dose.to_f, red_dose.to_f, response]
+        end
+      else
+        drug_info[k] ||= []
+        values.zip_fields.each do |dose, response|
+          response = response.to_f
+          response = (response - min) / (max - min) if scale 
+          response = 1.0 - [1.0, response].min if invert
+          response = response.round(5)
+          drug_info[k] << [dose.to_f, response]
+        end
+      end
+    end
+
+    [drug_info, combination_info]
+  end
+
+  def self.import_compact(tsv, scale, invert)
+    drug_info = {}
+    combination_info = {}
+
+    if scale
+      values = tsv.values.collect{|v| v }.flatten.uniq.collect{|v| v.to_f}
+      max = values.max
+      min = values.min
+    end
+
+    tsv.through do |k,values|
+      values = values[0]
+      values = [values] unless Array === values
+      if k =~ /\s*set\s*(\d+)/
+        k = $`
+        set = $1
+      else
+        set = nil
+      end
+
+      next unless set == '5' #or set == '6'
+
+      begin
+        if k.include? '-'
+          blue_drug_info, red_drug_info = k.split("-")
+
+          blue_drug, blue_dose = blue_drug_info.split("=")
+          red_drug, red_dose = red_drug_info.split("=")
+          if blue_drug == red_drug
+
+            k = [blue_drug, (red_dose.to_f + blue_dose.to_f).to_s] * "="
+            raise TryAgain
+          end
+
+          combination = [blue_drug, red_drug] * "-"
+          combination_info[combination] ||= []
+
+          values.each do |response|
+            response = response.to_f
+            blue_dose = blue_dose.to_f
+          red_dose = red_dose.to_f
+
+          response = (response - min) / (max - min) if scale 
+          response = 1.0 - [1.0, response].min if invert
+          response = response.round(5)
+
+          combination_info[combination] << [blue_dose.to_f, red_dose.to_f, response, set]
+          end
+        else
+          drug, dose = k.split("=")
+
+          drug_info[drug] ||= []
+
+          values.each do |response|
+            response = response.to_f
+            dose = dose.to_f
+
+            response = (response - min) / (max - min) if scale 
+            response = 1.0 - [1.0, response].min if invert
+            response = response.round(5)
+
+            drug_info[drug] << [dose, response, set]
+          end
+        end
+      rescue TryAgain
+        retry
+      end
+    end
+
+    [drug_info, combination_info]
+  end
 end

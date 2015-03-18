@@ -1,0 +1,32 @@
+= partial_render('layout/doctype')
+
+%head
+  = partial_render('layout/header')
+%body.preload
+
+  :sass
+    .title > .logo
+      font-size: 4em
+      text-align: center
+    .ui.tabular.menu .active.item
+      margin-bottom: -2px
+
+
+  .ui.segment.title.bottom.attached
+    .ui.logo CI-binator
+
+
+  #content.ui.basic.segment
+    = yield
+
+
+  /{{{ FOOTER
+  /----------
+  #footer
+    =partial_render('layout/footer')
+
+  /{{{ CODA
+  /--------
+  #coda
+    =partial_render('layout/coda')
+

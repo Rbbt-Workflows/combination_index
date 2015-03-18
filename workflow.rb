@@ -92,9 +92,7 @@ module CombinationIndex
 
         ci_value = CombinationIndex.ci_value(dose1, dm1, m1, dose2, dm2, m2, effect)
         ci_value = ci_value.to_s
-        iii ci_value
         ci_value = nil if ci_value.to_s == "NaN"
-        iii ci_value
         ci_values[set][treatment] = ci_value
       end
     end
@@ -184,3 +182,5 @@ module CombinationIndex
   end
   export_asynchronous :combination_index_multiple
 end
+
+require_relative 'lib/tasks/CI.rb'
