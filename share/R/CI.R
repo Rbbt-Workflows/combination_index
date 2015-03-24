@@ -5,7 +5,7 @@ CI.eff_ratio = function(x){
 
 CI.add_curve = function(m_1, m_2, dm_1, dm_2, d_1, d_2){
     step = 0.00001
-    additive.levels = seq(step / 100,1 - step/100 ,by=step)
+    additive.levels = sample(seq(step / 100,1 - step/100 ,by=step), 500)
     additive.doses = sapply(additive.levels, function(level){ 
                             ratio = CI.eff_ratio(level); 
                             t1 =  d_1/(dm_1*(ratio^(1/m_1)))

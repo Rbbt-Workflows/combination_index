@@ -5,8 +5,9 @@ module CombinationIndex
   input :doses, :array, "Doses"
   input :effects, :array, "Effects 0 to 1"
   input :median_point, :float, "If fitted, point around which predictions are made", 0.5
+  input :model_type, :select, "Model type for the DRC fit", ":LL.5()", :select_options => [":LL.2()", ":LL.3()", ":LL.4()", ":LL.5()"]
   extension :svg
-  task :fit => :text do |doses,effects,median_point|
+  task :fit => :text do |doses,effects,median_point,model_type|
     doses = doses.collect{|v| v.to_f}
     effects = effects.collect{|v| v.to_f}
     median_point = median_point.to_f
@@ -21,12 +22,12 @@ module CombinationIndex
       FileUtils.mkdir_p files_dir
       modelfile = file(:model)
       if invert
-        m, dm, dose1, effect1, dose2, effect2  = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point)
-        m = - m
+        m, dm, dose1, effect1, dose2, effect2  = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
+        m = - m if m
         effect1 = 1.0 - effect1
         effect2 = 1.0 - effect2
       else
-        m, dm, dose1, effect1, dose2, effect2  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point)
+        m, dm, dose1, effect1, dose2, effect2  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
         raise "Error computing m and dm" if m.to_s == "NaN"
       end
 
@@ -49,7 +50,7 @@ module CombinationIndex
         #{ "model = rbbt.model.load('#{modelfile}'); data.drc$Effect = predict(model, data.drc);" if File.exists? modelfile}
         #{ "data.drc$Effect = data.me$Effect" unless File.exists? modelfile}
 
-        #{invert and File.exists?(modelfile) ? 'data.drc$Effect = 1 - data.drc$Effect' : ''}
+        #{(invert and File.exists?(modelfile)) ? 'data.drc$Effect = 1 - data.drc$Effect' : ''}
 
         ggplot(aes(x=Dose, y=Effect), data=data) +
           scale_x_log10() + annotation_logticks() +
@@ -62,6 +63,7 @@ module CombinationIndex
 
       R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell
     rescue Exception
+      Log.exception $!
       if invert
         raise $!
       else
@@ -84,15 +86,17 @@ module CombinationIndex
   input :red_dose, :float, "Blue combination dose"
   input :effect, :float, "Combination effect"
   input :fix_ratio, :boolean, "Fix combination ratio dose", false
+  input :model_type, :select, "Model type for the DRC fit", ":LL.5()", :select_options => [":LL.2()", ":LL.3()", ":LL.4()", ":LL.5()"]
   extension :svg
   dep do |jobname, options|
     median_point = options[:effect].to_f
+    model_type = options[:model_type]
     [
-      CombinationIndex.job(:fit, nil, :doses => options[:blue_doses], :effects => options[:blue_effects], :median_point => median_point),
-      CombinationIndex.job(:fit, nil, :doses => options[:red_doses], :effects => options[:red_effects], :median_point => median_point)
+      CombinationIndex.job(:fit, nil, :doses => options[:blue_doses], :effects => options[:blue_effects], :median_point => median_point, :model_type => model_type),
+      CombinationIndex.job(:fit, nil, :doses => options[:red_doses], :effects => options[:red_effects], :median_point => median_point, :model_type => model_type)
     ]
   end
-  task :ci => :text do |blue_doses,blue_effects,red_doses,red_effects,blue_dose,red_dose,effect,fix_ratio|
+  task :ci => :text do |blue_doses,blue_effects,red_doses,red_effects,blue_dose,red_dose,effect,fix_ratio,model_type|
     blue_step, red_step = dependencies
     blue_doses = blue_doses.collect{|v| v.to_f}
     blue_effects = blue_effects.collect{|v| v.to_f}
@@ -114,6 +118,12 @@ module CombinationIndex
 
     red_m, red_dm, red_dose_1, red_effect_1, red_dose_2, red_effect_2, red_invert  = red_step.info.values_at :m, :dm, :dose1, :effect1, :dose2, :effect2, :invert
     red_modelfile = red_step.file(:model)
+
+    if Float === blue_dm and Float === red_dm
+      set_info :CI, CombinationIndex.ci_value(blue_dose, blue_dm, blue_m, red_dose, red_dm, red_m, effect)
+    else
+      set_info :CI, nil
+    end
 
     svg = TmpFile.with_file do |blue_data|
       Open.write(blue_data, blue_tsv.to_s)

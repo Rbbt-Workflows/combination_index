@@ -23,8 +23,8 @@ CombinationIndex=/$PWD filter="*.rb" {
 
  www=www filter="*.haml *.js *.sass"{
   views=views{
-   tasks.haml
    layout.haml
+   tasks.haml
    CombinationIndex=CombinationIndex{
     m_dm=m_dm{
      job_result.haml
@@ -37,6 +37,20 @@ CombinationIndex=/$PWD filter="*.rb" {
     }
     combination_index_batch=combination_index_batch{
      job_result.haml
+    }
+   }
+   public=public{
+    js=js{
+     require.js
+
+     rbbt.basic.js
+     rbbt.job.js
+
+     rbbt.views.js
+     rbbt.ci.js
+     rbbt.ci.controls.js
+     rbbt.ci.drugs.js
+     rbbt.ci.combinations.js
     }
    }
   }

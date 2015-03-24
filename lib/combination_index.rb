@@ -42,7 +42,7 @@ module CombinationIndex
     dose
   end
 
-  def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5)
+  def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5, model_type=':LL.5()')
     pairs = doses.zip(effects).sort_by{|d,e| d }
 
     dose1, effect1, dose2, effect2 = nil
@@ -54,9 +54,8 @@ module CombinationIndex
       R.eval 'library(drc)'
       model = R::Model.new "Bootstrap m dm #{Misc.digest(data.inspect)}", "Effect ~ Dose", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
       begin
-        model.fit(data,'drm', :fct => ":LL.5()")
+        model.fit(data,'drm', :fct => model_type)
         mean = Misc.mean effects
-
 
         #effect1 = 0.4
         #effect2 = 0.6
