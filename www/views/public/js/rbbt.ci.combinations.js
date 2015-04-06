@@ -24,9 +24,7 @@ ci.combinations.controller = function(){
 
 
     if (undefined === meassurement) {
-      var combination_info
       var values = ci.combination_info[combination][0]
-
       var blue_dose = values[0]
       var red_dose = values[1]
       var effect = values[2]
@@ -37,6 +35,12 @@ ci.combinations.controller = function(){
       var effect = parseFloat(values[2])
     }
 
+    var all_values = ci.combination_info[combination]
+    console.log(all_values)
+    var more_doses = all_values.map(function(a){ return a[0] + a[1]})
+    var more_effects = all_values.map(function(a){ return a[2]})
+    console.log(more_doses)
+
     var model_type = ci.controls.vm.model_type()
 
     var fix_ratio = ci.controls.vm.fix_ratio()
@@ -44,6 +48,8 @@ ci.combinations.controller = function(){
     var job_error = function(e){ci.combinations.vm.plot.content = m.prop('<div class="ui error message">Error producing plot</div>') }
 
     var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type }
+    inputs.more_doses = more_doses
+    inputs.more_effects = more_effects
 
     var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
@@ -208,7 +214,8 @@ ci.combinations.view.combination_details.measurement_new = function(controller, 
   var effect_input = m('.ui.small.input', [m('label', 'Effect'), m('input', {type: 'text', value: ci.combinations.vm.effect(),  onchange: m.withAttr('value', ci.combinations.vm.effect)})])
   var submit = m('input[type=submit].ui.submit.button', {'data-combination': combination, onclick: m.withAttr('data-combination', ci.combinations.vm.add_measurement), value: 'Add measurement'})
   var display_plot = m('input[type=submit].ui.submit.button', {'data-combination': combination, onclick: m.withAttr('data-combination', controller.draw_CI), value: 'Display plot'})
-  var buttons = m('.ui.buttons', [submit, display_plot])
+  //var buttons = m('.ui.buttons', [submit, display_plot])
+  var buttons = m('.ui.buttons', submit)
   var form = m('.ui.form', [blue_dose_input, red_dose_input, effect_input, buttons])
   return form
 }
@@ -228,7 +235,8 @@ ci.combinations.view.combination_details.measurement_table = function(controller
 
 ci.combinations.view.combination_details.measurement_row = function(controller, blue_dose, red_dose, effect){
   var remove = m('i.ui.icon.minus', {measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', ci.combinations.vm.remove_measurement)})
-  var plot = m('i.ui.icon.send', {measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', controller.draw_CI)})
+  //var plot = m('i.ui.icon.send', {measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', controller.draw_CI)})
+  var plot = m('input[type=submit].ui.submit.button', {measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', controller.draw_CI),value: "Plot"})
   return m('tr', [m('td', blue_dose), m('td', red_dose), m('td', effect), m('td', [remove, plot])])
 }
 

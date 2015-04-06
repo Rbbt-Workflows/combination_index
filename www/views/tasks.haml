@@ -41,7 +41,7 @@
     table
       th,td
         display: inline-block
-        height: 2.5em
+        height: 4em
         overflow: hidden
         text-overflow: ellipsis
         &:nth-child(1)
@@ -51,9 +51,9 @@
         &:nth-child(3)
           width: 8em
         &:nth-child(4)
-          width: 6em
+          width: 10em
       th:nth-child(4)
-        width: calc(6em + 24px)
+        width: calc(10em + 24px)
 
 
   dl.measurements
@@ -136,7 +136,14 @@
 
 :deferjs
   $('#import form input[type=submit]').click(function(){
-    $('#import form').ajaxSubmit(function(response){data = JSON.parse(response);rbbt.ci.drug_info = data.drug_info; rbbt.ci.combination_info = data.combination_info; m.redraw()})
+    $('#import form').ajaxSubmit(function(response){
+      data = JSON.parse(response);
+      rbbt.ci.drug_info = data.drug_info;
+      rbbt.ci.combination_info = data.combination_info; 
+      rbbt.ci.drugs.vm.save()
+      rbbt.ci.combinations.vm.save()
+      m.redraw()
+    })
     return false
   })
   $('table').tablesorter()

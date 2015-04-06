@@ -87,6 +87,8 @@ module CombinationIndex
   input :effect, :float, "Combination effect"
   input :fix_ratio, :boolean, "Fix combination ratio dose", false
   input :model_type, :select, "Model type for the DRC fit", ":LL.5()", :select_options => [":LL.2()", ":LL.3()", ":LL.4()", ":LL.5()"]
+  input :more_doses, :array, "More combination dose"
+  input :more_effects, :array, "More combination effects"
   extension :svg
   dep do |jobname, options|
     median_point = options[:effect].to_f
@@ -96,7 +98,7 @@ module CombinationIndex
       CombinationIndex.job(:fit, nil, :doses => options[:red_doses], :effects => options[:red_effects], :median_point => median_point, :model_type => model_type)
     ]
   end
-  task :ci => :text do |blue_doses,blue_effects,red_doses,red_effects,blue_dose,red_dose,effect,fix_ratio,model_type|
+  task :ci => :text do |blue_doses,blue_effects,red_doses,red_effects,blue_dose,red_dose,effect,fix_ratio,model_type,more_doses,more_effects|
     blue_step, red_step = dependencies
     blue_doses = blue_doses.collect{|v| v.to_f}
     blue_effects = blue_effects.collect{|v| v.to_f}
@@ -208,6 +210,9 @@ module CombinationIndex
             geom_line(data=data.add, col='black', cex=2) +
 
             geom_point(x=log10(#{blue_dose + red_dose}), y=#{effect}, col='black',cex=5) +
+
+            #{(more_doses and more_doses.any?) ? (more_doses.zip(more_effects).collect{|d,e|"geom_point(x=log10(#{d.to_f}), y=#{e.to_f},col='black',cex=3) +" } * "\n" + "\n") : ''}
+          
             geom_point(data=data.blue_me_points, col='blue',cex=5)  +
             geom_point(data=data.red_me_points, col='red',cex=5) 
         EOF
