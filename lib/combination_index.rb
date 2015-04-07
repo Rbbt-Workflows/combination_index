@@ -49,50 +49,72 @@ module CombinationIndex
     if pairs.collect{|p| p.first }.uniq.length > 2 
 
       data = TSV.setup({}, :key_field => "Sample", :fields => ["Dose", "Effect"], :type => :list, :cast => :to_f)
-      pairs.each{|p| data[p.first] = p }
+      pairs.each{|p| 
+        k = _k = p.first.to_s
+        i = 1
+        while data.include? k
+          i += 1
+          k = _k + ' (' + i.to_s + ')'
+        end
 
-      R.eval 'library(drc)'
-      model = R::Model.new "Bootstrap m dm #{Misc.digest(data.inspect)}", "Effect ~ Dose", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
-      begin
-        model.fit(data,'drm', :fct => model_type)
-        mean = Misc.mean effects
+        data[k] = p 
+      }
 
-        #effect1 = 0.4
-        #effect2 = 0.6
+      if model_type.to_s =~ /least_squares/
+        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
+        begin
+          model.fit(data,'lm')
+          mean = Misc.mean effects
 
-        #max_dose = pairs.collect{|p| p.first.to_f}.max
-        #min_dose = pairs.collect{|p| p.first.to_f}.min
+          effect1 = median_point * 0.8
+          effect2 = median_point * 1.2
+          effect1 = 0.05 if effect1 < 0.05
+          effect2 = 0.95 if effect2 > 0.95
 
-        #dose1 = adjust_dose(model, effect1, min_dose, max_dose)
-        #dose2 = adjust_dose(model, effect2, min_dose, max_dose)
-        #effect1 = model.predict(dose1)
-        #effect2= model.predict(dose2)
+          max_dose = pairs.collect{|p| p.first.to_f}.max
+          min_dose = pairs.collect{|p| p.first.to_f}.min
 
-        #zipped = pairs[0..-2].zip(pairs[1..-1])
-        ##sorted_zipped = zipped.reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}
-        #sorted_zipped = zipped.sort_by{|p1,p2| (p1.last - median_point).abs}
-        #cmp = sorted_zipped.first
-        #median_dose1, median_effect1, median_dose2, median_effect2 = cmp.flatten
+          dose1 = adjust_dose(model, Math.log(effect1), min_dose, max_dose)
+          dose2 = adjust_dose(model, Math.log(effect2), min_dose, max_dose)
 
-        effect1 = median_point * 0.8
-        effect2 = median_point * 1.2
-        effect1 = 0.05 if effect1 < 0.05
-        effect2 = 0.95 if effect2 > 0.95
+          effect1 = Math.exp model.predict(dose1)
+          effect2 = Math.exp model.predict(dose2)
 
-        max_dose = pairs.collect{|p| p.first.to_f}.max
-        min_dose = pairs.collect{|p| p.first.to_f}.min
+        rescue Exception
+          Log.warn "Fit exception: #{$!.message}"
+          Log.exception $!
+          cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}.first
+          dose1, effect1, dose2, effect2 = cmp.flatten
+        end
 
-        dose1 = adjust_dose(model, effect1, min_dose, max_dose)
-        dose2 = adjust_dose(model, effect2, min_dose, max_dose)
+      else
+        R.eval 'library(drc)'
+        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "Effect ~ Dose", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
+        begin
+          model.fit(data,'drm', :fct => model_type)
+          mean = Misc.mean effects
 
-        effect1 = model.predict(dose1)
-        effect2= model.predict(dose2)
 
-      rescue Exception
-        Log.warn "Fit exception: #{$!.message}"
-        Log.exception $!
-        cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}.first
-        dose1, effect1, dose2, effect2 = cmp.flatten
+          effect1 = median_point * 0.8
+          effect2 = median_point * 1.2
+          effect1 = 0.05 if effect1 < 0.05
+          effect2 = 0.95 if effect2 > 0.95
+
+          max_dose = pairs.collect{|p| p.first.to_f}.max
+          min_dose = pairs.collect{|p| p.first.to_f}.min
+
+          dose1 = adjust_dose(model, effect1, min_dose, max_dose)
+          dose2 = adjust_dose(model, effect2, min_dose, max_dose)
+
+          effect1 = model.predict(dose1)
+          effect2= model.predict(dose2)
+
+        rescue Exception
+          Log.warn "Fit exception: #{$!.message}"
+          Log.exception $!
+          cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}.first
+          dose1, effect1, dose2, effect2 = cmp.flatten
+        end
       end
     else
       dose1, dose2 = pairs.collect{|d,e| d}.uniq

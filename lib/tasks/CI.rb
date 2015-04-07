@@ -17,6 +17,7 @@ module CombinationIndex
       tsv[Misc.hash2md5(:values => [dose,effect] * ":")] = [dose, effect]
     end
 
+    log = true if model_type =~ /least_squares/
     invert = false
     begin
       FileUtils.mkdir_p files_dir
@@ -49,6 +50,8 @@ module CombinationIndex
 
         #{ "model = rbbt.model.load('#{modelfile}'); data.drc$Effect = predict(model, data.drc);" if File.exists? modelfile}
         #{ "data.drc$Effect = data.me$Effect" unless File.exists? modelfile}
+        #{ "data.drc$Effect = exp(data.drc$Effect)" if File.exists?(modelfile) and log}
+        #{ "data.drc$Effect[data.drc$Effect > 1] = 1" if File.exists?(modelfile) and log}
 
         #{(invert and File.exists?(modelfile)) ? 'data.drc$Effect = 1 - data.drc$Effect' : ''}
 
@@ -121,6 +124,8 @@ module CombinationIndex
     red_m, red_dm, red_dose_1, red_effect_1, red_dose_2, red_effect_2, red_invert  = red_step.info.values_at :m, :dm, :dose1, :effect1, :dose2, :effect2, :invert
     red_modelfile = red_step.file(:model)
 
+    log = true if model_type =~ /least_squares/
+
     if Float === blue_dm and Float === red_dm
       set_info :CI, CombinationIndex.ci_value(blue_dose, blue_dm, blue_m, red_dose, red_dm, red_m, effect)
     else
@@ -165,6 +170,8 @@ module CombinationIndex
           blue_model = rbbt.model.load('#{blue_modelfile}');
           data.blue_drc = data.frame(Dose=data.blue_me$Dose);
           data.blue_drc$Effect = predict(blue_model, data.blue_drc);
+          #{"data.blue_drc$Effect = exp(data.blue_drc$Effect)" if log}
+          #{"data.blue_drc$Effect[data.blue_drc$Effect > 1] = 1" if log}
           #{"data.blue_drc$Effect = 1 - data.blue_drc$Effect" if blue_invert}
 
           data.add = CI.add_curve(blue_m, red_m, blue_dm, red_dm, #{blue_dose}, #{red_dose})
@@ -177,6 +184,8 @@ module CombinationIndex
           red_model = rbbt.model.load('#{red_modelfile}');
           data.red_drc = data.frame(Dose=data.red_me$Dose);
           data.red_drc$Effect = predict(red_model, data.red_drc);
+          #{"data.red_drc$Effect = exp(data.red_drc$Effect)" if log}
+          #{"data.red_drc$Effect[data.red_drc$Effect > 1] = 1" if log}
           #{"data.red_drc$Effect = 1 - data.red_drc$Effect" if red_invert}
 
           blue_ratio = #{blue_dose + red_dose}/#{blue_dose}
