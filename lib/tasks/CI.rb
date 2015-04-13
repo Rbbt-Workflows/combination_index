@@ -55,7 +55,9 @@ module CombinationIndex
 
         #{(invert and File.exists?(modelfile)) ? 'data.drc$Effect = 1 - data.drc$Effect' : ''}
 
-        ggplot(aes(x=Dose, y=Effect), data=data) +
+        min.effect=min(c(0,data.me$Effect, data.drc$Effect, data.me_points$Effect))
+        max.effect=max(c(1,data.me$Effect, data.drc$Effect, data.me_points$Effect))
+        ggplot(aes(x=Dose, y=Effect), data=data, ylim=c(min.effect,max.effect)) +
           scale_x_log10() + annotation_logticks() +
           geom_line(data=data.me, col='blue', cex=2) +
           geom_line(data=data.drc, col='blue', linetype='dashed',cex=2) +
@@ -203,7 +205,20 @@ module CombinationIndex
           data.red_drc$Dose = data.red_drc$Dose * red_ratio
           data.red_me_points$Dose = data.red_me_points$Dose * red_ratio
 
+          min.effect=min(c(0,#{ effect.to_f },data.blue_me_points$Effect, data.blue_drc$Effect))
+          max.effect=max(c(1,#{ effect.to_f },data.blue_me_points$Effect, data.blue_drc$Effect))
+
+          min.effect=min(c(min.effect,data.red_me_points$Effect, data.red_drc$Effect))
+          max.effect=max(c(max.effect,data.red_me_points$Effect, data.red_drc$Effect))
+
+          #{if more_effects and more_effects.any?; 
+            "min.effect=min(c(min.effect, #{R.ruby2R more_effects.collect{|v| v.to_f}}))\n" +
+            "max.effect=max(c(max.effect, #{R.ruby2R more_effects.collect{|v| v.to_f}}))"
+            end
+          }
+
           ggplot(aes(x=as.numeric(Dose), y=as.numeric(Effect)), data=blue_data) + 
+            ylim(min.effect, max.effect) +
             scale_x_log10() + annotation_logticks() +
             xlab("Combination dose") +
             ylab("Effect") +

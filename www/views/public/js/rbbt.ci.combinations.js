@@ -36,10 +36,8 @@ ci.combinations.controller = function(){
     }
 
     var all_values = ci.combination_info[combination]
-    console.log(all_values)
     var more_doses = all_values.map(function(a){ return a[0] + a[1]})
     var more_effects = all_values.map(function(a){ return a[2]})
-    console.log(more_doses)
 
     var model_type = ci.controls.vm.model_type()
 

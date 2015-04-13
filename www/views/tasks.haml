@@ -70,11 +70,63 @@
 .ui.basic.segment#drugs
 .ui.basic.segment#combinations
 
+.ui.basic.segment#export
+  .ui.header
+    Export data
+  .content
+    .ui.button
+      Export
+
+  :deferjs
+    $('#export .ui.button').click(function(){
+      var content = "#Treatment\tDose\tEffect\n"
+
+      for (drug in rbbt.ci.drug_info){
+        var line = ""
+        var regimes = rbbt.ci.drug_info[drug]
+        var doses = []
+        var effects = []
+
+        line = line + drug + "\t"
+        
+        for (i = 0; i < regimes.length; i++){
+          var pair = regimes[i]
+          doses.push(pair[0])
+          effects.push(pair[1])
+        }
+        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+
+        content = content + line
+      }
+
+      for (combination in rbbt.ci.combination_info){
+        var line = ""
+        var regimes = rbbt.ci.combination_info[combination]
+        var doses = []
+        var effects = []
+
+        line = line + combination + "\t"
+        
+        console.log(regimes)
+        for (i = 0; i < regimes.length; i++){
+          var pair = regimes[i]
+          doses.push([pair[0],pair[1]].join("-"))
+          effects.push(pair[2])
+        }
+        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+
+        content = content + line
+      }
+
+      var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, "CI-binator-export.txt");
+    })
+
 .ui.basic.segment#import
   .ui.header
     Import data
   .content
-    = action_parameters nil, {}, :action => '/import', :method => 'POST' do
+    = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
       - input :file, :file, "Data file"
       - input :scale, :boolean, "Scale effect"
       - input :invert, :boolean, "Invert effect"
@@ -161,9 +213,11 @@
      
 :deferjs
   //require(['rbbt.job', 'rbbt.ci', 'rbbt.ci.drugs', 'rbbt.ci.combinations'], function(args){
-  require(['rbbt.job', 'rbbt.views', 'rbbt.ci','rbbt.ci.controls', 'rbbt.ci.combinations', 'rbbt.ci.drugs'], function(args){
-    m.module(document.getElementById("controls"), rbbt.ci.controls)
-    m.module(document.getElementById("drugs"), rbbt.ci.drugs)
-    m.module(document.getElementById("combinations"), rbbt.ci.combinations)
+  require(['rbbt.job', 'rbbt.views', 'rbbt.ci'], function(args){
+    require(['rbbt.ci.controls', 'rbbt.ci.combinations', 'rbbt.ci.drugs'], function(args){
+      m.module(document.getElementById("controls"), rbbt.ci.controls)
+      m.module(document.getElementById("drugs"), rbbt.ci.drugs)
+      m.module(document.getElementById("combinations"), rbbt.ci.combinations)
+    })
   })
 
