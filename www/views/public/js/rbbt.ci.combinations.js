@@ -119,12 +119,12 @@ ci.combinations.vm = (function(){
 
     vm.add_measurement = function(){
       var combination = vm.combination()
-      var red_dose = vm.red_dose()
       var blue_dose = vm.blue_dose()
+      var red_dose = vm.red_dose()
       var effect = vm.effect()
 
       if (undefined === ci.combination_info[combination]) ci.combination_info[combination] = {}
-      ci.combination_info[combination].push([parseFloat(red_dose), parseFloat(blue_dose), parseFloat(effect)])
+      ci.combination_info[combination].push([parseFloat(blue_dose), parseFloat(red_dose), parseFloat(effect)])
       vm.save()
       return false
     }
@@ -143,6 +143,14 @@ ci.combinations.vm = (function(){
       vm.save()
       return false
     }
+
+    vm.remove_combination = function(combination){
+     delete ci.combination_info[combination]
+     vm.save()
+     vm.combination(Object.keys(ci.combination_info)[0])
+     m.redraw()
+     return false
+    }
   }
   return vm
 }())
@@ -151,16 +159,6 @@ ci.combinations.view = function(controller){
 
   return ci.combinations.view.combination_details(controller)
 }
-
-//ci.combinations.view.new_combination = function(controller){
-//  var drug1 = m('.ui.input', m('input[type=text]',  {onchange: m.withAttr('value', vm.combination.drug1), placeholder: "Drug 1"}))
-//  var drug2 = m('.ui.input', m('input[type=text]',  {onchange: m.withAttr('value', vm.combination.drug2), placeholder: "Drug 2"}))
-//  var dose1 = m('.ui.input', m('input[type=text]',  {onchange: m.withAttr('value', vm.combination.dose1), placeholder: "Dose 1"}))
-//  var dose2 = m('.ui.input', m('input[type=text]',  {onchange: m.withAttr('value', vm.combination.dose2), placeholder: "Dose 2"}))
-//  var effect = m('.ui.input', m('input[type=text]', {onchange: m.withAttr('value', vm.combination.effect), placeholder: "Effect"}))
-//  var submit = m('input.ui.button.submit[type=submit]', {value: "Draw plot", onclick: controller.draw_CI})
-//  return [drug1, drug2, dose1, dose2, effect, submit]
-//}
 
 ci.combinations.view.combination_details = function(controller){
   var combination_details = []
@@ -181,9 +179,12 @@ ci.combinations.view.combination_details = function(controller){
 
     if (klass == 'active'){
       var table = ci.combinations.view.combination_details.measurement_table(controller, combination_info[combination])
+      var close_icon = m('.ui.close.icon.labeled.button', 
+                         {"data-combination": combination, onclick: m.withAttr("data-combination", ci.combinations.vm.remove_combination) },
+                         [m('i.icon.close'), "Remove combination"])
 
       var new_measurement = ci.combinations.view.combination_details.measurement_new(controller, combination)
-      details = m('.combination_details.ui.segment.tab.bottom.attached[data-tab=' + combination + ']', {class: klass}, [new_measurement, table])
+      details = m('.combination_details.ui.segment.tab.bottom.attached[data-tab=' + combination + ']', {class: klass}, [new_measurement, table, close_icon])
 
       combination_details.push(details)
     }

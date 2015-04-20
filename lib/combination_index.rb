@@ -6,11 +6,15 @@ module CombinationIndex
   end
 
   def self.m_dm(dose_1, effect_1, dose_2, effect_2, max_effect = 1)
+    max_effect = 1
     e_ratio1 = self.effect_ratio effect_1, max_effect
     e_ratio2 = self.effect_ratio effect_2, max_effect
 
     le1 = Math.log(e_ratio1)
     le2 = Math.log(e_ratio2)
+
+    #le1 = e_ratio1
+    #le2 = e_ratio2
 
     ld1 = Math.log(dose_1)
     ld2 = Math.log(dose_2)
@@ -65,8 +69,18 @@ module CombinationIndex
                   sorted[0][1] > sorted[-1][1]
                 end
 
+      max_dose = pairs.collect{|p| p.first.to_f}.max
+      min_dose = pairs.collect{|p| p.first.to_f}.min
+
+      max_effect = pairs.collect{|p| p.last.to_f}.max
+      min_effect = pairs.collect{|p| p.last.to_f}.min
+
+      median_point = max_effect * 0.9 if median_point > max_effect
+      median_point = min_effect * 1.1 if median_point < min_effect
+
       if model_type.to_s =~ /least_squares/
-        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
+        #model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
+        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect/(1-Effect)) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
         begin
           data.process "Effect" do |effect|
             if effect <= 0 
@@ -78,31 +92,21 @@ module CombinationIndex
           model.fit(data,'lm')
           mean = Misc.mean effects
 
-          max_dose = pairs.collect{|p| p.first.to_f}.max
-          min_dose = pairs.collect{|p| p.first.to_f}.min
-
-          max_effect = pairs.collect{|p| p.last.to_f}.max
-          min_effect = pairs.collect{|p| p.last.to_f}.min
-
-
-          median_point = max_effect * 0.9 if median_point > max_effect
-          median_point = min_effect * 1.1 if median_point < min_effect
-
           effect1 = median_point * 0.8
           effect2 = median_point * 1.2
           effect1 = 0.05 if effect1 < 0.05
           effect2 = 0.95 if effect2 > 0.95
 
-          dose1 = adjust_dose(model, Math.log(effect1), min_dose, max_dose, inverse)
-          dose2 = adjust_dose(model, Math.log(effect2), min_dose, max_dose, inverse)
+          dose1 = adjust_dose(model, effect1, min_dose, max_dose, inverse)
+          dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
 
           if (dose1 - dose2).abs < dose1 / 10
             dose1 -= dose1/10
             dose2 += dose2/10
           end
 
-          effect1 = Math.exp model.predict(dose1)
-          effect2 = Math.exp model.predict(dose2)
+          effect1 = Math.exp(model.predict(dose1)) / (1+Math.exp(model.predict(dose1)))
+          effect2 = Math.exp(model.predict(dose2)) / (1+Math.exp(model.predict(dose2)))
 
         rescue Exception
           Log.warn "Fit exception: #{$!.message}"
@@ -117,16 +121,7 @@ module CombinationIndex
         begin
           model.fit(data,'drm', :fct => model_type)
           mean = Misc.mean effects
-
-          max_dose = pairs.collect{|p| p.first.to_f}.max
-          min_dose = pairs.collect{|p| p.first.to_f}.min
-
-          max_effect = pairs.collect{|p| p.last.to_f}.max
-          min_effect = pairs.collect{|p| p.last.to_f}.min
-
-          median_point = max_effect * 0.9 if median_point > max_effect
-          median_point = min_effect * 1.1 if median_point < min_effect
-
+          
           effect1 = median_point * 0.8
           effect2 = median_point * 1.2
           effect1 = 0.05 if effect1 < 0.05
@@ -136,7 +131,7 @@ module CombinationIndex
           dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
 
           effect1 = model.predict(dose1)
-          effect2= model.predict(dose2)
+          effect2 = model.predict(dose2)
 
         rescue Exception
           Log.warn "Fit exception: #{$!.message}"
@@ -154,7 +149,9 @@ module CombinationIndex
     end
 
     begin
-      CombinationIndex.m_dm(dose1, effect1, dose2, effect2, 1) + [dose1, effect1, dose2, effect2]
+      max_effect = effect1 if effect1 > max_effect
+      max_effect = effect2 if effect2 > max_effect
+      CombinationIndex.m_dm(dose1, effect1, dose2, effect2, max_effect) + [dose1, effect1, dose2, effect2]
     rescue Exception
       Log.warn "M Dm exception: #{$!.message}"
       Log.exception $!

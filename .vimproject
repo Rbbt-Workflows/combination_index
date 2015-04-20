@@ -49,6 +49,7 @@ CombinationIndex=/$PWD filter="*.rb" {
 
      rbbt.ci.js
      rbbt.ci.controls.js
+
      rbbt.ci.drugs.js
      rbbt.ci.combinations.js
     }

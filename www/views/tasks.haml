@@ -15,6 +15,10 @@
       width: 50%
 
   #drugs, #combinations
+    .ui.close.icon.button
+      float: right
+      clear: both
+      margin-top: 1em
     table
       float: left
       tbody
@@ -161,6 +165,31 @@
 
       %li
         %a.load_example(href="#" task='combination_index_batch' name=name)= name
+
+      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["KU-GD"]
+      - name = File.basename(example_dir)
+      - task_info = workflow.task_info 'combination_index_batch'
+      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+
+      :javascript
+        example_inputs["#{ name }"] = #{inputs.to_json}
+
+      %li
+        %a.load_example(href="#" task='combination_index_batch' name=name)= name
+        
+      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Haagensen"]
+      - name = File.basename(example_dir)
+      - task_info = workflow.task_info 'combination_index_batch'
+      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+
+      :javascript
+        example_inputs["#{ name }"] = #{inputs.to_json}
+
+      %li
+        %a.load_example(href="#" task='combination_index_batch' name=name)= name
+
 
     :javascript
       defer(function(){

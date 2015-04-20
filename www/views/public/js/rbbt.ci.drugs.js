@@ -6,6 +6,7 @@ ci.drugs = {}
 
 ci.drugs.vm = (function(){
   var vm = {}
+
   vm.init = function(){
 
 
@@ -60,6 +61,15 @@ ci.drugs.vm = (function(){
       ci.drug_info[drug] = new_list
       vm.save()
       return false
+    }
+
+    vm.remove_drug = function(drug){
+     delete ci.drug_info[drug]
+     console.log(ci.drug_info)
+     vm.save()
+     vm.drug(Object.keys(ci.drug_info)[0])
+     m.redraw()
+     return false
     }
   }
   return vm
@@ -122,8 +132,11 @@ ci.drugs.view.drug_details = function(controller){
     if (klass == 'active'){
       var table = ci.drugs.view.drug_details.measurement_table(controller, drug_info[drug])
       var new_measurement = ci.drugs.view.drug_details.measurement_new(controller, drug)
+      var close_icon = m('.ui.close.icon.labeled.button', 
+                         {"data-drug": drug, onclick: m.withAttr("data-drug", ci.drugs.vm.remove_drug) },
+                         [m('i.icon.close'), "Remove drug"])
       var klass = (ci.drugs.vm.drug() == drug ? 'active' : '')
-      details = m('.drug_details.ui.segment.tab.bottom.attached[data-tab=' + drug + ']', {class: klass}, [new_measurement, table])
+      details = m('.drug_details.ui.segment.tab.bottom.attached[data-tab=' + drug + ']', {class: klass}, [new_measurement, table, close_icon])
       drug_details.push(details)
     }
   }
@@ -131,13 +144,6 @@ ci.drugs.view.drug_details = function(controller){
 
   var tabs = m('.ui.tabular.menu.top.attached', drug_tabs)
   var plot = rbbt.mview.plot(ci.drugs.vm.plot.content(), ci.drugs.vm.plot.title())
-
-  //var option_options = {onclick: m.withAttr('data-value', ci.drugs.vm.model_type)}
-  //var options = [m('.item[data-value=:LL.2()]',option_options, ":LL.2()"),m('.item[data-value=:LL.3()]',option_options, ":LL.3()"),m('.item[data-value=:LL.4()]',option_options, ":LL.4()"),m('.item[data-value=:LL.5()]',option_options, ":LL.5()")]
-  //var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', "DRC Method"),m('i.dropdown.icon'),m('.menu',options)])
-
-  //var median_point_input = m('.ui.small.input', [m('label', 'Median effect point'), m('input', {type: 'text', value: ci.drugs.vm.median_point(),  onchange: m.withAttr('value', ci.drugs.vm.median_point)})])
-  //var plot_column = m('.five.wide.column', [model_type_input, median_point_input, plot])
 
   var plot_column = m('.five.wide.column', plot)
   return m('.ui.three.column.grid', [m('.eleven.wide.column', [tabs, drug_details]), plot_column])

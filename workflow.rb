@@ -1,5 +1,9 @@
 require 'rbbt-util'
 require 'rbbt/workflow'
+require 'rbbt/util/R'
+require 'rbbt/util/R/svg'
+
+R.eval_a "library(drc)"
 
 require_relative 'lib/combination_index'
 

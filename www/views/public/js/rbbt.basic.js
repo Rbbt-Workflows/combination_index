@@ -30,4 +30,3 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
 
   return deferred.promise
 }
-

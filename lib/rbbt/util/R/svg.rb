@@ -4,6 +4,12 @@ module R
       width ||= 3
       height ||= 3
       values = []
+
+      options = options.dup
+
+      sources = [:plot, Rbbt.share.R["svg.R"].find(:lib), options[:source]].flatten.compact
+      options.delete :source
+
       if data
         data.each do |k,v|
           v = Array === v ? v : [v]
@@ -33,7 +39,7 @@ module R
         options[:R_open] ||= "colClasses=c('character'," + field_classes * ", " + ')'
 
         TmpFile.with_file nil, true, :extension => 'svg' do |tmpfile|
-          data.R <<-EOF, [:plot, Rbbt.share.R["svg.R"].find(:lib)], options
+          data.R <<-EOF, sources, options
   plot = { #{script} }
 
   rbbt.SVG.save('#{tmpfile}', plot, width = #{R.ruby2R width}, height = #{R.ruby2R height})
@@ -44,7 +50,7 @@ module R
       else
 
         TmpFile.with_file nil, true, :extension => 'svg' do |tmpfile|
-          R.run <<-EOF, [:plot, Rbbt.share.R["svg.R"].find(:lib)], options
+          R.run <<-EOF, sources, options
   plot = { #{script} }
 
   rbbt.SVG.save('#{tmpfile}', plot, width = #{R.ruby2R width}, height = #{R.ruby2R height})
@@ -62,6 +68,9 @@ module R
       width ||= 3
       height ||= 3
       values = []
+
+      sources = [:plot, options[:source]].flatten.compact
+
       data.each do |k,v|
         v = Array === v ? v : [v]
         next if v == "NA" or v.nil? or v.include? "NA" or v.include? nil
