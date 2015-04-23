@@ -34,6 +34,8 @@ module CombinationIndex
         raise "Error computing m and dm" if m.to_s == "NaN"
       end
 
+      modelfile = nil unless modelfile.exists?
+
       plot_script =<<-EOF
         m = #{R.ruby2R m}
         dm = #{R.ruby2R dm}
@@ -92,8 +94,6 @@ module CombinationIndex
     blue_random_samples = blue_step.info[:random_samples]
     red_random_samples = red_step.info[:random_samples]
 
-    iii blue_random_samples.flatten
-    iii red_random_samples.flatten
     blue_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Effect"], :type => :single)
     blue_doses.zip(blue_effects).each do |dose, effect|
       blue_tsv[Misc.hash2md5(:values => [dose,effect] * ":")] = [dose, effect]
@@ -106,9 +106,11 @@ module CombinationIndex
 
     blue_m, blue_dm, blue_dose_1, blue_effect_1, blue_dose_2, blue_effect_2, blue_invert  = blue_step.info.values_at :m, :dm, :dose1, :effect1, :dose2, :effect2, :invert
     blue_modelfile = blue_step.file(:model)
+    blue_modelfile = nil unless blue_modelfile.exists?
 
     red_m, red_dm, red_dose_1, red_effect_1, red_dose_2, red_effect_2, red_invert  = red_step.info.values_at :m, :dm, :dose1, :effect1, :dose2, :effect2, :invert
     red_modelfile = red_step.file(:model)
+    red_modelfile = nil unless red_modelfile.exists?
 
     lss = true if model_type =~ /least_squares/
 
@@ -160,8 +162,6 @@ module CombinationIndex
             blue.modelfile = blue.modelfile, red.modelfile=red.modelfile, least_squares=least_squares, blue.invert=blue.invert, red.invert=red.invert, 
             fix_ratio=fix_ratio, more_doses = more_doses, more_effects = more_effects, blue.random.samples = blue.random.samples, red.random.samples = red.random.samples)
         EOF
-
-        ppp plot_script
 
         R::SVG.ggplotSVG nil, plot_script, 5, 5, :debug => true, :R_method => :debug, :source => Rbbt.share.R["CI.R"].find
       end

@@ -3,15 +3,59 @@ CI.eff_ratio = function(x){
     return(x / (1-x));
 }
 
+CI.misc.seq <- function(){
+    res = seq(0, 0.1, length.out=50)
+    res = c(res, seq(0.1, 0.9, length.out=50))
+    res = c(res, seq(0.9, 1, length.out=50))
+
+    return(res)
+}
+
+CI.misc.log_seq <- function(center.point){
+
+    res = c(center.point)
+    for (i in seq(1,5,by=0.5)) {
+        n = center.point * i
+        res = c(res, n)
+        n = center.point * 2^i
+        res = c(res, n)
+        n = center.point * 4^i
+        res = c(res, n)
+        n = center.point * 8^i
+        res = c(res, n)
+        n = center.point * 16^i
+        res = c(res, n)
+        n = center.point * 32^i
+        res = c(res, n)
+        n = center.point / i
+        res = c(res, n)
+        n = center.point / 2^i
+        res = c(res, n)
+        n = center.point / 4^i
+        res = c(res, n)
+        n = center.point / 8^i
+        res = c(res, n)
+        n = center.point / 16^i
+        res = c(res, n)
+        n = center.point / 32^i
+        res = c(res, n)
+        n = center.point / 64^i
+        res = c(res, n)
+    }
+
+    return(sort(res))
+}
+
+
 CI.add_curve = function(m_1, m_2, dm_1, dm_2, d_1, d_2){
-    step = 0.01
-    additive.levels = seq(0, 1,by=step)
+    additive.levels = CI.misc.seq()
     additive.doses = sapply(additive.levels, function(level){ 
                             ratio = CI.eff_ratio(level); 
                             t1 =  d_1/(dm_1*(ratio^(1/m_1)))
                             t2 =  d_2/(dm_2*(ratio^(1/m_2)))
                             (d_1+d_2)/(t1 + t2)
     })
+
     data.add = data.frame(Dose=additive.doses, Effect=additive.levels)
 
     return(data.add)
@@ -19,36 +63,7 @@ CI.add_curve = function(m_1, m_2, dm_1, dm_2, d_1, d_2){
 
 CI.me_curve = function(m, dm, center_dose=NA){
     if (is.na(center_dose)) center_dose = dm
-    doses.me = c(center_dose)
-
-    for (i in seq(1,5,by=0.1)) {
-        n = dm * i
-        doses.me = c(doses.me, n)
-        n = dm * 2^i
-        doses.me = c(doses.me, n)
-        n = dm * 4^i
-        doses.me = c(doses.me, n)
-        n = dm * 8^i
-        doses.me = c(doses.me, n)
-        n = dm * 16^i
-        doses.me = c(doses.me, n)
-        n = dm * 32^i
-        doses.me = c(doses.me, n)
-        n = dm / i
-        doses.me = c(doses.me, n)
-        n = dm / 2^i
-        doses.me = c(doses.me, n)
-        n = dm / 4^i
-        doses.me = c(doses.me, n)
-        n = dm / 8^i
-        doses.me = c(doses.me, n)
-        n = dm / 16^i
-        doses.me = c(doses.me, n)
-        n = dm / 32^i
-        doses.me = c(doses.me, n)
-    }
-
-    doses.me = sort(doses.me)
+    doses.me = c(CI.misc.log_seq(center_dose), CI.misc.seq())
 
     if (is.na(m)){
         data.me = data.frame(Dose=doses.me, Effect=rep(NA, length(doses.me)))
@@ -100,7 +115,7 @@ CI.predict_line <- function(modelfile, doses, least_squares=FALSE, invert=FALSE,
             })
         }
     }else{
-        data.drc$Effect = data.me$Effect
+        return(NULL)
     }
 
     return(data.drc)
@@ -113,6 +128,8 @@ CI.subset_data <- function(data, min, max){
     return(data)
 }
 
+#{{{ PLOTS }}}#
+
 CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_squares=FALSE, invert=FALSE, random.samples=NULL){
     data.me = CI.me_curve(m, dm)
     max = max(data$Dose)
@@ -122,6 +139,10 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
     data.me = subset(data.me, data.me$Dose >= min)
 
     data.drc = CI.predict_line(modelfile, data.me$Dose, least_squares, invert)
+    
+    if (is.null(data.drc)){
+        data.drc = data.me
+    }
 
     min.effect=min(c(0,data.me$Effect, data.drc$Effect, data.me_points$Effect))
     max.effect=max(c(1,data.me$Effect, data.drc$Effect, data.me_points$Effect))
@@ -185,13 +206,13 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
     data.blue_drc = CI.predict_line(blue.modelfile, data.add$Dose/blue_ratio, least_squares, blue.invert)
     data.red_drc = CI.predict_line(red.modelfile, data.add$Dose/red_ratio, least_squares, red.invert)
 
-    data.add$Effect.lwr = data.add$Effect + 
-    (data.blue_drc$Effect.lwr - data.blue_drc$Effect) +
-    (data.red_drc$Effect.lwr - data.red_drc$Effect) 
+    if (is.null(data.blue_drc)){
+        data.blue_drc = data.blue_me
+    }
 
-    data.add$Effect.upr = data.add$Effect + 
-    (data.blue_drc$Effect.upr - data.blue_drc$Effect) +
-    (data.red_drc$Effect.upr - data.red_drc$Effect) 
+    if (is.null(data.red_drc)){
+        data.red_drc = data.red_me
+    }
 
     blue_data$Dose = blue_data$Dose * blue_ratio
     data.blue_me$Dose = data.blue_me$Dose * blue_ratio
@@ -233,58 +254,30 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         scale_x_log10() + annotation_logticks() +
         xlab("Combination dose") +
         ylab("Effect") +
-        geom_point(data=blue_data, col='blue') +
-        geom_point(data=red_data, col='red') +
+        geom_point(data=blue_data, col='blue',cex=3,alpha=0.8) +
+        geom_point(data=red_data, col='red',cex=3,alpha=0.8) +
 
-        geom_line(data=data.blue_me, col='blue', cex=2) +
-        geom_line(data=data.red_me, col='red', cex=2) +
+        geom_line(data=data.blue_me, col='blue', cex=2,alpha=0.8) +
+        geom_line(data=data.red_me, col='red', cex=2,alpha=0.8) +
 
-        geom_line(data=data.blue_drc, linetype='dashed', col='blue', cex=1) +
+        geom_line(data=data.blue_drc, linetype='dashed', col='blue', cex=1,alpha=0.8) +
 
-        geom_line(data=data.red_drc, linetype='dashed', col='red', cex=1) +
+        geom_line(data=data.red_drc, linetype='dashed', col='red', cex=1,alpha=0.8) +
 
-        geom_line(data=data.add, col='black', cex=2) +
+        geom_line(data=data.add, col='black', cex=2,alpha=0.8) +
 
-        geom_point(x=log10(blue_dose + red_dose), y=effect, col='black',cex=5) +
+        geom_point(x=log10(blue_dose + red_dose), y=effect, col='black',cex=5,alpha=0.8) +
 
 
-        geom_point(data=data.blue_me_points, col='blue',cex=5)  +
-        geom_point(data=data.red_me_points, col='red',cex=5) 
+        geom_point(data=data.blue_me_points, col='blue',cex=5,alpha=0.8)  +
+        geom_point(data=data.red_me_points, col='red',cex=5,alpha=0.8) 
 
     if (!is.null(more_effects)){
         len = length(more_doses)
         for (i in seq(1, len)){
-            plot = plot + geom_point(x=log10(more_doses[i]), y=more_effects[i], col='black', cex=3)
+            plot = plot + geom_point(x=log10(more_doses[i]), y=more_effects[i], col='black', cex=3, alpha=0.8)
         }
     }
-
-    #plot = plot + geom_ribbon(data=data.blue_drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
-    #plot = plot + geom_ribbon(data=data.red_drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='red',fill='red',alpha=0.2, cex=0.1)
-    #plot = plot + geom_ribbon(data=data.add, aes(ymin=Effect.lwr, ymax=Effect.upr),col='black',fill='black',alpha=0.2, cex=0.1)
-
-    #if (!is.null(blue.random.samples)){
-    #    for (i in seq(0,length(blue.random.samples)/2)){
-    #        m.s = blue.random.samples[2*i+1]
-    #        dm.s = blue.random.samples[2*i+2]
-    #        data.me.s = CI.me_curve(m.s, dm.s)
-    #        data.me.s = subset(data.me.s, data.me.s$Effect <= 1)
-    #        data.me.s = subset(data.me.s, data.me.s$Dose <= max)
-    #        data.me.s = subset(data.me.s, data.me.s$Dose >= min)
-    #        plot = plot + geom_line(data=data.me.s, col='blue', cex=1, linetype='dotted', alpha=0.4)
-    #    }
-    #}
-
-    #if (!is.null(red.random.samples)){
-    #    for (i in seq(0,length(red.random.samples)/2)){
-    #        m.s = red.random.samples[2*i+1]
-    #        dm.s = red.random.samples[2*i+2]
-    #        data.me.s = CI.me_curve(m.s, dm.s)
-    #        data.me.s = subset(data.me.s, data.me.s$Effect <= 1)
-    #        data.me.s = subset(data.me.s, data.me.s$Dose <= max)
-    #        data.me.s = subset(data.me.s, data.me.s$Dose >= min)
-    #        plot = plot + geom_line(data=data.me.s, col='red', cex=1, linetype='dotted', alpha=0.4)
-    #    }
-    #}
 
     if (!is.null(blue.random.samples) && !is.null(red.random.samples)){
         max = min(length(blue.random.samples), length(red.random.samples))

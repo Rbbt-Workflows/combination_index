@@ -81,6 +81,12 @@ module CombinationIndex
   def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5, model_type=':LL.5()')
     pairs = doses.zip(effects).sort_by{|d,e| d }
 
+    max_dose = pairs.collect{|p| p.first.to_f}.max
+    min_dose = pairs.collect{|p| p.first.to_f}.min
+
+    max_effect = pairs.collect{|p| p.last.to_f}.max
+    min_effect = pairs.collect{|p| p.last.to_f}.min
+
     dose1, effect1, dose2, effect2 = nil
     if pairs.collect{|p| p.first }.uniq.length > 2 
 
@@ -100,12 +106,6 @@ module CombinationIndex
                   sorted = pairs.sort_by{|p| p.first}
                   sorted[0][1] > sorted[-1][1]
                 end
-
-      max_dose = pairs.collect{|p| p.first.to_f}.max
-      min_dose = pairs.collect{|p| p.first.to_f}.min
-
-      max_effect = pairs.collect{|p| p.last.to_f}.max
-      min_effect = pairs.collect{|p| p.last.to_f}.min
 
       median_point = max_effect * 0.9 if median_point > max_effect
       median_point = min_effect * 1.1 if median_point < min_effect
