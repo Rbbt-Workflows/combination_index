@@ -76,22 +76,28 @@ CI.predict_line <- function(modelfile, doses, least_squares=FALSE, invert=FALSE,
         model = rbbt.model.load(modelfile)
         if (least_squares){
             data.drc$Effect = predict(model, data.drc)
-            data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'upr'];
-            data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'lwr'];
-
             data.drc$Effect = CI.least_squares.fix_log(data.drc$Effect)  
-            data.drc$Effect.upr = CI.least_squares.fix_log(data.drc$Effect.upr)  
-            data.drc$Effect.lwr = CI.least_squares.fix_log(data.drc$Effect.lwr)  
+
+            tryCatch({
+                data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'upr'];
+                data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'lwr'];
+                data.drc$Effect.upr = CI.least_squares.fix_log(data.drc$Effect.upr)  
+                data.drc$Effect.lwr = CI.least_squares.fix_log(data.drc$Effect.lwr)  
+            })
 
         }else{
             data.drc$Effect = predict(model, data.drc)
-            data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'Upper'];
-            data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'Lower'];
+            tryCatch({
+                data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'Upper'];
+                data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'Lower'];
+            })
         }
         if (invert){
             data.drc$Effect = 1 - data.drc$Effect
-            data.drc$Effect.upr = 1 - data.drc$Effect.upr
-            data.drc$Effect.lwr = 1 - data.drc$Effect.lwr
+            tryCatch({
+                data.drc$Effect.upr = 1 - data.drc$Effect.upr
+                data.drc$Effect.lwr = 1 - data.drc$Effect.lwr
+            })
         }
     }else{
         data.drc$Effect = data.me$Effect
@@ -125,20 +131,22 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
     plot = ggplot(aes(x=Dose, y=Effect), data=data, ylim=c(min.effect,max.effect),xlim=c(min.dose, max.dose)) +
     scale_x_log10() + annotation_logticks(side='b') +
     geom_line(data=data.me, col='blue', cex=2) +
-    geom_line(data=data.drc, col='blue', linetype='dashed',cex=2) +
+    geom_line(data=data.drc, col='blue', linetype='dotted',cex=2) +
     geom_point(cex=5) + 
     ylim(c(0,1)) +
     geom_point(data=data.me_points, col='blue',cex=5) 
 
-    plot = plot + geom_ribbon(data=data.drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
+    if(sum(!is.nan(data.drc$Effect.upr)) > 0){
+        plot = plot + geom_ribbon(data=data.drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
+    }
 
-    if (!is.null(random.samples)){
+    if (!is.null(random.samples) && length(random.samples)>0){
         for (i in seq(0,length(random.samples)/2)){
             m.s = random.samples[2*i+1]
             dm.s = random.samples[2*i+2]
             data.me.s = CI.me_curve(m.s, dm.s)
             data.me.s = CI.subset_data(data.me.s, min, max)
-            plot = plot + geom_line(data=data.me.s, col='blue', cex=1, linetype='dotted', alpha=0.4)
+            plot = plot + geom_line(data=data.me.s, col='blue', cex=2, linetype='dashed', alpha=0.2)
         }
     }
 
@@ -279,7 +287,7 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
     #}
 
     if (!is.null(blue.random.samples) && !is.null(red.random.samples)){
-        max = max(length(blue.random.samples), length(red.random.samples))
+        max = min(length(blue.random.samples), length(red.random.samples))
         for (i in seq(0,max/2)){
             m.blue.s = blue.random.samples[2*i+1]
             dm.blue.s = blue.random.samples[2*i+2]
@@ -287,7 +295,7 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
             dm.red.s = red.random.samples[2*i+2]
             data.add.s = CI.add_curve(m.blue.s, m.red.s, dm.blue.s, dm.red.s, blue_dose, red_dose)
             data.add.s = CI.subset_data(data.add.s, min.dose, max.dose)
-            plot = plot + geom_line(data=data.add.s, col='black', cex=1, linetype='dotted', alpha=0.4)
+            plot = plot + geom_line(data=data.add.s, col='black', cex=2, linetype='dashed', alpha=0.2)
         }
     }
 

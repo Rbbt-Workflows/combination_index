@@ -32,9 +32,11 @@ module CombinationIndex
     sd1 = (effect1_info["upper"] - effect1_info["fit"])/1.96
     sd2 = (effect2_info["upper"] - effect2_info["fit"])/1.96
     size = 25
-    diffs1 = R.eval_a "rnorm(#{R.ruby2R size},0,#{R.ruby2R sd1})"
-    diffs2 = R.eval_a "rnorm(#{R.ruby2R size},0,#{R.ruby2R sd2})"
+    diffs1 = R.eval_a "rnorm(#{R.ruby2R size*4},0,#{R.ruby2R sd1})"
+    diffs2 = R.eval_a "rnorm(#{R.ruby2R size*4},0,#{R.ruby2R sd2})"
+    found = 0
     diffs1.zip(diffs2).collect{|diff1, diff2|
+      next nil if found == size
       begin
         e1 = fit1 + diff1
         e1 = 0.99 if e1 > 0.99
@@ -44,7 +46,10 @@ module CombinationIndex
         e2 = 0.99 if e2 > 0.99
         e2 = 0.01 if e2 < 0.01
 
-        self.m_dm(dose_1, e1, dose_2, fit2 + diff2)
+        m, dm = self.m_dm(dose_1, e1, dose_2, fit2 + diff2)
+        raise "NaN found" if m.to_s == "NaN" or dm.to_s == "NaN"
+        found += 1
+        [m, dm]
       rescue
         nil
       end
@@ -198,8 +203,9 @@ module CombinationIndex
 
       if effect1_info
         random_samples = CombinationIndex.sample_m_dm(dose1, effect1_info, dose2, effect2_info, max_effect)
+        random_samples.select!{|_m,_dm| iii [m,_m]; (m > 0) == (_m > 0)}
       else
-        random_samples = nil
+        random_samples = []
       end
                    
       [m, dm, dose1, effect1, dose2, effect2] + random_samples
