@@ -4,8 +4,8 @@ CI.eff_ratio = function(x){
 }
 
 CI.add_curve = function(m_1, m_2, dm_1, dm_2, d_1, d_2){
-    step = 0.001
-    additive.levels = sample(seq(0, 1,by=step), 50)
+    step = 0.01
+    additive.levels = seq(0, 1,by=step)
     additive.doses = sapply(additive.levels, function(level){ 
                             ratio = CI.eff_ratio(level); 
                             t1 =  d_1/(dm_1*(ratio^(1/m_1)))
@@ -69,7 +69,7 @@ CI.least_squares.fix_log <- function(value){
     return(res)
 }
 
-CI.predict_line <- function(modelfile, doses, least_squares=FALSE, invert=FALSE,level=0.95){
+CI.predict_line <- function(modelfile, doses, least_squares=FALSE, invert=FALSE,level=0.90){
     data.drc = data.frame(Dose=doses);
 
     if (!is.null(modelfile)){
@@ -100,7 +100,14 @@ CI.predict_line <- function(modelfile, doses, least_squares=FALSE, invert=FALSE,
     return(data.drc)
 }
 
-CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_squares=FALSE, invert=FALSE){
+CI.subset_data <- function(data, min, max){
+    data = subset(data, data$Effect <= 1)
+    data = subset(data, data$Dose <= max)
+    data = subset(data, data$Dose >= min)
+    return(data)
+}
+
+CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_squares=FALSE, invert=FALSE, random.samples=NULL){
     data.me = CI.me_curve(m, dm)
     max = max(data$Dose)
     min = min(data$Dose)
@@ -113,22 +120,34 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
     min.effect=min(c(0,data.me$Effect, data.drc$Effect, data.me_points$Effect))
     max.effect=max(c(1,data.me$Effect, data.drc$Effect, data.me_points$Effect))
 
-    plot = ggplot(aes(x=Dose, y=Effect), data=data, ylim=c(min.effect,max.effect)) +
-        scale_x_log10() + annotation_logticks() +
-        geom_line(data=data.me, col='blue', cex=2) +
-        geom_line(data=data.drc, col='blue', linetype='dashed',cex=2) +
-        geom_point(cex=5) + 
-        ylim(c(0,1)) +
-        geom_point(data=data.me_points, col='blue',cex=5) 
+    min.dose = min(data.me_points$Dose)
+    max.dose = max(data.me_points$Dose)
+    plot = ggplot(aes(x=Dose, y=Effect), data=data, ylim=c(min.effect,max.effect),xlim=c(min.dose, max.dose)) +
+    scale_x_log10() + annotation_logticks(side='b') +
+    geom_line(data=data.me, col='blue', cex=2) +
+    geom_line(data=data.drc, col='blue', linetype='dashed',cex=2) +
+    geom_point(cex=5) + 
+    ylim(c(0,1)) +
+    geom_point(data=data.me_points, col='blue',cex=5) 
 
     plot = plot + geom_ribbon(data=data.drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
+
+    if (!is.null(random.samples)){
+        for (i in seq(0,length(random.samples)/2)){
+            m.s = random.samples[2*i+1]
+            dm.s = random.samples[2*i+2]
+            data.me.s = CI.me_curve(m.s, dm.s)
+            data.me.s = CI.subset_data(data.me.s, min, max)
+            plot = plot + geom_line(data=data.me.s, col='blue', cex=1, linetype='dotted', alpha=0.4)
+        }
+    }
 
     return(plot)
 }
 
 
 
-CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, effect, blue_data, red_data, data.blue_me_points, data.red_me_points, blue.modelfile = NULL, red.modelfile=NULL, least_squares=FALSE, blue.invert=FALSE, red.invert=FALSE, fix_ratio=FALSE, more_doses = NULL, more_effects = NULL){
+CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, effect, blue_data, red_data, data.blue_me_points, data.red_me_points, blue.modelfile = NULL, red.modelfile=NULL, least_squares=FALSE, blue.invert=FALSE, red.invert=FALSE, fix_ratio=FALSE, more_doses = NULL, more_effects = NULL, blue.random.samples=NULL, red.random.samples=NULL){
 
     data.blue_me = CI.me_curve(blue_m, blue_dm)
 
@@ -145,48 +164,26 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
     data.red_me = subset(data.red_me, data.red_me$Dose <= max)
     data.red_me = subset(data.red_me, data.red_me$Dose >= min)
 
-    #blue_model = rbbt.model.load(blue.modelfile);
-    #data.blue_drc = data.frame(Dose=data.blue_me$Dose);
-    #data.blue_drc$Effect = predict(blue_model, data.blue_drc);
-    #if (least_squares){
-    #    data.blue_drc$Effect = exp(data.blue_drc$Effect)/(1+exp(data.blue_drc$Effect))
-    #    data.blue_drc$Effect[data.blue_drc$Effect > 1] = 1
-    #}
-    #
-    #if (blue.invert){
-    #    data.blue_drc$Effect = 1 - data.blue_drc$Effect
-    #}
-
-
-    #red_model = rbbt.model.load(red.modelfile);
-    #data.red_drc = data.frame(Dose=data.red_me$Dose);
-    #data.red_drc$Effect = predict(red_model, data.red_drc);
-
-    #if (least_squares){
-    #    data.red_drc$Effect = exp(data.red_drc$Effect)/(1+exp(data.red_drc$Effect))
-    #    data.red_drc$Effect[data.red_drc$Effect > 1] = 1
-    #}
-    #
-    #if (red.invert){
-    #    data.red_drc$Effect = 1 - data.red_drc$Effect
-    #}
-
-    data.blue_drc = CI.predict_line(blue.modelfile, data.blue_me$Dose, least_squares, blue.invert)
-    data.red_drc = CI.predict_line(red.modelfile, data.red_me$Dose, least_squares, red.invert)
-
-    data.add = CI.add_curve(blue_m, red_m, blue_dm, red_dm, blue_dose, red_dose)
-
-    data.add = subset(data.add, data.add$Effect <= 1)
-    data.add = subset(data.add, data.add$Dose <= max)
-    data.add = subset(data.add, data.add$Dose >= min)
-
-
     if (fix_ratio){
         blue_ratio = (blue_dose + red_dose)/blue_dose
         red_ratio = (blue_dose + red_dose)/red_dose
     }else{
         blue_ratio = red_ratio = 1
     }
+
+
+    data.add = CI.add_curve(blue_m, red_m, blue_dm, red_dm, blue_dose, red_dose)
+
+    data.blue_drc = CI.predict_line(blue.modelfile, data.add$Dose/blue_ratio, least_squares, blue.invert)
+    data.red_drc = CI.predict_line(red.modelfile, data.add$Dose/red_ratio, least_squares, red.invert)
+
+    data.add$Effect.lwr = data.add$Effect + 
+    (data.blue_drc$Effect.lwr - data.blue_drc$Effect) +
+    (data.red_drc$Effect.lwr - data.red_drc$Effect) 
+
+    data.add$Effect.upr = data.add$Effect + 
+    (data.blue_drc$Effect.upr - data.blue_drc$Effect) +
+    (data.red_drc$Effect.upr - data.red_drc$Effect) 
 
     blue_data$Dose = blue_data$Dose * blue_ratio
     data.blue_me$Dose = data.blue_me$Dose * blue_ratio
@@ -209,7 +206,21 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         max.effect=max(c(max.effect, more_effects))
     }
 
+    all.doses = c(data.blue_me$Dose, data.red_me$Dose)
+    min.dose = min(all.doses)
+    max.dose = max(all.doses)
+
+    data.blue_drc = CI.subset_data(data.blue_drc, min.dose, max.dose)
+    data.red_drc = CI.subset_data(data.red_drc, min.dose, max.dose)
+
+    data.blue_me = CI.subset_data(data.blue_me, min.dose, max.dose)
+    data.red_me = CI.subset_data(data.red_me, min.dose, max.dose)
+
+    data.add = CI.subset_data(data.add, min.dose, max.dose)
+
+
     plot = ggplot(aes(x=as.numeric(Dose), y=as.numeric(Effect)), data=blue_data) + 
+        xlim(min.dose, max.dose) +
         ylim(min.effect, max.effect) +
         scale_x_log10() + annotation_logticks() +
         xlab("Combination dose") +
@@ -239,8 +250,46 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         }
     }
 
-    plot = plot + geom_ribbon(data=data.blue_drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
-    plot = plot + geom_ribbon(data=data.red_drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='red',fill='red',alpha=0.2, cex=0.1)
+    #plot = plot + geom_ribbon(data=data.blue_drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
+    #plot = plot + geom_ribbon(data=data.red_drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='red',fill='red',alpha=0.2, cex=0.1)
+    #plot = plot + geom_ribbon(data=data.add, aes(ymin=Effect.lwr, ymax=Effect.upr),col='black',fill='black',alpha=0.2, cex=0.1)
+
+    #if (!is.null(blue.random.samples)){
+    #    for (i in seq(0,length(blue.random.samples)/2)){
+    #        m.s = blue.random.samples[2*i+1]
+    #        dm.s = blue.random.samples[2*i+2]
+    #        data.me.s = CI.me_curve(m.s, dm.s)
+    #        data.me.s = subset(data.me.s, data.me.s$Effect <= 1)
+    #        data.me.s = subset(data.me.s, data.me.s$Dose <= max)
+    #        data.me.s = subset(data.me.s, data.me.s$Dose >= min)
+    #        plot = plot + geom_line(data=data.me.s, col='blue', cex=1, linetype='dotted', alpha=0.4)
+    #    }
+    #}
+
+    #if (!is.null(red.random.samples)){
+    #    for (i in seq(0,length(red.random.samples)/2)){
+    #        m.s = red.random.samples[2*i+1]
+    #        dm.s = red.random.samples[2*i+2]
+    #        data.me.s = CI.me_curve(m.s, dm.s)
+    #        data.me.s = subset(data.me.s, data.me.s$Effect <= 1)
+    #        data.me.s = subset(data.me.s, data.me.s$Dose <= max)
+    #        data.me.s = subset(data.me.s, data.me.s$Dose >= min)
+    #        plot = plot + geom_line(data=data.me.s, col='red', cex=1, linetype='dotted', alpha=0.4)
+    #    }
+    #}
+
+    if (!is.null(blue.random.samples) && !is.null(red.random.samples)){
+        max = max(length(blue.random.samples), length(red.random.samples))
+        for (i in seq(0,max/2)){
+            m.blue.s = blue.random.samples[2*i+1]
+            dm.blue.s = blue.random.samples[2*i+2]
+            m.red.s = red.random.samples[2*i+1]
+            dm.red.s = red.random.samples[2*i+2]
+            data.add.s = CI.add_curve(m.blue.s, m.red.s, dm.blue.s, dm.red.s, blue_dose, red_dose)
+            data.add.s = CI.subset_data(data.add.s, min.dose, max.dose)
+            plot = plot + geom_line(data=data.add.s, col='black', cex=1, linetype='dotted', alpha=0.4)
+        }
+    }
 
     return(plot)
 }

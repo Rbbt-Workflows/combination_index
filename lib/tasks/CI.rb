@@ -24,12 +24,12 @@ module CombinationIndex
       FileUtils.mkdir_p files_dir
       modelfile = file(:model)
       if invert
-        m, dm, dose1, effect1, dose2, effect2  = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
+        m, dm, dose1, effect1, dose2, effect2, *random_samples = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
         m = - m if m
         effect1 = 1.0 - effect1
         effect2 = 1.0 - effect2
       else
-        m, dm, dose1, effect1, dose2, effect2  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
+        m, dm, dose1, effect1, dose2, effect2, *random_samples  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
         raise "Error computing m and dm" if m.to_s == "NaN"
       end
 
@@ -40,11 +40,12 @@ module CombinationIndex
         least_squares = #{lss ? 'TRUE' : 'FALSE'}
         invert = #{invert ? 'TRUE' : 'FALSE'}
         modelfile = #{R.ruby2R modelfile}
+        random_samples = #{R.ruby2R random_samples.flatten}
 
-        CI.plot_fit(m,dm,data,data.me_points, modelfile, least_squares, invert)
+        CI.plot_fit(m,dm,data,data.me_points, modelfile, least_squares, invert, random_samples)
       EOF
 
-      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib)
+      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :debug, :source => Rbbt.share.R["CI.R"].find(:lib)
     rescue Exception
       Log.exception $!
       if invert
@@ -55,7 +56,7 @@ module CombinationIndex
         retry
       end
     ensure
-      {:m => m, :dm => dm, :dose1 => dose1, :dose2 => dose2, :effect1 => effect1, :effect2 => effect2, :invert => invert}.each do |k,v|
+      {:random_samples => random_samples, :m => m, :dm => dm, :dose1 => dose1, :dose2 => dose2, :effect1 => effect1, :effect2 => effect2, :invert => invert}.each do |k,v|
         set_info k, v
       end
     end
@@ -87,7 +88,11 @@ module CombinationIndex
     blue_effects = blue_effects.collect{|v| v.to_f}
     red_doses = red_doses.collect{|v| v.to_f}
     red_effects = red_effects.collect{|v| v.to_f}
+    blue_random_samples = blue_step.info[:random_samples]
+    red_random_samples = red_step.info[:random_samples]
 
+    iii blue_random_samples.flatten
+    iii red_random_samples.flatten
     blue_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Effect"], :type => :single)
     blue_doses.zip(blue_effects).each do |dose, effect|
       blue_tsv[Misc.hash2md5(:values => [dose,effect] * ":")] = [dose, effect]
@@ -145,14 +150,19 @@ module CombinationIndex
 
           more_doses = #{R.ruby2R more_doses.collect{|v| v.to_f}}
           more_effects = #{R.ruby2R more_effects.collect{|v| v.to_f}}
+        
+          blue.random.samples = #{R.ruby2R(blue_random_samples.flatten)}
+          red.random.samples = #{R.ruby2R(red_random_samples.flatten)}
 
           CI.plot_combination(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, effect,
             blue_data, red_data, data.blue_me_points, data.red_me_points, 
             blue.modelfile = blue.modelfile, red.modelfile=red.modelfile, least_squares=least_squares, blue.invert=blue.invert, red.invert=red.invert, 
-            fix_ratio=fix_ratio, more_doses = more_doses, more_effects = more_effects)
+            fix_ratio=fix_ratio, more_doses = more_doses, more_effects = more_effects, blue.random.samples = blue.random.samples, red.random.samples = red.random.samples)
         EOF
 
-        R::SVG.ggplotSVG nil, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find
+        ppp plot_script
+
+        R::SVG.ggplotSVG nil, plot_script, 5, 5, :debug => true, :R_method => :debug, :source => Rbbt.share.R["CI.R"].find
       end
     end
   end

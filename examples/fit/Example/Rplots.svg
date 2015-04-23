@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="ASCII"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="sIptSKg0qOOC" width="360px" height="360px" viewBox="0 0 360 360" version="1.1">
+  <metadata xmlns:gridsvg="http://www.stat.auckland.ac.nz/~paul/R/gridSVG/">
+    <gridsvg:generator name="gridSVG" version="1.4-0" time="2015-04-22 16:21:33"/>
+    <gridsvg:argument name="name" value="Rplots.svg"/>
+    <gridsvg:argument name="exportCoords" value="none"/>
+    <gridsvg:argument name="exportMappings" value="none"/>
+    <gridsvg:argument name="exportJS" value="none"/>
+    <gridsvg:argument name="res" value="51.4285714285714"/>
+    <gridsvg:argument name="prefix" value="sIptSKg0qOOC"/>
+    <gridsvg:argument name="addClasses" value="FALSE"/>
+    <gridsvg:argument name="indent" value="TRUE"/>
+    <gridsvg:argument name="htmlWrapper" value="FALSE"/>
+    <gridsvg:argument name="usePaths" value="vpPaths"/>
+    <gridsvg:argument name="uniqueNames" value="TRUE"/>
+    <gridsvg:separator name="id.sep" value="."/>
+    <gridsvg:separator name="gPath.sep" value="::"/>
+    <gridsvg:separator name="vpPath.sep" value="::"/>
+  </metadata>
+  <g transform="translate(0, 360) scale(1, -1)">
+    <g id="sIptSKg0qOOCgridSVG" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.54" font-size="8.57" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" opacity="1" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-opacity="1" fill-opacity="0" font-weight="normal" font-style="normal">
+      <defs>
+        <symbol id="sIptSKg0qOOCgridSVG.pch16" viewBox="-5 -5 10 10" overflow="visible">
+          <circle cx="0" cy="0" r="3.75"/>
+        </symbol>
+      </defs>
+      <g id="sIptSKg0qOOClayout.1">
+        <g id="sIptSKg0qOOCGRID.gTableParent.48.1">
+          <defs>
+            <clipPath id="sIptSKg0qOOClayout::background.1-5-6-1.1.clipPath">
+              <rect x="0" y="0" width="360" height="360" fill="none" stroke="none"/>
+            </clipPath>
+          </defs>
+          <g id="sIptSKg0qOOClayout::background.1-5-6-1.1" clip-path="url(#sIptSKg0qOOClayout::background.1-5-6-1.1.clipPath)">
+            <g id="sIptSKg0qOOCbackground.1-5-6-1.1">
+              <rect id="sIptSKg0qOOCbackground.1-5-6-1.1.1" x="0" y="0" width="360" height="360" stroke-width="0.76" stroke="rgb(0,0,0)" fill="rgb(255,255,255)" stroke-dasharray="none" stroke-opacity="1" fill-opacity="1"/>
+            </g>
+          </g>
+          <g id="sIptSKg0qOOClayout::spacer.4-3-4-3.1"/>
+          <defs>
+            <clipPath id="sIptSKg0qOOClayout::panel.3-4-3-4.1.clipPath">
+              <rect x="60.08" y="29.71" width="289.64" height="320.01" fill="none" stroke="none"/>
+            </clipPath>
+          </defs>
+          <g id="sIptSKg0qOOClayout::panel.3-4-3-4.1" clip-path="url(#sIptSKg0qOOClayout::panel.3-4-3-4.1.clipPath)">
+            <g id="sIptSKg0qOOCpanel.3-4-3-4.1">
+              <g id="sIptSKg0qOOCgrill.gTree.26.1">
+                <g id="sIptSKg0qOOCpanel.background.rect.19.1">
+                  <rect id="sIptSKg0qOOCpanel.background.rect.19.1.1" x="60.08" y="29.71" width="289.64" height="320.01" stroke-width="0.76" stroke="none" fill="rgb(255,255,255)" stroke-dasharray="none" stroke-opacity="0" fill-opacity="1"/>
+                </g>
+                <g id="sIptSKg0qOOCpanel.grid.major.y.polyline.23.1">
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.y.polyline.23.1.1" points="60.08,44.25 349.71,44.25" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.y.polyline.23.1.2" points="60.08,116.98 349.71,116.98" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.y.polyline.23.1.3" points="60.08,189.71 349.71,189.71" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.y.polyline.23.1.4" points="60.08,262.44 349.71,262.44" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.y.polyline.23.1.5" points="60.08,335.17 349.71,335.17" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                </g>
+                <g id="sIptSKg0qOOCpanel.grid.major.x.polyline.25.1">
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.x.polyline.25.1.1" points="119.82,29.71 119.82,349.71" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.x.polyline.25.1.2" points="189.8,29.71 189.8,349.71" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.x.polyline.25.1.3" points="259.77,29.71 259.77,349.71" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCpanel.grid.major.x.polyline.25.1.4" points="329.74,29.71 329.74,349.71" stroke-width="0.76" stroke="rgb(204,204,204)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                </g>
+              </g>
+              <g id="sIptSKg0qOOCGRID.gTree.3.1">
+                <g id="sIptSKg0qOOCGRID.segments.1.1">
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.1" points="49.85,29.71 49.85,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.2" points="55.11,29.71 55.11,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.3" points="58.19,29.71 58.19,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.4" points="60.38,29.71 60.38,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.5" points="62.07,29.71 62.07,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.6" points="63.46,29.71 63.46,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.7" points="64.63,29.71 64.63,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.8" points="65.64,29.71 65.64,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.9" points="66.54,29.71 66.54,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.10" points="67.34,29.71 67.34,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.11" points="72.61,29.71 72.61,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.12" points="75.69,29.71 75.69,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.13" points="77.87,29.71 77.87,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.14" points="79.57,29.71 79.57,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.15" points="80.95,29.71 80.95,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.16" points="82.12,29.71 82.12,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.17" points="83.14,29.71 83.14,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.18" points="84.03,29.71 84.03,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.19" points="84.83,29.71 84.83,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.20" points="90.1,29.71 90.1,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.21" points="93.18,29.71 93.18,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.22" points="95.37,29.71 95.37,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.23" points="97.06,29.71 97.06,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.24" points="98.45,29.71 98.45,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.25" points="99.62,29.71 99.62,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.26" points="100.63,29.71 100.63,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.27" points="101.53,29.71 101.53,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.28" points="102.33,29.71 102.33,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.29" points="107.59,29.71 107.59,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.30" points="110.67,29.71 110.67,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.31" points="112.86,29.71 112.86,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.32" points="114.55,29.71 114.55,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.33" points="115.94,29.71 115.94,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.34" points="117.11,29.71 117.11,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.35" points="118.13,29.71 118.13,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.36" points="119.02,29.71 119.02,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.37" points="119.82,29.71 119.82,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.38" points="125.09,29.71 125.09,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.39" points="128.17,29.71 128.17,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.40" points="130.35,29.71 130.35,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.41" points="132.05,29.71 132.05,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.42" points="133.43,29.71 133.43,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.43" points="134.6,29.71 134.6,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.44" points="135.62,29.71 135.62,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.45" points="136.51,29.71 136.51,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.46" points="137.31,29.71 137.31,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.47" points="142.58,29.71 142.58,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.48" points="145.66,29.71 145.66,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.49" points="147.85,29.71 147.85,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.50" points="149.54,29.71 149.54,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.51" points="150.93,29.71 150.93,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.52" points="152.1,29.71 152.1,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.53" points="153.11,29.71 153.11,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.54" points="154.01,29.71 154.01,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.55" points="154.81,29.71 154.81,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.56" points="160.07,29.71 160.07,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.57" points="163.15,29.71 163.15,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.58" points="165.34,29.71 165.34,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.59" points="167.04,29.71 167.04,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.60" points="168.42,29.71 168.42,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.61" points="169.59,29.71 169.59,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.62" points="170.61,29.71 170.61,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.63" points="171.5,29.71 171.5,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.64" points="172.3,29.71 172.3,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.65" points="177.57,29.71 177.57,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.66" points="180.65,29.71 180.65,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.67" points="182.83,29.71 182.83,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.68" points="184.53,29.71 184.53,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.69" points="185.91,29.71 185.91,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.70" points="187.09,29.71 187.09,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.71" points="188.1,29.71 188.1,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.72" points="188.99,29.71 188.99,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.73" points="189.8,29.71 189.8,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.74" points="195.06,29.71 195.06,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.75" points="198.14,29.71 198.14,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.76" points="200.33,29.71 200.33,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.77" points="202.02,29.71 202.02,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.78" points="203.41,29.71 203.41,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.79" points="204.58,29.71 204.58,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.80" points="205.59,29.71 205.59,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.81" points="206.49,29.71 206.49,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.82" points="207.29,29.71 207.29,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.83" points="212.56,29.71 212.56,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.84" points="215.64,29.71 215.64,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.85" points="217.82,29.71 217.82,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.86" points="219.52,29.71 219.52,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.87" points="220.9,29.71 220.9,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.88" points="222.07,29.71 222.07,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.89" points="223.09,29.71 223.09,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.90" points="223.98,29.71 223.98,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.91" points="224.78,29.71 224.78,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.92" points="230.05,29.71 230.05,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.93" points="233.13,29.71 233.13,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.94" points="235.31,29.71 235.31,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.95" points="237.01,29.71 237.01,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.96" points="238.4,29.71 238.4,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.97" points="239.57,29.71 239.57,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.98" points="240.58,29.71 240.58,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.99" points="241.48,29.71 241.48,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.100" points="242.28,29.71 242.28,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.101" points="247.54,29.71 247.54,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.102" points="250.62,29.71 250.62,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.103" points="252.81,29.71 252.81,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.104" points="254.5,29.71 254.5,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.105" points="255.89,29.71 255.89,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.106" points="257.06,29.71 257.06,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.107" points="258.07,29.71 258.07,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.108" points="258.97,29.71 258.97,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.109" points="259.77,29.71 259.77,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.110" points="265.04,29.71 265.04,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.111" points="268.12,29.71 268.12,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.112" points="270.3,29.71 270.3,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.113" points="272,29.71 272,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.114" points="273.38,29.71 273.38,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.115" points="274.55,29.71 274.55,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.116" points="275.57,29.71 275.57,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.117" points="276.46,29.71 276.46,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.118" points="277.26,29.71 277.26,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.119" points="282.53,29.71 282.53,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.120" points="285.61,29.71 285.61,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.121" points="287.8,29.71 287.8,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.122" points="289.49,29.71 289.49,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.123" points="290.88,29.71 290.88,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.124" points="292.05,29.71 292.05,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.125" points="293.06,29.71 293.06,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.126" points="293.96,29.71 293.96,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.127" points="294.76,29.71 294.76,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.128" points="300.02,29.71 300.02,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.129" points="303.1,29.71 303.1,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.130" points="305.29,29.71 305.29,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.131" points="306.98,29.71 306.98,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.132" points="308.37,29.71 308.37,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.133" points="309.54,29.71 309.54,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.134" points="310.56,29.71 310.56,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.135" points="311.45,29.71 311.45,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.136" points="312.25,29.71 312.25,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.137" points="317.52,29.71 317.52,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.138" points="320.6,29.71 320.6,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.139" points="322.78,29.71 322.78,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.140" points="324.48,29.71 324.48,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.141" points="325.86,29.71 325.86,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.142" points="327.03,29.71 327.03,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.143" points="328.05,29.71 328.05,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.144" points="328.94,29.71 328.94,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.145" points="329.74,29.71 329.74,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.146" points="335.01,29.71 335.01,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.147" points="338.09,29.71 338.09,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.148" points="340.28,29.71 340.28,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.149" points="341.97,29.71 341.97,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.150" points="343.36,29.71 343.36,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.151" points="344.53,29.71 344.53,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.152" points="345.54,29.71 345.54,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.153" points="346.44,29.71 346.44,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.154" points="347.24,29.71 347.24,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.155" points="352.5,29.71 352.5,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.156" points="355.59,29.71 355.59,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.157" points="357.77,29.71 357.77,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.158" points="359.47,29.71 359.47,33.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.159" points="360.85,29.71 360.85,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.160" points="362.02,29.71 362.02,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.161" points="363.04,29.71 363.04,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.162" points="363.93,29.71 363.93,31.73" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.1.1.163" points="364.73,29.71 364.73,35.78" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                </g>
+                <g id="sIptSKg0qOOCGRID.segments.2.1">
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.1" points="60.08,-246.66 66.15,-246.66" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.2" points="60.08,-159.09 62.1,-159.09" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.3" points="60.08,-107.86 62.1,-107.86" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.4" points="60.08,-71.51 62.1,-71.51" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.5" points="60.08,-43.32 64.13,-43.32" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.6" points="60.08,-20.29 62.1,-20.29" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.7" points="60.08,-0.81 62.1,-0.81" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.8" points="60.08,16.06 62.1,16.06" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.9" points="60.08,30.94 62.1,30.94" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.10" points="60.08,44.25 66.15,44.25" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.11" points="60.08,131.83 62.1,131.83" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.12" points="60.08,183.06 62.1,183.06" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.13" points="60.08,219.4 62.1,219.4" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.14" points="60.08,247.59 64.13,247.59" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.15" points="60.08,270.63 62.1,270.63" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.16" points="60.08,290.11 62.1,290.11" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.17" points="60.08,306.98 62.1,306.98" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.18" points="60.08,321.86 62.1,321.86" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.19" points="60.08,335.17 66.15,335.17" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.20" points="60.08,422.74 62.1,422.74" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.21" points="60.08,473.97 62.1,473.97" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.22" points="60.08,510.32 62.1,510.32" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.23" points="60.08,538.51 64.13,538.51" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.24" points="60.08,561.54 62.1,561.54" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.25" points="60.08,581.02 62.1,581.02" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.26" points="60.08,597.89 62.1,597.89" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.27" points="60.08,612.77 62.1,612.77" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                  <polyline id="sIptSKg0qOOCGRID.segments.2.1.28" points="60.08,626.08 66.15,626.08" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-width="0.76" stroke-opacity="1" fill="none"/>
+                </g>
+              </g>
+              <g id="sIptSKg0qOOCGRID.polyline.4.1">
+                <polyline id="sIptSKg0qOOCGRID.polyline.4.1.1" points="181.39,329.88 181.39,329.88 181.92,329.4 181.92,329.4 181.92,329.4 182.44,328.88 182.97,328.31 182.97,328.31 182.97,328.31 183.5,327.69 184.02,327.01 184.02,327.01 184.02,327.01 184.55,326.28 184.55,326.28 185.08,325.49 185.08,325.49 185.6,324.62 186.13,323.68 186.13,323.68 186.13,323.68 186.66,322.66 187.18,321.56 187.18,321.56 187.71,320.36 187.71,320.36 188.24,319.06 188.24,319.06 188.76,317.66 189.29,316.14 189.29,316.14 189.29,316.14 189.82,314.5 190.34,312.74 190.34,312.74 190.87,310.83 191.4,308.78 191.4,308.78 191.92,306.57 192.45,304.2 192.45,304.2 192.86,302.24 192.98,301.66 193.02,301.47 193.17,300.68 193.33,299.85 193.5,298.99 193.5,298.94 193.5,298.94 193.66,298.09 193.83,297.15 194.01,296.17 194.03,296.04 194.19,295.14 194.37,294.07 194.56,292.94 194.56,292.94 194.56,292.94 194.75,291.76 194.95,290.51 195.08,289.64 195.15,289.21 195.36,287.84 195.57,286.39 195.61,286.13 195.79,284.87 196.02,283.26 196.14,282.4 196.25,281.56 196.49,279.76 196.66,278.47 196.74,277.86 197,275.83 197.19,274.31 197.27,273.69 197.54,271.4 197.72,269.93 197.83,268.96 198.13,266.36 198.24,265.34 198.44,263.58 198.76,260.61 198.77,260.53 199.1,257.41 199.3,255.5 199.45,253.97 199.82,250.27 199.82,250.27 200.21,246.27 200.62,241.95 201.06,237.26 201.52,232.16 202.01,226.6 202.53,220.53 203.1,213.89 203.7,206.59 204.37,198.57 205.09,189.71 205.09,189.71 205.09,189.71 205.81,180.86 206.47,172.83 207.08,165.53 207.65,158.89 208.17,152.82 208.66,147.26 209.12,142.16 209.55,137.47 209.97,133.15 210.36,129.15 210.36,129.15 210.73,125.45 210.88,123.92 211.08,122.01 211.41,118.9 211.42,118.82 211.74,115.84 211.94,114.08 212.05,113.06 212.35,110.46 212.46,109.49" stroke="rgb(0,0,255)" fill="none" stroke-width="3.04" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity="1" fill-opacity="1"/>
+              </g>
+              <g id="sIptSKg0qOOCGRID.polyline.5.1">
+                <polyline id="sIptSKg0qOOCGRID.polyline.5.1.1" points="181.39,329.88 181.39,329.88 181.92,329.4 181.92,329.4 181.92,329.4 182.44,328.88 182.97,328.31 182.97,328.31 182.97,328.31 183.5,327.69 184.02,327.01 184.02,327.01 184.02,327.01 184.55,326.28 184.55,326.28 185.08,325.49 185.08,325.49 185.6,324.62 186.13,323.68 186.13,323.68 186.13,323.68 186.66,322.66 187.18,321.56 187.18,321.56 187.71,320.36 187.71,320.36 188.24,319.06 188.24,319.06 188.76,317.66 189.29,316.14 189.29,316.14 189.29,316.14 189.82,314.5 190.34,312.74 190.34,312.74 190.87,310.83 191.4,308.78 191.4,308.78 191.92,306.57 192.45,304.2 192.45,304.2 192.86,302.24 192.98,301.66 193.02,301.47 193.17,300.68 193.33,299.85 193.5,298.99 193.5,298.94 193.5,298.94 193.66,298.09 193.83,297.15 194.01,296.17 194.03,296.04 194.19,295.14 194.37,294.07 194.56,292.94 194.56,292.94 194.56,292.94 194.75,291.76 194.95,290.51 195.08,289.64 195.15,289.21 195.36,287.84 195.57,286.39 195.61,286.13 195.79,284.87 196.02,283.26 196.14,282.4 196.25,281.56 196.49,279.76 196.66,278.47 196.74,277.86 197,275.83 197.19,274.31 197.27,273.69 197.54,271.4 197.72,269.93 197.83,268.96 198.13,266.36 198.24,265.34 198.44,263.58 198.76,260.61 198.77,260.53 199.1,257.41 199.3,255.5 199.45,253.97 199.82,250.27 199.82,250.27 200.21,246.27 200.62,241.95 201.06,237.26 201.52,232.16 202.01,226.6 202.53,220.53 203.1,213.89 203.7,206.59 204.37,198.57 205.09,189.71 205.09,189.71 205.09,189.71 205.81,180.86 206.47,172.83 207.08,165.53 207.65,158.89 208.17,152.82 208.66,147.26 209.12,142.16 209.55,137.47 209.97,133.15 210.36,129.15 210.36,129.15 210.73,125.45 210.88,123.92 211.08,122.01 211.41,118.9 211.42,118.82 211.74,115.84 211.94,114.08 212.05,113.06 212.35,110.46 212.46,109.49" stroke="rgb(0,0,255)" fill="none" stroke-width="3.04" stroke-dasharray="12.15,12.15" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity="1" fill-opacity="1"/>
+              </g>
+              <g id="sIptSKg0qOOCgeom_point.points.7.1">
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.1" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="180.96" y="320.91" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.2" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="180.96" y="330.22" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.3" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="180.96" y="330.51" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.4" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="180.96" y="323.53" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.5" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="180.96" y="292.69" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.6" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="186.22" y="333.71" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.7" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="186.22" y="316.26" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.8" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="186.22" y="304.62" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.9" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="186.22" y="308.7" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.10" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="186.22" y="279.31" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.11" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="186.22" y="294.15" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.12" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="191.49" y="329.35" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.13" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="191.49" y="299.68" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.14" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="191.49" y="302.3" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.15" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="191.49" y="315.97" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.16" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="191.49" y="286" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.17" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="191.49" y="288.33" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.18" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="196.76" y="313.64" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.19" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="196.76" y="277.86" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.20" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="196.76" y="272.62" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.21" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="196.76" y="295.02" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.22" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="196.76" y="261.28" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.23" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="196.76" y="286" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.24" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.02" y="254.29" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.25" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.02" y="240.33" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.26" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.02" y="215.02" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.27" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.02" y="232.48" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.28" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.02" y="221.42" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.29" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.02" y="248.77" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.30" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.29" y="164.11" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.31" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.29" y="140.26" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.32" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.29" y="160.33" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.33" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.29" y="144.04" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.34" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.29" y="150.44" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.35" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.29" y="153.64" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.36" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="212.56" y="121.05" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.37" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="212.56" y="107.38" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.38" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="212.56" y="124.84" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.39" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="212.56" y="109.42" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.7.1.40" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="212.56" y="100.4" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,0)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+              </g>
+              <g id="sIptSKg0qOOCgeom_point.points.9.1">
+                <use id="sIptSKg0qOOCgeom_point.points.9.1.1" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="202.8" y="217.34" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,255)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+                <use id="sIptSKg0qOOCgeom_point.points.9.1.2" xlink:href="#sIptSKg0qOOCgridSVG.pch16" x="207.41" y="161.69" width="10.12" height="10.12" transform="translate(-5.06,-5.06)" stroke="none" fill="rgb(0,0,255)" font-size="10.12" stroke-width="0.53" stroke-opacity="0" fill-opacity="1"/>
+              </g>
+              <g id="sIptSKg0qOOCribbons.gTree.13.1">
+                <g id="sIptSKg0qOOCgeom_ribbon.polygon.11.1">
+                  <polygon id="sIptSKg0qOOCgeom_ribbon.polygon.11.1.1" points="181.39,327.34 181.39,327.34 181.92,326.69 181.92,326.69 181.92,326.69 182.44,325.99 182.97,325.24 182.97,325.24 182.97,325.24 183.5,324.43 184.02,323.55 184.02,323.55 184.02,323.55 184.55,322.61 184.55,322.61 185.08,321.59 185.08,321.59 185.6,320.5 186.13,319.32 186.13,319.32 186.13,319.32 186.66,318.06 187.18,316.7 187.18,316.7 187.71,315.25 187.71,315.25 188.24,313.69 188.24,313.69 188.76,312.01 189.29,310.23 189.29,310.23 189.29,310.23 189.82,308.31 190.34,306.27 190.34,306.27 190.87,304.09 191.4,301.77 191.4,301.77 191.92,299.3 192.45,296.68 192.45,296.68 192.86,294.52 192.98,293.9 193.02,293.69 193.17,292.83 193.33,291.93 193.5,291 193.5,290.95 193.5,290.95 193.66,290.03 193.83,289.02 194.01,287.96 194.03,287.83 194.19,286.87 194.37,285.72 194.56,284.53 194.56,284.53 194.56,284.53 194.75,283.28 194.95,281.98 195.08,281.06 195.15,280.61 195.36,279.18 195.57,277.67 195.61,277.4 195.79,276.1 196.02,274.44 196.14,273.56 196.25,272.69 196.49,270.85 196.66,269.53 196.74,268.9 197,266.85 197.19,265.31 197.27,264.68 197.54,262.38 197.72,260.9 197.83,259.93 198.13,257.33 198.24,256.31 198.44,254.56 198.76,251.61 198.77,251.53 199.1,248.45 199.3,246.56 199.45,245.06 199.82,241.41 199.82,241.41 200.21,237.49 200.62,233.25 201.06,228.66 201.52,223.66 202.01,218.21 202.53,212.23 203.1,205.66 203.7,198.4 204.37,190.35 205.09,181.39 205.09,181.39 205.09,181.39 205.81,172.35 206.47,164.1 207.08,156.56 207.65,149.68 208.17,143.4 208.66,137.65 209.12,132.38 209.55,127.55 209.97,123.1 210.36,119.01 210.36,119.01 210.73,115.24 210.88,113.69 211.08,111.76 211.41,108.61 211.42,108.53 211.74,105.54 211.94,103.78 212.05,102.76 212.35,100.17 212.46,99.21 212.46,119.77 212.35,120.75 212.05,123.36 211.94,124.39 211.74,126.14 211.42,129.1 211.41,129.18 211.08,132.27 210.88,134.15 210.73,135.66 210.36,139.29 210.36,139.29 209.97,143.19 209.55,147.4 209.12,151.95 208.66,156.88 208.17,162.24 207.65,168.09 207.08,174.5 206.47,181.56 205.81,189.37 205.09,198.04 205.09,198.04 205.09,198.04 204.37,206.78 203.7,214.79 203.1,222.12 202.53,228.84 202.01,235 201.52,240.66 201.06,245.86 200.62,250.65 200.21,255.06 199.82,259.13 199.82,259.13 199.45,262.89 199.3,264.44 199.1,266.37 198.77,269.52 198.76,269.61 198.44,272.61 198.24,274.37 198.13,275.4 197.83,278 197.72,278.96 197.54,280.43 197.27,282.69 197.19,283.31 197,284.82 196.74,286.81 196.66,287.41 196.49,288.68 196.25,290.43 196.14,291.25 196.02,292.08 195.79,293.64 195.61,294.85 195.57,295.11 195.36,296.5 195.15,297.81 195.08,298.22 194.95,299.05 194.75,300.23 194.56,301.35 194.56,301.35 194.56,301.35 194.37,302.41 194.19,303.41 194.03,304.25 194.01,304.37 193.83,305.29 193.66,306.16 193.5,306.94 193.5,306.94 193.5,306.99 193.33,307.78 193.17,308.54 193.02,309.26 192.98,309.43 192.86,309.95 192.45,311.73 192.45,311.73 191.92,313.84 191.4,315.78 191.4,315.78 190.87,317.57 190.34,319.2 190.34,319.2 189.82,320.69 189.29,322.06 189.29,322.06 189.29,322.06 188.76,323.3 188.24,324.44 188.24,324.44 187.71,325.47 187.71,325.47 187.18,326.41 187.18,326.41 186.66,327.26 186.13,328.04 186.13,328.04 186.13,328.04 185.6,328.74 185.08,329.38 185.08,329.38 184.55,329.96 184.55,329.96 184.02,330.48 184.02,330.48 184.02,330.48 183.5,330.95 182.97,331.38 182.97,331.38 182.97,331.38 182.44,331.76 181.92,332.11 181.92,332.11 181.92,332.11 181.39,332.43 181.39,332.43" fill="rgb(0,0,255)" stroke="rgb(0,0,255)" stroke-width="0.15" stroke-dasharray="none" stroke-opacity="1" fill-opacity="0.2"/>
+                </g>
+              </g>
+              <g id="sIptSKg0qOOCGRID.polyline.14.1">
+                <polyline id="sIptSKg0qOOCGRID.polyline.14.1.1" points="73.24,44.25 75.88,44.25 78.51,44.25 81.14,44.25 83.78,44.25 86.41,44.25 89.04,44.25 91.67,44.25 94.31,44.25 96.94,44.25 99.57,44.25 99.57,44.25 101.68,44.25 102.21,44.25 103.79,44.25 104.84,44.25 105.89,44.25 107.47,44.25 108,44.25 110.11,44.25 110.11,44.25 112.21,44.25 112.74,44.25 114.32,44.25 115.37,44.25 116.43,44.25 118,44.25 118.53,44.25 120.64,44.26 120.64,44.26 122.74,44.26 123.27,44.26 124.85,44.26 125.9,44.26 125.9,44.26 126.96,44.26 127.48,44.26 128.54,44.26 129.06,44.26 129.06,44.26 130.64,44.26 131.17,44.26 131.17,44.26 132.22,44.26 133.28,44.26 133.8,44.26 133.8,44.26 135.38,44.27 135.38,44.27 136.44,44.27 136.96,44.27 137.49,44.27 138.54,44.28 139.07,44.28 139.6,44.28 140.12,44.28 141.7,44.29 141.7,44.29 141.7,44.29 143.28,44.3 143.81,44.3 144.34,44.3 144.86,44.31 145.92,44.32 146.44,44.32 146.97,44.33 148.02,44.34 148.02,44.34 149.6,44.36 149.6,44.36 150.13,44.37 151.18,44.39 152.23,44.41 152.23,44.41 152.23,44.41 152.76,44.42 153.29,44.43 154.34,44.46 154.34,44.46 154.34,44.46 154.87,44.48 155.39,44.5 155.92,44.52 156.45,44.54 156.45,44.54 157.5,44.58 157.5,44.58 157.5,44.58 158.55,44.64 158.55,44.64 159.08,44.67 159.61,44.7 160.13,44.74 160.66,44.77 160.66,44.77 160.66,44.77 161.71,44.86 162.24,44.9 162.77,44.95 162.77,44.95 162.77,44.95 163.82,45.07 163.82,45.07 164.87,45.2 164.87,45.2 165.4,45.27 165.4,45.27 165.93,45.35 166.98,45.53 166.98,45.53 166.98,45.53 168.03,45.74 168.03,45.74 168.56,45.85 169.09,45.98 169.09,45.98 170.14,46.26 170.14,46.26 170.67,46.41 171.19,46.58 171.19,46.58 171.72,46.76 172.25,46.96 173.3,47.39 173.3,47.39 173.3,47.39 173.3,47.39 174.35,47.89 174.88,48.17 175.41,48.48 175.41,48.48 175.93,48.8 176.46,49.15 176.46,49.15 177.51,49.93 177.51,49.93 178.04,50.37 178.57,50.84 178.57,50.84 178.57,50.84 179.09,51.34 179.62,51.88 179.62,51.88 179.62,51.88 179.62,51.88 180.15,52.46 180.67,53.08 180.67,53.08 181.2,53.75 181.2,53.75 181.72,54.46 181.72,54.46 181.72,54.46 182.25,55.23 182.78,56.06 182.78,56.06 182.78,56.06 183.3,56.94 183.83,57.89 183.83,57.89 183.83,57.89 184.36,58.9 184.36,58.9 184.88,59.98 184.88,59.98 185.41,61.14 185.94,62.38 185.94,62.38 185.94,62.38 186.46,63.7 186.99,65.11 186.99,65.11 187.52,66.62 187.52,66.62 188.04,68.23 188.04,68.23 188.57,69.94 189.1,71.75 189.1,71.75 189.1,71.75 189.62,73.69 190.15,75.74 190.15,75.74 190.68,77.92 191.2,80.23 191.2,80.23 191.73,82.67 192.26,85.25 192.26,85.25 192.67,87.37 192.78,87.98 192.82,88.18 192.98,89.02 193.14,89.9 193.3,90.8 193.31,90.85 193.31,90.85 193.47,91.74 193.64,92.72 193.81,93.74 193.84,93.87 193.99,94.8 194.18,95.9 194.36,97.05 194.36,97.05 194.36,97.05 194.56,98.25 194.75,99.5 194.89,100.38 194.96,100.81 195.16,102.18 195.38,103.61 195.42,103.87 195.6,105.11 195.83,106.69 195.94,107.52 196.06,108.35 196.3,110.09 196.47,111.33 196.55,111.92 196.81,113.85 197,115.3 197.07,115.89 197.35,118.04 197.52,119.42 197.64,120.32 197.93,122.74 198.05,123.69 198.24,125.31 198.57,128.04 198.58,128.12 198.91,130.95 199.1,132.68 199.26,134.06 199.63,137.38 199.63,137.38 200.02,140.95 200.43,144.78 200.86,148.9 201.33,153.36 201.82,158.18 202.34,163.41 202.9,169.12 203.51,175.35 204.17,182.19 204.9,189.71 204.9,189.71 204.9,189.71 205.62,197.24 206.28,204.07 206.89,210.31 207.45,216.01 207.98,221.24 208.47,226.07 208.93,230.52 209.36,234.64 209.77,238.47 210.16,242.04 210.16,242.04 210.53,245.36 210.69,246.74 210.89,248.47 211.22,251.31 211.22,251.38 211.55,254.11 211.74,255.73 211.86,256.68 212.16,259.1 212.27,260 212.44,261.38 212.72,263.53 212.8,264.12 212.98,265.57 213.24,267.5 213.32,268.09 213.49,269.34 213.73,271.08 213.85,271.9 213.97,272.73 214.19,274.31 214.37,275.55 214.41,275.81 214.63,277.24 214.84,278.61 214.9,279.04 215.04,279.92 215.24,281.17 215.43,282.37 215.43,282.37 215.43,282.37 215.62,283.52 215.8,284.62 215.95,285.55 215.98,285.68 216.15,286.7 216.32,287.68 216.48,288.57 216.48,288.57 216.49,288.62 216.65,289.53 216.81,290.4 216.97,291.24 217.01,291.44 217.12,292.05 217.53,294.17 217.53,294.17 218.06,296.75 218.59,299.19 218.59,299.19 219.11,301.5 219.64,303.68 219.64,303.68 220.17,305.73 220.69,307.67 220.69,307.67 220.69,307.67 221.22,309.49 221.75,311.2 221.75,311.2 222.27,312.8 222.27,312.8 222.8,314.31 222.8,314.31 223.33,315.72 223.85,317.04 223.85,317.04 223.85,317.04 224.38,318.28 224.91,319.44 224.91,319.44 225.43,320.52 225.43,320.52 225.96,321.54 225.96,321.54 225.96,321.54 226.49,322.48 227.01,323.37 227.01,323.37 227.01,323.37 227.54,324.19 228.07,324.96 228.07,324.96 228.07,324.96 228.59,325.67 228.59,325.67 229.12,326.34 229.12,326.34 229.65,326.96 230.17,327.54 230.17,327.54 230.17,327.54 230.17,327.54 230.7,328.08 231.23,328.59 231.23,328.59 231.23,328.59 231.75,329.05 232.28,329.49 232.28,329.49 233.33,330.27 233.33,330.27 233.86,330.62 234.39,330.94 234.39,330.94 234.91,331.25 235.44,331.53 236.49,332.03 236.49,332.03 236.49,332.03 236.49,332.03 237.55,332.47 238.07,332.66 238.6,332.84 238.6,332.84 239.13,333.01 239.65,333.16 239.65,333.16 240.71,333.44 240.71,333.44 241.23,333.57 241.76,333.68 241.76,333.68 242.81,333.89 242.81,333.89 242.81,333.89 243.87,334.07 244.39,334.15 244.39,334.15 244.92,334.22 244.92,334.22 245.97,334.35 245.97,334.35 247.02,334.47 247.02,334.47 247.02,334.47 247.55,334.52 248.08,334.56 249.13,334.65 249.13,334.65 249.13,334.65 249.66,334.69 250.18,334.72 250.71,334.75 251.24,334.78 251.24,334.78 252.29,334.84 252.29,334.84 252.29,334.84 253.34,334.88 253.34,334.88 253.87,334.9 254.4,334.92 254.92,334.94 255.45,334.96 255.45,334.96 255.45,334.96 256.5,334.99 257.03,335 257.56,335.01 257.56,335.01 257.56,335.01 258.61,335.03 259.66,335.05 260.19,335.06 260.19,335.06 261.77,335.08 261.77,335.08 262.82,335.1 263.35,335.1 263.88,335.11 264.93,335.11 265.46,335.12 265.98,335.12 266.51,335.13 268.09,335.13 268.09,335.13 268.09,335.13 269.67,335.14 270.2,335.14 270.72,335.14 271.25,335.15 272.3,335.15 272.83,335.15 273.36,335.15 274.41,335.15 274.41,335.15 275.99,335.16 275.99,335.16 276.52,335.16 277.57,335.16 278.62,335.16 278.62,335.16 279.15,335.16 280.73,335.16 280.73,335.16 281.25,335.16 282.31,335.16 282.83,335.16 283.89,335.16 283.89,335.16 284.94,335.17 286.52,335.17 287.05,335.17 289.15,335.17 289.15,335.17 291.26,335.17 291.79,335.17 293.37,335.17 294.42,335.17 295.47,335.17 297.05,335.17 297.58,335.17 299.69,335.17 299.69,335.17 301.79,335.17 302.32,335.17 303.9,335.17 304.95,335.17 306.01,335.17 307.59,335.17 308.11,335.17 310.22,335.17 310.22,335.17 312.85,335.17 315.48,335.17 318.12,335.17 320.75,335.17 323.38,335.17 326.02,335.17 328.65,335.17 331.28,335.17 333.92,335.17 336.55,335.17" stroke="rgb(0,0,255)" fill="none" stroke-width="1.52" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="1" stroke-opacity="0.1" fill-opacity="0.1"/>
+              </g>
+              <g id="sIptSKg0qOOCpanel.border.rect.16.1">
+                <rect id="sIptSKg0qOOCpanel.border.rect.16.1.1" x="60.08" y="29.71" width="289.64" height="320.01" stroke-width="0.76" stroke="none" fill="none" stroke-dasharray="none" stroke-opacity="0" fill-opacity="0"/>
+              </g>
+            </g>
+          </g>
+          <g id="sIptSKg0qOOClayout::axis-l.3-3-3-3.1">
+            <g id="sIptSKg0qOOClayout::axis-l.3-3-3-3::GRID.VP.2.1">
+              <g id="sIptSKg0qOOCaxis-l.3-3-3-3.1">
+                <g id="sIptSKg0qOOCaxis.line.y.polyline.37.1">
+                  <polyline id="sIptSKg0qOOCaxis.line.y.polyline.37.1.1" points="60.08,29.71 60.08,349.71" stroke-width="0.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                </g>
+                <g id="sIptSKg0qOOClayout::axis-l.3-3-3-3::GRID.VP.2::axis.1">
+                  <g id="sIptSKg0qOOCGRID.gTableParent.51.1">
+                    <g id="sIptSKg0qOOClayout::axis-l.3-3-3-3::GRID.VP.2::axis::axis.1-1-1-1.1">
+                      <g id="sIptSKg0qOOCaxis.1-1-1-1.1">
+                        <g id="sIptSKg0qOOCaxis.1-1-1-1.1.1" transform="translate(45.29, 44.25)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.1-1-1-1.1.1.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.1-1-1-1.1.1.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.1-1-1-1.1.1.tspan.1" dy="3.59" x="0">0.00</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.1-1-1-1.1.2" transform="translate(45.29, 116.98)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.1-1-1-1.1.2.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.1-1-1-1.1.2.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.1-1-1-1.1.2.tspan.1" dy="3.59" x="0">0.25</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.1-1-1-1.1.3" transform="translate(45.29, 189.71)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.1-1-1-1.1.3.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.1-1-1-1.1.3.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.1-1-1-1.1.3.tspan.1" dy="3.59" x="0">0.50</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.1-1-1-1.1.4" transform="translate(45.29, 262.44)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.1-1-1-1.1.4.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.1-1-1-1.1.4.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.1-1-1-1.1.4.tspan.1" dy="3.59" x="0">0.75</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.1-1-1-1.1.5" transform="translate(45.29, 335.17)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.1-1-1-1.1.5.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.1-1-1-1.1.5.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.1-1-1-1.1.5.tspan.1" dy="3.59" x="0">1.00</tspan>
+                            </text>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                    <g id="sIptSKg0qOOClayout::axis-l.3-3-3-3::GRID.VP.2::axis::axis.1-2-1-2.1"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+          <g id="sIptSKg0qOOClayout::axis-b.4-4-4-4.1">
+            <g id="sIptSKg0qOOClayout::axis-b.4-4-4-4::GRID.VP.1.1">
+              <g id="sIptSKg0qOOCaxis-b.4-4-4-4.1">
+                <g id="sIptSKg0qOOCaxis.line.x.polyline.31.1">
+                  <polyline id="sIptSKg0qOOCaxis.line.x.polyline.31.1.1" points="60.08,29.71 349.71,29.71" stroke-width="0.76" stroke="rgb(0,0,0)" stroke-dasharray="none" stroke-linecap="butt" stroke-opacity="1" fill="none"/>
+                </g>
+                <g id="sIptSKg0qOOClayout::axis-b.4-4-4-4::GRID.VP.1::axis.1">
+                  <g id="sIptSKg0qOOCGRID.gTableParent.58.1">
+                    <g id="sIptSKg0qOOClayout::axis-b.4-4-4-4::GRID.VP.1::axis::axis.1-1-1-1.1"/>
+                    <g id="sIptSKg0qOOClayout::axis-b.4-4-4-4::GRID.VP.1::axis::axis.2-1-2-1.1">
+                      <g id="sIptSKg0qOOCaxis.2-1-2-1.1">
+                        <g id="sIptSKg0qOOCaxis.2-1-2-1.1.1" transform="translate(119.82, 21.06)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.2-1-2-1.1.1.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.2-1-2-1.1.1.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.2-1-2-1.1.1.tspan.1" dy="3.59" x="0">1e-04</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.2-1-2-1.1.2" transform="translate(189.8, 21.06)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.2-1-2-1.1.2.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.2-1-2-1.1.2.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.2-1-2-1.1.2.tspan.1" dy="3.59" x="0">1e+00</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.2-1-2-1.1.3" transform="translate(259.77, 21.06)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.2-1-2-1.1.3.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.2-1-2-1.1.3.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.2-1-2-1.1.3.tspan.1" dy="3.59" x="0">1e+04</tspan>
+                            </text>
+                          </g>
+                        </g>
+                        <g id="sIptSKg0qOOCaxis.2-1-2-1.1.4" transform="translate(329.74, 21.06)" stroke-width="0.1">
+                          <g id="sIptSKg0qOOCaxis.2-1-2-1.1.4.scale" transform="scale(1, -1)">
+                            <text x="0" y="0" id="sIptSKg0qOOCaxis.2-1-2-1.1.4.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="normal">
+                              <tspan id="sIptSKg0qOOCaxis.2-1-2-1.1.4.tspan.1" dy="3.59" x="0">1e+08</tspan>
+                            </text>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+          <g id="sIptSKg0qOOClayout::xlab.5-4-5-4.1">
+            <g id="sIptSKg0qOOCxlab.5-4-5-4.1">
+              <g id="sIptSKg0qOOCxlab.5-4-5-4.1.1" transform="translate(204.9, 11.3)" stroke-width="0.1">
+                <g id="sIptSKg0qOOCxlab.5-4-5-4.1.1.scale" transform="scale(1, -1)">
+                  <text x="0" y="0" id="sIptSKg0qOOCxlab.5-4-5-4.1.1.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="italic">
+                    <tspan id="sIptSKg0qOOCxlab.5-4-5-4.1.1.tspan.1" dy="3.59" x="0">Dose</tspan>
+                  </text>
+                </g>
+              </g>
+            </g>
+          </g>
+          <g id="sIptSKg0qOOClayout::ylab.3-2-3-2.1">
+            <g id="sIptSKg0qOOCylab.3-2-3-2.1">
+              <g id="sIptSKg0qOOCylab.3-2-3-2.1.1" transform="translate(20.35, 189.71)" stroke-width="0.1">
+                <g id="sIptSKg0qOOCylab.3-2-3-2.1.1.scale" transform="scale(1, -1)">
+                  <text x="0" y="0" id="sIptSKg0qOOCylab.3-2-3-2.1.1.text" text-anchor="middle" font-size="10" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="normal" font-style="italic">
+                    <tspan id="sIptSKg0qOOCylab.3-2-3-2.1.1.tspan.1" dy="3.59" x="0">Effect</tspan>
+                  </text>
+                </g>
+              </g>
+            </g>
+          </g>
+          <g id="sIptSKg0qOOClayout::title.2-4-2-4.1">
+            <g id="sIptSKg0qOOCtitle.2-4-2-4.1">
+              <g id="sIptSKg0qOOCtitle.2-4-2-4.1.1" transform="translate(60.08, 349.71)" stroke-width="0.1">
+                <g id="sIptSKg0qOOCtitle.2-4-2-4.1.1.scale" transform="scale(1, -1)">
+                  <text x="0" y="0" id="sIptSKg0qOOCtitle.2-4-2-4.1.1.text" text-anchor="start" font-size="13.3" stroke="rgb(0,0,0)" font-family="Helvetica, Arial, FreeSans, Liberation Sans, Nimbus Sans L, sans-serif" fill="rgb(0,0,0)" stroke-opacity="1" fill-opacity="1" font-weight="bold" font-style="normal">
+                    <tspan id="sIptSKg0qOOCtitle.2-4-2-4.1.1.tspan.1" dy="4.87" x="0"> </tspan>
+                  </text>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

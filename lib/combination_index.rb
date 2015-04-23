@@ -7,14 +7,12 @@ module CombinationIndex
 
   def self.m_dm(dose_1, effect_1, dose_2, effect_2, max_effect = 1)
     max_effect = 1
+
     e_ratio1 = self.effect_ratio effect_1, max_effect
     e_ratio2 = self.effect_ratio effect_2, max_effect
 
     le1 = Math.log(e_ratio1)
     le2 = Math.log(e_ratio2)
-
-    #le1 = e_ratio1
-    #le2 = e_ratio2
 
     ld1 = Math.log(dose_1)
     ld2 = Math.log(dose_2)
@@ -27,12 +25,41 @@ module CombinationIndex
     [m, dm]
   end
 
+  def self.sample_m_dm(dose_1, effect1_info, dose_2, effect2_info, max_effect)
+    fit1 = effect1_info["fit"]
+    fit2 = effect2_info["fit"]
+
+    sd1 = (effect1_info["upper"] - effect1_info["fit"])/1.96
+    sd2 = (effect2_info["upper"] - effect2_info["fit"])/1.96
+    size = 25
+    diffs1 = R.eval_a "rnorm(#{R.ruby2R size},0,#{R.ruby2R sd1})"
+    diffs2 = R.eval_a "rnorm(#{R.ruby2R size},0,#{R.ruby2R sd2})"
+    diffs1.zip(diffs2).collect{|diff1, diff2|
+      begin
+        e1 = fit1 + diff1
+        e1 = 0.99 if e1 > 0.99
+        e1 = 0.01 if e1 < 0.01
+
+        e2 = fit2 + diff2
+        e2 = 0.99 if e2 > 0.99
+        e2 = 0.01 if e2 < 0.01
+
+        self.m_dm(dose_1, e1, dose_2, fit2 + diff2)
+      rescue
+        nil
+      end
+    }.compact
+  end
+
   def self.adjust_dose(model, effect, min_dose, max_dose, inverse=false)
     dose = min_dose + (max_dose - min_dose)/2
 
+    real_max_dose = max_dose
+    real_min_dose = min_dose
+
     new_effect = model.predict(dose)
     delta = new_effect - effect
-    while delta.abs > 0.01 and max_dose - dose > max_dose / 100 and dose - min_dose > min_dose / 100
+    while delta.abs > 0.01 and real_max_dose - dose > real_max_dose / 100 and dose - real_min_dose > real_min_dose / 100
       if (delta < 0 and not inverse) or (delta > 0 and inverse)
         min_dose = dose
         dose = dose + (max_dose - dose) / 2
@@ -79,7 +106,6 @@ module CombinationIndex
       median_point = min_effect * 1.1 if median_point < min_effect
 
       if model_type.to_s =~ /least_squares/
-        #model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
         model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect/(1-Effect)) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
         begin
           data.process "Effect" do |effect|
@@ -92,21 +118,35 @@ module CombinationIndex
           model.fit(data,'lm')
           mean = Misc.mean effects
 
-          effect1 = median_point * 0.8
-          effect2 = median_point * 1.2
+          effect1 = median_point - 0.15
+          effect2 = median_point + 0.15
           effect1 = 0.05 if effect1 < 0.05
           effect2 = 0.95 if effect2 > 0.95
 
-          dose1 = adjust_dose(model, effect1, min_dose, max_dose, inverse)
-          dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
+          dose1 = adjust_dose(model, Math.log(effect1/(1-effect1)), min_dose, max_dose, inverse)
+          dose2 = adjust_dose(model, Math.log(effect2/(1-effect2)), min_dose, max_dose, inverse)
 
           if (dose1 - dose2).abs < dose1 / 10
             dose1 -= dose1/10
             dose2 += dose2/10
           end
 
-          effect1 = Math.exp(model.predict(dose1)) / (1+Math.exp(model.predict(dose1)))
-          effect2 = Math.exp(model.predict(dose2)) / (1+Math.exp(model.predict(dose2)))
+          predict1_info = model.predict_interval(dose1)
+          predict2_info = model.predict_interval(dose2)
+
+          effect1_info = {}
+          effect2_info = {}
+
+          predict1_info.each do |k,pred1|
+            effect1_info[k] =  Math.exp(pred1) / (1+Math.exp(pred1))
+          end
+
+          predict2_info.each do |k,pred2|
+            effect2_info[k] =  Math.exp(pred2) / (1+Math.exp(pred2))
+          end
+
+          effect1 = effect1_info["fit"]
+          effect2 = effect2_info["fit"]
 
         rescue Exception
           Log.warn "Fit exception: #{$!.message}"
@@ -122,16 +162,19 @@ module CombinationIndex
           model.fit(data,'drm', :fct => model_type)
           mean = Misc.mean effects
           
-          effect1 = median_point * 0.8
-          effect2 = median_point * 1.2
+          effect1 = median_point - 0.15
+          effect2 = median_point + 0.15
           effect1 = 0.05 if effect1 < 0.05
           effect2 = 0.95 if effect2 > 0.95
 
           dose1 = adjust_dose(model, effect1, min_dose, max_dose, inverse)
           dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
 
-          effect1 = model.predict(dose1)
-          effect2 = model.predict(dose2)
+          effect1_info = model.predict_interval(dose1)
+          effect2_info = model.predict_interval(dose2)
+
+          effect1 = effect1_info["fit"]
+          effect2 = effect2_info["fit"]
 
         rescue Exception
           Log.warn "Fit exception: #{$!.message}"
@@ -151,7 +194,15 @@ module CombinationIndex
     begin
       max_effect = effect1 if effect1 > max_effect
       max_effect = effect2 if effect2 > max_effect
-      CombinationIndex.m_dm(dose1, effect1, dose2, effect2, max_effect) + [dose1, effect1, dose2, effect2]
+      m, dm = CombinationIndex.m_dm(dose1, effect1, dose2, effect2, max_effect)
+
+      if effect1_info
+        random_samples = CombinationIndex.sample_m_dm(dose1, effect1_info, dose2, effect2_info, max_effect)
+      else
+        random_samples = nil
+      end
+                   
+      [m, dm, dose1, effect1, dose2, effect2] + random_samples
     rescue Exception
       Log.warn "M Dm exception: #{$!.message}"
       Log.exception $!
