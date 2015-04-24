@@ -56,7 +56,6 @@ require(['rbbt.basic'], function(){
         url: url, 
         method: 'GET', 
         serialize: function(data) {return data},
-        //data: data,
         deserialize: function(value) {return value},
       }
 
@@ -123,7 +122,6 @@ require(['rbbt.basic'], function(){
     }.bind(this)
 
   }
-
 
   rbbt.job = function(workflow, task, inputs){
     var job = new rbbt.Job(workflow, task, inputs)
