@@ -33,3 +33,7 @@ rbbt.mview.plot = function(content, title, caption){
 
   return plot
 }
+
+rbbt.mview.button = function(options,args){
+  return m('.ui.button', options, args)
+}

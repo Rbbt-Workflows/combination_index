@@ -6,6 +6,7 @@ ci.controls.vm = (function(){
     vm.model_type = m.prop(":LL.5()")
     vm.median_point = m.prop(0.5)
     vm.fix_ratio = m.prop(false)
+    vm.batch = {}
   }
 
   return vm
@@ -13,7 +14,53 @@ ci.controls.vm = (function(){
 
 
 ci.controls.controller = function(){
+  var controller = this
   ci.controls.vm.init()
+  controller.batch = function(){
+    for (combination in ci.combination_info){
+      var combination_values = ci.combination_info[combination]
+
+      var more_doses = combination_values.map(function(a){ return a[0] + a[1]})
+      var more_effects = combination_values.map(function(a){ return a[2]})
+
+      for (i in combination_values){
+        var combination_value = combination_values[i]
+
+        var blue_drug = combination.split("-")[0]
+        var blue_drug_info = ci.drug_info[blue_drug]
+        var blue_doses = blue_drug_info.map(function(p){return p[0]})
+        var blue_effects = blue_drug_info.map(function(p){return p[1]})
+
+        var red_drug = combination.split("-")[1]
+        var red_drug_info = ci.drug_info[red_drug]
+        var red_doses = red_drug_info.map(function(p){return p[0]})
+        var red_effects = red_drug_info.map(function(p){return p[1]})
+
+        var blue_dose = combination_value[0]
+        var red_dose = combination_value[1]
+        var effect = combination_value[2]
+        var fix_ratio = ci.controls.vm.fix_ratio()
+        var model_type = ci.controls.vm.model_type()
+
+
+        var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type }
+        inputs.more_doses = more_doses
+        inputs.more_effects = more_effects
+
+        var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
+
+        job.issue()
+        job.join().then(function(){
+          job.get_info().then(function(info){
+            var batch = ci.controls.vm.batch
+            if (undefined === batch[combination]) batch[combination] = {}
+            batch[combination][effect] = info.CI
+            m.redraw()
+          })
+        })
+      }
+    }
+  }
 }
 
 ci.controls.view = function(controller){
@@ -22,8 +69,10 @@ ci.controls.view = function(controller){
   var options = [m('.item[data-value=:least_squares]',option_options, ":least_squares"),m('.item[data-value=:LL.2()]',option_options, ":LL.2()"),m('.item[data-value=:LL.3()]',option_options, ":LL.3()"),m('.item[data-value=:LL.4()]',option_options, ":LL.4()"),m('.item[data-value=:LL.5()]',option_options, ":LL.5()")]
   var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', ci.controls.vm.model_type()),m('i.dropdown.icon'), m('.menu',options)])
   var fix_input = m('.ui.small.input', [m('label', 'Fix combination ratio'), m('input.ui.checkbox', {type: 'checkbox', checked: ci.controls.vm.fix_ratio(),  onchange: m.withAttr('checked', ci.controls.vm.fix_ratio)})])
+  var batch_button = rbbt.mview.button({onclick: controller.batch}, "Batch")
+  var batch_count = m('p', "Number of finished jobs: " + Object.keys(ci.controls.vm.batch).length)
 
-  var control_panel =  m('.ui.basic.segment',[model_type_input, median_point_input, fix_input])
+  var control_panel =  m('.ui.basic.segment',[model_type_input, median_point_input, fix_input, batch_button])
   return control_panel
 }
 

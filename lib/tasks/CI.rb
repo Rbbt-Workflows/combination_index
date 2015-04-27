@@ -48,7 +48,7 @@ module CombinationIndex
         CI.plot_fit(m,dm,data,data.me_points, modelfile, least_squares, invert, random_samples)
       EOF
 
-      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :debug, :source => Rbbt.share.R["CI.R"].find(:lib)
+      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib)
     rescue Exception
       Log.exception $!
       if invert
@@ -91,8 +91,8 @@ module CombinationIndex
     blue_effects = blue_effects.collect{|v| v.to_f}
     red_doses = red_doses.collect{|v| v.to_f}
     red_effects = red_effects.collect{|v| v.to_f}
-    blue_random_samples = blue_step.info[:random_samples]
-    red_random_samples = red_step.info[:random_samples]
+    blue_random_samples = blue_step.info[:random_samples] || []
+    red_random_samples = red_step.info[:random_samples] || []
 
     blue_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Effect"], :type => :single)
     blue_doses.zip(blue_effects).each do |dose, effect|
@@ -163,7 +163,7 @@ module CombinationIndex
             fix_ratio=fix_ratio, more_doses = more_doses, more_effects = more_effects, blue.random.samples = blue.random.samples, red.random.samples = red.random.samples)
         EOF
 
-        R::SVG.ggplotSVG nil, plot_script, 5, 5, :debug => true, :R_method => :debug, :source => Rbbt.share.R["CI.R"].find
+        R::SVG.ggplotSVG nil, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find
       end
     end
   end

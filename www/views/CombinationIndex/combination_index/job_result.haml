@@ -2,7 +2,6 @@
   .job_control
     = workflow_partial('job_result/job_control', workflow, task, locals)
 - ci_value = result
-- iii job.info
 - inputs = job.info[:inputs].dup
 
 - m, dm = CombinationIndex.m_dm(inputs[:dose_d1_1], inputs[:effect_d1_1], inputs[:dose_d1_2], inputs[:effect_d1_2])

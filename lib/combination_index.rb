@@ -1,6 +1,8 @@
 require 'rbbt/util/R/model'
 
+R.eval_a 'library(drc)'
 module CombinationIndex
+
   def self.effect_ratio(effect, max = 1.0)
     effect / (max.to_f - effect)
   end
@@ -32,8 +34,11 @@ module CombinationIndex
     sd1 = (effect1_info["upper"] - effect1_info["fit"])/1.96
     sd2 = (effect2_info["upper"] - effect2_info["fit"])/1.96
     size = 25
+    diffs1 = nil
+    diffs2 = nil
     diffs1 = R.eval_a "rnorm(#{R.ruby2R size*4},0,#{R.ruby2R sd1})"
     diffs2 = R.eval_a "rnorm(#{R.ruby2R size*4},0,#{R.ruby2R sd2})"
+
     found = 0
     diffs1.zip(diffs2).collect{|diff1, diff2|
       next nil if found == size
@@ -155,7 +160,6 @@ module CombinationIndex
 
         rescue Exception
           Log.warn "Fit exception: #{$!.message}"
-          Log.exception $!
           cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}.first
           dose1, effect1, dose2, effect2 = cmp.flatten
         end
@@ -203,7 +207,7 @@ module CombinationIndex
 
       if effect1_info
         random_samples = CombinationIndex.sample_m_dm(dose1, effect1_info, dose2, effect2_info, max_effect)
-        random_samples.select!{|_m,_dm| iii [m,_m]; (m > 0) == (_m > 0)}
+        random_samples.select!{|_m,_dm| (m > 0) == (_m > 0)}
       else
         random_samples = []
       end
@@ -360,8 +364,8 @@ module CombinationIndex
 
     if scale
       values = tsv.values.collect{|v| v[1] }.flatten.uniq.collect{|v| v.to_f}
-      max = values.max
-      min = values.min
+      max = values.max + 0.0001
+      min = values.min - 0.0001
     end
 
     tsv.through do |k,values|

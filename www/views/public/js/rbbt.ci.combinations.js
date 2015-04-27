@@ -6,7 +6,7 @@ ci.combinations.controller = function(){
   var controller = this
   ci.combinations.vm.init()
 
-  this.draw_CI = function(meassurement){
+  controller.draw_CI = function(meassurement){
     ci.combinations.vm.plot.title = m.prop('loading')
     m.redraw()
 

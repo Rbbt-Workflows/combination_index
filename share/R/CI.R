@@ -1,7 +1,10 @@
 library(drc)
+
+
 CI.eff_ratio = function(x){ 
     return(x / (1-x));
 }
+
 
 CI.misc.seq <- function(){
     res = seq(0, 0.1, length.out=50)
@@ -65,7 +68,7 @@ CI.me_curve = function(m, dm, center_dose=NA){
     if (is.na(center_dose)) center_dose = dm
     doses.me = c(CI.misc.log_seq(center_dose), CI.misc.seq())
 
-    if (is.na(m)){
+    if (is.null(m) || is.na(m)){
         data.me = data.frame(Dose=doses.me, Effect=rep(NA, length(doses.me)))
     }else{
         effect_ratios.me = sapply(doses.me, function(d){ (d / dm)^m });
@@ -149,15 +152,21 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
 
     min.dose = min(data.me_points$Dose)
     max.dose = max(data.me_points$Dose)
-    plot = ggplot(aes(x=Dose, y=Effect), data=data, ylim=c(min.effect,max.effect),xlim=c(min.dose, max.dose)) +
-    scale_x_log10() + annotation_logticks(side='b') +
-    geom_line(data=data.me, col='blue', cex=2) +
-    geom_line(data=data.drc, col='blue', linetype='dotted',cex=2) +
-    geom_point(cex=5) + 
-    ylim(c(0,1)) +
-    geom_point(data=data.me_points, col='blue',cex=5) 
 
-    if(sum(!is.nan(data.drc$Effect.upr)) > 0){
+    if (least_squares){
+        plot = ggplot(aes(x=log(Dose), y=log(Effect/(1-Effect))), data=data) #+ xlim(log(c(min.dose, max.dose))) + ylim(c(1,-1))
+    }else{
+        plot = ggplot(aes(x=log(Dose), y=Effect), data=data) + ylim(c(min.effect,max.effect)) #+ xlim(log(c(min.dose, max.dose)))
+    }
+
+    plot = plot +
+           geom_line(data=data.me, col='blue', cex=2) +
+           geom_line(data=data.drc, col='blue', linetype='dotted',cex=2) +
+           geom_point(cex=5) + 
+           geom_point(data=data.me_points, col='blue',cex=5) 
+
+
+    if(sum(!is.nan(data.drc$Effect.upr)) > 0 && ! least_squares){
         plot = plot + geom_ribbon(data=data.drc, aes(ymin=Effect.lwr, ymax=Effect.upr),col='blue',fill='blue',alpha=0.2, cex=0.1)
     }
 
@@ -170,6 +179,7 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
             plot = plot + geom_line(data=data.me.s, col='blue', cex=2, linetype='dashed', alpha=0.2)
         }
     }
+
 
     return(plot)
 }
@@ -235,6 +245,9 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         max.effect=max(c(max.effect, more_effects))
     }
 
+    max.effect = min(c(1, max.effect))
+    min.effect = max(c(0, min.effect))
+
     all.doses = c(data.blue_me$Dose, data.red_me$Dose)
     min.dose = min(all.doses)
     max.dose = max(all.doses)
@@ -275,7 +288,7 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
     if (!is.null(more_effects)){
         len = length(more_doses)
         for (i in seq(1, len)){
-            plot = plot + geom_point(x=log10(more_doses[i]), y=more_effects[i], col='black', cex=3, alpha=0.8)
+            plot = plot + geom_point(x=log10(more_doses[i]), y=more_effects[i], col='black', cex=2, alpha=0.4)
         }
     }
 
