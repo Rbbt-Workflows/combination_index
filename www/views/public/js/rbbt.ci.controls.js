@@ -6,17 +6,42 @@ ci.controls.vm = (function(){
     vm.model_type = m.prop(":LL.5()")
     vm.median_point = m.prop(0.5)
     vm.fix_ratio = m.prop(false)
+    console.log('init')
     vm.batch = {}
   }
 
   return vm
 }())
 
+ci.controls.job_cache = []
+ci.controls.running_jobs = 0
+
+ci.controls.batch_complete_function = function(){
+  this.join().then(function(){
+    this.get_info().then(function(info){
+      var batch = ci.controls.vm.batch
+      if (undefined === batch[this.combination]) batch[this.combination] = {}
+      batch[this.combination][this.effect] = info.CI
+      m.redraw()
+      ci.controls.running_jobs = ci.controls.running_jobs - 1
+      ci.controls.start_job_cache()
+    }.bind(this))
+  }.bind(this))
+}
+
+ci.controls.start_job_cache = function(){
+  var job = ci.controls.job_cache.pop()
+  if(job != undefined){
+    ci.controls.running_jobs = ci.controls.running_jobs + 1
+    job.issue().then(ci.controls.batch_complete_function.bind(job))
+  }
+}
 
 ci.controls.controller = function(){
   var controller = this
   ci.controls.vm.init()
   controller.batch = function(){
+    ci.controls.vm.batch = {}
     for (combination in ci.combination_info){
       var combination_values = ci.combination_info[combination]
 
@@ -43,23 +68,23 @@ ci.controls.controller = function(){
         var model_type = ci.controls.vm.model_type()
 
 
-        var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type }
+        var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type}
         inputs.more_doses = more_doses
         inputs.more_effects = more_effects
 
         var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
-        job.issue()
-        job.join().then(function(){
-          job.get_info().then(function(info){
-            var batch = ci.controls.vm.batch
-            if (undefined === batch[combination]) batch[combination] = {}
-            batch[combination][effect] = info.CI
-            m.redraw()
-          })
-        })
+        job.combination = combination
+        job.effect = effect
+
+        ci.controls.job_cache.push(job)
+        //job.run().then(ci.controls.batch_complete_function.bind(job))
       }
     }
+    ci.controls.start_job_cache()
+    ci.controls.start_job_cache()
+    ci.controls.start_job_cache()
+    ci.controls.start_job_cache()
   }
 }
 

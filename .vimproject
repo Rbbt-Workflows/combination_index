@@ -41,12 +41,6 @@ CombinationIndex=/$PWD filter="*.rb" {
    }
    public=public{
     js=js{
-     require.js
-
-     rbbt.basic.js
-     rbbt.job.js
-     rbbt.views.js
-
      rbbt.ci.js
 
      rbbt.ci.controls.js

@@ -154,12 +154,13 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
     max.dose = max(data.me_points$Dose)
 
     if (least_squares){
-        plot = ggplot(aes(x=log(Dose), y=log(Effect/(1-Effect))), data=data) #+ xlim(log(c(min.dose, max.dose))) + ylim(c(1,-1))
+        plot = ggplot(aes(x=Dose, y=log(Effect/(1-Effect))), data=data) #+ xlim(log(c(min.dose, max.dose))) + ylim(c(1,-1))
     }else{
-        plot = ggplot(aes(x=log(Dose), y=Effect), data=data) + ylim(c(min.effect,max.effect)) #+ xlim(log(c(min.dose, max.dose)))
+        plot = ggplot(aes(x=Dose, y=Effect), data=data) + ylim(c(min.effect,max.effect)) #+ xlim(log(c(min.dose, max.dose)))
     }
 
     plot = plot +
+           scale_x_log10() + annotation_logticks(side='b') +
            geom_line(data=data.me, col='blue', cex=2) +
            geom_line(data=data.drc, col='blue', linetype='dotted',cex=2) +
            geom_point(cex=5) + 

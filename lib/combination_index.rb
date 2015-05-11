@@ -7,6 +7,13 @@ module CombinationIndex
     effect / (max.to_f - effect)
   end
 
+  def self.additive_dose(level, blue_dose, red_dose, blue_m, blue_dm, red_m, red_dm)
+    ratio = self.effect_ratio(level); 
+    t1 =  blue_dose/(blue_dm*(ratio**(1/blue_m)))
+    t2 =  red_dose/(red_dm*(ratio**(1/red_m)))
+    (blue_dose+red_dose)/(t1 + t2)
+  end
+
   def self.m_dm(dose_1, effect_1, dose_2, effect_2, max_effect = 1)
     max_effect = 1
 

@@ -51,14 +51,25 @@ ci.combinations.controller = function(){
 
     var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
-    job.issue()
-    job.join().then(function(info){
+    job.run().then(function(info){
       job.load().then(ci.combinations.vm.plot.content, job_error)
+      var title = "Fit plot for combination: " + blue_drug + " (blue) and " + red_drug + " (red)."
       if (info.status == "done"){
         var ci_value = info["CI"]
-        ci.combinations.vm.plot.title("Fit plot for combination: " + blue_drug + " (blue) and " + red_drug + " (red)"+ '. CI=' + parseFloat(ci_value).toFixed(2))
+        var gi50 = info["GI50"]
+        title = title + ' GI50=' + parseFloat(gi50).toFixed(2)
+        title = title + '. CI=' + parseFloat(ci_value).toFixed(2)
+
+        var random_ci = info["random_CI"]
+        if (undefined !== random_ci){
+          var min = Math.min(...random_ci)
+          var max = Math.max(...random_ci)
+          title = title + '. Random range: ' + min.toFixed(2) + ' - ' + max.toFixed(2)
+        }
+        ci.combinations.vm.plot.title(title)
       }else{
-        ci.combinations.vm.plot.title("Fit plot for combination: " + blue_drug + " (blue) and " + red_drug + " (red)"+ '. Could not calculate CI value')
+        title = title + ' Could not calculate CI value'
+        ci.combinations.vm.plot.title(title)
       }
       m.redraw()
     })

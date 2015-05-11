@@ -78,8 +78,14 @@ module CombinationIndex
   input :more_effects, :array, "More combination effects"
   extension :svg
   dep do |jobname, options|
-    median_point = options[:effect].to_f
     model_type = options[:model_type]
+
+    if model_type.to_s =~ /least_squares/
+      median_point = 0.5
+    else
+      median_point = options[:effect].to_f
+    end
+
     [
       CombinationIndex.job(:fit, nil, :doses => options[:blue_doses], :effects => options[:blue_effects], :median_point => median_point, :model_type => model_type),
       CombinationIndex.job(:fit, nil, :doses => options[:red_doses], :effects => options[:red_effects], :median_point => median_point, :model_type => model_type)
@@ -115,7 +121,32 @@ module CombinationIndex
     lss = true if model_type =~ /least_squares/
 
     if Float === blue_dm and Float === red_dm
-      set_info :CI, CombinationIndex.ci_value(blue_dose, blue_dm, blue_m, red_dose, red_dm, red_m, effect)
+      ci = CombinationIndex.ci_value(blue_dose, blue_dm, blue_m, red_dose, red_dm, red_m, effect)
+      random_doses = []
+      random_ci = []
+
+      blue_random_samples.zip(red_random_samples).collect do |bi,ri|
+        rblue_m, rblue_dm = bi
+        rred_m, rred_dm = ri
+        rci = CombinationIndex.ci_value(blue_dose, rblue_dm, rblue_m, red_dose, rred_dm, rred_m, effect)
+        random_ci << rci
+      end
+
+      set_info :CI, ci
+      set_info :random_CI, random_ci.sort
+      set_info :GI50, CombinationIndex.additive_dose(0.5, blue_dose, red_dose, blue_m, blue_dm, red_m, red_dm)
+
+      matching_effects = []
+      more_doses.each_with_index{|dose,i|
+        if (dose.to_f - (red_dose.to_f + blue_dose.to_f)).abs < 0.0001
+          matching_effects << more_effects[i]
+        end
+      }
+
+      if matching_effects.length > 2
+        matching_CI = matching_effects.collect{|_effect|
+        }
+      end
     else
       set_info :CI, nil
     end

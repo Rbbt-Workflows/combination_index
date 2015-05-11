@@ -132,8 +132,8 @@
   .content
     = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
       - input :file, :file, "Data file"
-      - input :scale, :boolean, "Scale effect"
-      - input :invert, :boolean, "Invert effect"
+      - input :scale, :boolean, "Scale effect", true
+      - input :invert, :boolean, "Invert effect", false
 
   .examples
 
@@ -254,12 +254,12 @@
 
      
 :deferjs
-  //require(['rbbt.job', 'rbbt.ci', 'rbbt.ci.drugs', 'rbbt.ci.combinations'], function(args){
   require(['rbbt.job', 'rbbt.views', 'rbbt.ci'], function(args){
     require(['rbbt.ci.controls', 'rbbt.ci.combinations', 'rbbt.ci.drugs'], function(args){
       m.module(document.getElementById("controls"), rbbt.ci.controls)
       m.module(document.getElementById("drugs"), rbbt.ci.drugs)
       m.module(document.getElementById("combinations"), rbbt.ci.combinations)
+      m.redraw()
     })
   })
 
