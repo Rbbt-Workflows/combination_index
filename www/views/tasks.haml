@@ -1,6 +1,31 @@
 :sass
+  .ui.logo
+    font-family: serif
+  .ui.tabular.menu > .item
+    font-family: monospace
+
+  .plot.column
+    position: absolute !important
+    bottom: 0
+    right: 0
+    figure
+      min-height: 400px
+    
+  .ci_values
+    width: calc(100% - 4px)
+    height: 3px
+    position: absolute
+    bottom: 0
+    left: 0
+    margin-left: 2px
+    margin-right: 2px
+    display: flex
+    .ci_value
+      height: 3px
+      background-color: attr('data-color')
 
   #drugs, #combinations
+    min-height: 23em
     .new_drug, .new_combination
       padding-left: 0 !important
       .icon.input, input
@@ -22,7 +47,7 @@
     table
       float: left
       tbody
-        max-height: 19em
+        max-height: 23em
         overflow: auto
         display: block
 

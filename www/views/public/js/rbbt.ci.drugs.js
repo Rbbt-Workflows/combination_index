@@ -31,7 +31,7 @@ ci.drugs.vm = (function(){
     vm.median_point = m.prop(0.5)
     vm.model_type = m.prop(":LL.2()")
 
-    vm.plot = {content: m.prop(), title: m.prop()}
+    vm.plot = {content: m.prop(), title: m.prop(), caption: m.prop()}
 
     vm.add_new_drug = function(){
       ci.drug_info[vm.new_drug()] = []
@@ -99,6 +99,10 @@ ci.drugs.controller = function(){
       job.get_info().then(function(info){
         if (info.status == "done"){
           ci.drugs.vm.plot.title("Fit plot for drug: " + drug)
+          var caption = ""
+          caption = "ME statistics for " + drug + ": m=" + info.m.toFixed(2) + ", dm=" + info.dm.toFixed(2) + "."
+          caption = caption + " GI50=" + parseFloat(info.GI50).toFixed(2)
+          ci.drugs.vm.plot.caption(caption)
         }else{
           ci.drugs.vm.plot.title("Fit plot for drug: " + drug + '. Error in fit')
         }
@@ -143,9 +147,9 @@ ci.drugs.view.drug_details = function(controller){
 
 
   var tabs = m('.ui.tabular.menu.top.attached', drug_tabs)
-  var plot = rbbt.mview.plot(ci.drugs.vm.plot.content(), ci.drugs.vm.plot.title())
+  var plot = rbbt.mview.plot(ci.drugs.vm.plot.content(), ci.drugs.vm.plot.title(), ci.drugs.vm.plot.caption())
 
-  var plot_column = m('.five.wide.column', plot)
+  var plot_column = m('.five.wide.plot.column', plot)
   return m('.ui.three.column.grid', [m('.eleven.wide.column', [tabs, drug_details]), plot_column])
 }
 

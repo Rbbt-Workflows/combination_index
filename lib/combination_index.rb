@@ -59,7 +59,10 @@ module CombinationIndex
         e2 = 0.01 if e2 < 0.01
 
         m, dm = self.m_dm(dose_1, e1, dose_2, fit2 + diff2)
-        raise "NaN found" if m.to_s == "NaN" or dm.to_s == "NaN"
+        m_to_s = m.to_s
+        dm_to_s = dm.to_s
+        raise "NaN found" if m_to_s == "NaN" or dm_to_s == "NaN" 
+        raise "Infinity found" if m_to_s == "Infinity" or dm_to_s == "Infinity" 
         found += 1
         [m, dm]
       rescue
@@ -142,6 +145,7 @@ module CombinationIndex
 
           dose1 = adjust_dose(model, Math.log(effect1/(1-effect1)), min_dose, max_dose, inverse)
           dose2 = adjust_dose(model, Math.log(effect2/(1-effect2)), min_dose, max_dose, inverse)
+          gi50 = adjust_dose(model, Math.log(0.5/(1-0.5)), min_dose, max_dose, inverse)
 
           if (dose1 - dose2).abs < dose1 / 10
             dose1 -= dose1/10
@@ -185,6 +189,7 @@ module CombinationIndex
 
           dose1 = adjust_dose(model, effect1, min_dose, max_dose, inverse)
           dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
+          gi50 = adjust_dose(model, 0.5, min_dose, max_dose, inverse)
 
           effect1_info = model.predict_interval(dose1)
           effect2_info = model.predict_interval(dose2)
@@ -219,7 +224,7 @@ module CombinationIndex
         random_samples = []
       end
                    
-      [m, dm, dose1, effect1, dose2, effect2] + random_samples
+      [m, dm, dose1, effect1, dose2, effect2, gi50] + random_samples
     rescue Exception
       Log.warn "M Dm exception: #{$!.message}"
       Log.exception $!

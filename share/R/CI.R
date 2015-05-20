@@ -49,7 +49,6 @@ CI.misc.log_seq <- function(center.point){
     return(sort(res))
 }
 
-
 CI.add_curve = function(m_1, m_2, dm_1, dm_2, d_1, d_2){
     additive.levels = CI.misc.seq()
     additive.doses = sapply(additive.levels, function(level){ 

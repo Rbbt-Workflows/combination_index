@@ -6,34 +6,38 @@ ci.controls.vm = (function(){
     vm.model_type = m.prop(":LL.5()")
     vm.median_point = m.prop(0.5)
     vm.fix_ratio = m.prop(false)
-    console.log('init')
+
+    vm.job_cache = []
+    vm.running_jobs = 0
     vm.batch = {}
   }
 
   return vm
 }())
 
-ci.controls.job_cache = []
-ci.controls.running_jobs = 0
-
-ci.controls.batch_complete_function = function(){
+ci.controls.vm.batch_complete_function = function(){
   this.join().then(function(){
     this.get_info().then(function(info){
       var batch = ci.controls.vm.batch
       if (undefined === batch[this.combination]) batch[this.combination] = {}
-      batch[this.combination][this.effect] = info.CI
+
+      if (info.status == 'done')
+        batch[this.combination][this.effect] = info.CI
+      else
+        batch[this.combination][this.effect] = info.status
+
       m.redraw()
-      ci.controls.running_jobs = ci.controls.running_jobs - 1
-      ci.controls.start_job_cache()
+      ci.controls.vm.running_jobs = ci.controls.vm.running_jobs - 1
+      ci.controls.vm.start_job_cache()
     }.bind(this))
   }.bind(this))
 }
 
-ci.controls.start_job_cache = function(){
-  var job = ci.controls.job_cache.pop()
+ci.controls.vm.start_job_cache = function(){
+  var job = ci.controls.vm.job_cache.shift()
   if(job != undefined){
-    ci.controls.running_jobs = ci.controls.running_jobs + 1
-    job.issue().then(ci.controls.batch_complete_function.bind(job))
+    ci.controls.vm.running_jobs = ci.controls.vm.running_jobs + 1
+    job.issue().then(ci.controls.vm.batch_complete_function.bind(job))
   }
 }
 
@@ -42,6 +46,7 @@ ci.controls.controller = function(){
   ci.controls.vm.init()
   controller.batch = function(){
     ci.controls.vm.batch = {}
+    ci.controls.vm.job_cache = []
     for (combination in ci.combination_info){
       var combination_values = ci.combination_info[combination]
 
@@ -77,14 +82,13 @@ ci.controls.controller = function(){
         job.combination = combination
         job.effect = effect
 
-        ci.controls.job_cache.push(job)
-        //job.run().then(ci.controls.batch_complete_function.bind(job))
+        ci.controls.vm.job_cache.push(job)
       }
     }
-    ci.controls.start_job_cache()
-    ci.controls.start_job_cache()
-    ci.controls.start_job_cache()
-    ci.controls.start_job_cache()
+    ci.controls.vm.start_job_cache()
+    ci.controls.vm.start_job_cache()
+    ci.controls.vm.start_job_cache()
+    ci.controls.vm.start_job_cache()
   }
 }
 

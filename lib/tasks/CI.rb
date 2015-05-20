@@ -24,15 +24,17 @@ module CombinationIndex
       FileUtils.mkdir_p files_dir
       modelfile = file(:model)
       if invert
-        m, dm, dose1, effect1, dose2, effect2, *random_samples = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
+        m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
         m = - m if m
         random_samples = random_samples.collect{|_m,_dm| [-_m, _dm] }
         effect1 = 1.0 - effect1
         effect2 = 1.0 - effect2
       else
-        m, dm, dose1, effect1, dose2, effect2, *random_samples  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
+        m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
         raise "Error computing m and dm" if m.to_s == "NaN"
       end
+
+      set_info 'GI50', gi50
 
       modelfile = nil unless modelfile.exists?
 
@@ -126,6 +128,7 @@ module CombinationIndex
       random_ci = []
 
       blue_random_samples.zip(red_random_samples).collect do |bi,ri|
+        next if bi.nil? or ri.nil?
         rblue_m, rblue_dm = bi
         rred_m, rred_dm = ri
         rci = CombinationIndex.ci_value(blue_dose, rblue_dm, rblue_m, red_dose, rred_dm, rred_m, effect)
@@ -133,7 +136,7 @@ module CombinationIndex
       end
 
       set_info :CI, ci
-      set_info :random_CI, random_ci.sort
+      set_info :random_CI, random_ci.sort.reject{|ci| ci.to_s == "Infinity"}
       set_info :GI50, CombinationIndex.additive_dose(0.5, blue_dose, red_dose, blue_m, blue_dm, red_m, red_dm)
 
       matching_effects = []
