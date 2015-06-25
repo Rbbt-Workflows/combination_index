@@ -8,11 +8,6 @@ CombinationIndex=/$PWD filter="*.rb" {
    CI.rb
   }
   rbbt=rbbt{
-   util=util{
-    R=R{
-     svg.rb
-    }
-   }
   }
  }
  share=share{

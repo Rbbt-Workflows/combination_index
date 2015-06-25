@@ -102,6 +102,8 @@ module CombinationIndex
     max_effect = pairs.collect{|p| p.last.to_f}.max
     min_effect = pairs.collect{|p| p.last.to_f}.min
 
+    total_range = max_effect - min_effect
+
     dose1, effect1, dose2, effect2 = nil
     if pairs.collect{|p| p.first }.uniq.length > 2 
 
@@ -138,8 +140,8 @@ module CombinationIndex
           model.fit(data,'lm')
           mean = Misc.mean effects
 
-          effect1 = median_point - 0.15
-          effect2 = median_point + 0.15
+          effect1 = median_point - 0.15 * total_range
+          effect2 = median_point + 0.15 * total_range
           effect1 = 0.05 if effect1 < 0.05
           effect2 = 0.95 if effect2 > 0.95
 
@@ -182,8 +184,8 @@ module CombinationIndex
           model.fit(data,'drm', :fct => model_type)
           mean = Misc.mean effects
           
-          effect1 = median_point - 0.15
-          effect2 = median_point + 0.15
+          effect1 = median_point - 0.15 * total_range
+          effect2 = median_point + 0.15 * total_range
           effect1 = 0.05 if effect1 < 0.05
           effect2 = 0.95 if effect2 > 0.95
 

@@ -227,7 +227,9 @@ ci.combinations.view.combination_details = function(controller){
                               m('i.icon.plus',{onclick: ci.combinations.vm.add_new_combination})
                             ])))
 
-                            for (combination in combination_info){
+                            combinations = Object.keys(combination_info).sort()
+                            for (i in combinations){
+                              var combination = combinations[i]
                               var klass = (ci.combinations.vm.combination() == combination ? 'active' : '')
                               var batch = rbbt.ci.controls.vm.batch[combination]
                               var values = []

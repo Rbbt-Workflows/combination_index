@@ -1,7 +1,6 @@
 require 'rbbt-util'
 require 'rbbt/workflow'
 require 'rbbt/util/R'
-require 'rbbt/util/R/svg'
 
 require_relative 'lib/combination_index'
 

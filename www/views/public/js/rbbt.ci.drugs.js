@@ -129,7 +129,9 @@ ci.drugs.view.drug_details = function(controller){
                         m('i.icon.plus',{onclick: ci.drugs.vm.add_new_drug})
                       ])))
 
-  for (drug in drug_info){
+  drugs = Object.keys(drug_info).sort()
+  for (i in drugs){
+    var drug = drugs[i]
     var klass = (ci.drugs.vm.drug() == drug ? 'active' : '')
     drug_tabs.push(m('.item[data-tab=' + drug + ']', {class: klass, onclick: m.withAttr('data-tab', ci.drugs.vm.drug)}, drug))
 

@@ -47,7 +47,10 @@ ci.controls.controller = function(){
   controller.batch = function(){
     ci.controls.vm.batch = {}
     ci.controls.vm.job_cache = []
-    for (combination in ci.combination_info){
+
+    combinations = Object.keys(ci.combination_info).sort()
+    for (i in combinations){
+      var combination = combinations[i]
       var combination_values = ci.combination_info[combination]
 
       var more_doses = combination_values.map(function(a){ return a[0] + a[1]})
@@ -57,7 +60,9 @@ ci.controls.controller = function(){
         var combination_value = combination_values[i]
 
         var blue_drug = combination.split("-")[0]
+        console.log(blue_drug)
         var blue_drug_info = ci.drug_info[blue_drug]
+        console.log(blue_drug_info)
         var blue_doses = blue_drug_info.map(function(p){return p[0]})
         var blue_effects = blue_drug_info.map(function(p){return p[1]})
 

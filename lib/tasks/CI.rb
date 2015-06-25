@@ -1,4 +1,4 @@
-require 'rbbt/util/R/svg'
+require 'rbbt/util/R/plot'
 
 module CombinationIndex
  
@@ -139,17 +139,17 @@ module CombinationIndex
       set_info :random_CI, random_ci.sort.reject{|ci| ci.to_s == "Infinity"}
       set_info :GI50, CombinationIndex.additive_dose(0.5, blue_dose, red_dose, blue_m, blue_dm, red_m, red_dm)
 
-      matching_effects = []
-      more_doses.each_with_index{|dose,i|
-        if (dose.to_f - (red_dose.to_f + blue_dose.to_f)).abs < 0.0001
-          matching_effects << more_effects[i]
-        end
-      }
+      #matching_effects = []
+      #more_doses.each_with_index{|dose,i|
+      #  if (dose.to_f - (red_dose.to_f + blue_dose.to_f)).abs < 0.0001
+      #    matching_effects << more_effects[i]
+      #  end
+      #}
 
-      if matching_effects.length > 2
-        matching_CI = matching_effects.collect{|_effect|
-        }
-      end
+      #if matching_effects.length > 2
+      #  matching_CI = matching_effects.collect{|_effect|
+      #  }
+      #end
     else
       set_info :CI, nil
     end
