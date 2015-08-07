@@ -1,0 +1,156 @@
+@import 'screen_sizes'
+
+#help
+  float: left
+  width: 50em
+  font-size: 1.1em
+
+#controls
+  width: 40em
+  float: right
+
+#export, #import
+  width: 40em
+  float: left
+
+.tab 
+  min-height: 35em
+  padding-bottom: 4em !important
+  .close.button
+    position: absolute !important
+    bottom: 1em
+    right: 1em
+  .form
+    max-width: 20em
+
+.title .logo
+  font-size: 4em
+  text-align: center
+
+.ui.tabular.menu .active.item
+  margin-bottom: -2px
+
+.ui.logo
+  font-family: serif
+  line-height: 3em
+
+.ui.tabular.menu > .item
+  font-family: monospace
+
+.plot.column
+  position: absolute 
+  bottom: 0
+  right: 0
+  .content svg
+    margin: auto
+    display: block
+  figcaption
+    text-align: justify
+  
+.ci_values
+  width: calc(100% - 4px)
+  height: 7px
+  position: absolute
+  bottom: 0
+  left: 0
+  margin-left: 2px
+  margin-right: 2px
+  display: flex
+  .ci_value
+    height: 7px
+    background-color: attr('data-color')
+
+#drugs, #combinations
+  clear: both
+  min-height: 23em
+  .new_drug, .new_combination
+    padding-left: 0 !important
+    .icon.input, input
+      width: 10em !important
+  .form 
+    width: 30em !important
+    .input
+      width: 15em !important
+      
+  .form
+    float: right
+    width: 50%
+
+#drugs, #combinations
+  .ui.close.icon.button
+    float: right
+    clear: both
+    margin-top: 1em
+  table
+    float: left
+    tbody
+      max-height: 23em
+      overflow: auto
+      display: block
+
+#drugs
+  table
+    th,td
+      display: inline-block
+      height: 2.5em
+      overflow: hidden
+      text-overflow: ellipsis
+      &:nth-child(1)
+        width: 8em
+      &:nth-child(2)
+        width: 8em
+      &:nth-child(3)
+        width: 4em
+    th:nth-child(3)
+      width: calc(4em + 24px)
+#combinations
+  table
+    th,td
+      display: inline-block
+      height: 4em
+      overflow: hidden
+      text-overflow: ellipsis
+      &:nth-child(1)
+        width: 8em
+      &:nth-child(2)
+        width: 8em
+      &:nth-child(3)
+        width: 8em
+      &:nth-child(4)
+        width: 10em
+    th:nth-child(4)
+      width: calc(10em + 24px)
+
+.ui.menu.tabular
+  display: block
+  & > .item
+    display: inline-block !important
+
+.ui.segment
+  &:after
+    content: ""
+    display: block
+    clear: both
+
+dl.measurements
+  display: block
+  dt, dd
+    display: inline-block
+  dt
+    font-weight: bold
+  dd
+    margin-right: 3em
+
+code
+  font-weight: bold
+
+@media #{$not-large}
+  .ui.segment, .wide
+    display: block !important
+    width: 100% !important
+    min-width: 100% !important
+    float: left
+    clear: both
+  .ui.field
+    padding-left: 0px !important
+    

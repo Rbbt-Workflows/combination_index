@@ -1,103 +1,84 @@
-:sass
-  .ui.logo
-    font-family: serif
-  .ui.tabular.menu > .item
-    font-family: monospace
+.ui.basic.segment#help
 
-  .plot.column
-    position: absolute !important
-    bottom: 0
-    right: 0
-    figure
-      min-height: 400px
+  :markdown
+    CImbinator is a web server for the assesment of drug combination synergies.
+    Here is a small tutorial on how to use this server:
+
+      1. Load example data
+      2. Select dose response fit model, for instance "least_squares".
+      3. Click Batch to compute dose-response series and combination effects
+      4. Click on [Drug] to open dose-response data information..
+      5. Click on `Display plot` to display dose response curve and compute GI50 values.
+      6. Click on [Drug combination] to open dose-response data information for this combination of drugs.
+      7. Click on `Plot` to display A) single drug dose response curves, B) computed additive effect curve), and C) measured combination effects, along with CI values.
+      8. Upload your own data.
+ 
+    CImbination offers several options to help analyze dose-response curves
+    that deviate from the standard median effect theory.  The standard method
+    is to use the `least squares` model type. Alternatively you can select one
+    of the `LL.*` methods from the R package
+    [DRC](https://cran.r-project.org/web/packages/drc/index.html). 
     
-  .ci_values
-    width: calc(100% - 4px)
-    height: 3px
-    position: absolute
-    bottom: 0
-    left: 0
-    margin-left: 2px
-    margin-right: 2px
-    display: flex
-    .ci_value
-      height: 3px
-      background-color: attr('data-color')
+    Selecting the `fix dossage` option aligns the dosages for the single drug
+    points in the combination plot (as if the other drug is replaced by a
+    neutral substance). The `median effect point` is used to show how the ME
+    (median effect) points are selected for the single drug plots at different
+    effect levels; when using LL.* models to compute a synergy the median
+    effect point is placed at the combination effect level. Lastly, selecting
+    the option to `compute the CI directly from fit` the ME points and ME
+    statistics derived from the single drug fits are ignored and the CI is
+    computed directly from the dose-response fit for each drug; note that the
+    result might deviate a little from the alternative using the ME points, and
+    the additive line in the combination plot, as well as the random additive
+    lines and the CI ranges calculated from them, might not match exactly these
+    CI calculations.
 
-  #drugs, #combinations
-    min-height: 23em
-    .new_drug, .new_combination
-      padding-left: 0 !important
-      .icon.input, input
-        width: 10em !important
-    .form 
-      width: 30em !important
-      .input
-        width: 15em !important
-       
-    .form
-      float: right
-      width: 50%
-
-  #drugs, #combinations
-    .ui.close.icon.button
-      float: right
-      clear: both
-      margin-top: 1em
-    table
-      float: left
-      tbody
-        max-height: 23em
-        overflow: auto
-        display: block
-
-  #drugs
-    table
-      th,td
-        display: inline-block
-        height: 2.5em
-        overflow: hidden
-        text-overflow: ellipsis
-        &:nth-child(1)
-          width: 8em
-        &:nth-child(2)
-          width: 8em
-        &:nth-child(3)
-          width: 4em
-      th:nth-child(3)
-        width: calc(4em + 24px)
-  #combinations
-    table
-      th,td
-        display: inline-block
-        height: 4em
-        overflow: hidden
-        text-overflow: ellipsis
-        &:nth-child(1)
-          width: 8em
-        &:nth-child(2)
-          width: 8em
-        &:nth-child(3)
-          width: 8em
-        &:nth-child(4)
-          width: 10em
-      th:nth-child(4)
-        width: calc(10em + 24px)
-
-
-  dl.measurements
-    display: block
-    dt, dd
-      display: inline-block
-    dt
-      font-weight: bold
-    dd
-      margin-right: 3em
 
 
 .ui.basic.segment#controls
+
 .ui.basic.segment#drugs
 .ui.basic.segment#combinations
+
+.ui.basic.segment#import
+  .ui.header
+    Import data
+  .content
+    = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
+      - input :file, :file, "Data file"
+      - input :scale, :boolean, "Scale effect", true
+      - input :invert, :boolean, "Invert effect", false
+
+  .examples
+
+    Click below to load example data:
+      
+    :javascript
+      example_inputs = [];
+
+    %ul
+
+      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Miller"]
+      - name = File.basename(example_dir)
+      - task_info = workflow.task_info 'combination_index_batch'
+      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+      :javascript
+        example_inputs["#{ name }"] = #{inputs.to_json}
+
+      %li
+        %a.load_example(href="#" task='combination_index_batch' name=name)= name
+
+
+      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Haagensen-fig1"]
+      - name = File.basename(example_dir)
+      - task_info = workflow.task_info 'combination_index_batch'
+      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+      :javascript
+        example_inputs["#{ name }"] = #{inputs.to_json}
+      %li
+        %a.load_example(href="#" task='combination_index_batch' name=name)= name
 
 .ui.basic.segment#export
   .ui.header
@@ -149,137 +130,49 @@
 
       var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "CI-binator-export.txt");
+      return(false)
     })
 
-.ui.basic.segment#import
-  .ui.header
-    Import data
-  .content
-    = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
-      - input :file, :file, "Data file"
-      - input :scale, :boolean, "Scale effect", true
-      - input :invert, :boolean, "Invert effect", false
-
-  .examples
-
-    Click below to load example data:
-      
-    :javascript
-      example_inputs = [];
-    %ul
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Miller"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
-
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
-
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["4EBP1_pS65_V_GBL9006968"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
-
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
-
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["KU-GD"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
-
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
-        
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Haagensen"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
-
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
-        
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Bethametasone-Nitazoxanide"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
 
 
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
-
-
-    :javascript
-      defer(function(){
-        var form = $('#import form')
-
-        $("a.load_example").click(function(){
-          var link = $(this);
-          var name = $(link).attr('name');
-          var inputs = example_inputs[name];
-          form[0].reset()
-
-          for (var input in inputs){
-            var value = inputs[input]
-            var input = form.find('[name=' + input + ']')
-            if (input.is('[type=checkbox]')){
-              input.prop('checked', value)
-            }else{
-              input.val(value)
-            }
-          }
-          form.find('[name=jobname]').val(name)
-          return false
-        })
-      })
-
+     
 :deferjs
-  $('#import form input[type=submit]').click(function(){
+  var form = $('#import form')
+
+  form.find('input[type=submit]').click(function(){
     $('#import form').ajaxSubmit(function(response){
       data = JSON.parse(response);
       rbbt.ci.drug_info = data.drug_info;
       rbbt.ci.combination_info = data.combination_info; 
       rbbt.ci.drugs.vm.save()
+      rbbt.ci.drugs.vm.init()
       rbbt.ci.combinations.vm.save()
+      rbbt.ci.combinations.vm.init()
       m.redraw()
     })
     return false
   })
-  $('table').tablesorter()
 
-.ui.basic.segment
-  .ui.header
-    Tasks
-  .content
-    .ui.vertical.menu
-      - tasks = CombinationIndex.exec_exports + CombinationIndex.synchronous_exports + CombinationIndex.asynchronous_exports
-      - tasks.sort.each do |task|
-        - url = '/CombinationIndex/' << task.to_s
-        %a.item(href=url)= task.to_s
+  $("a.load_example").click(function(){
+    var link = $(this);
+    var name = $(link).attr('name');
+    var inputs = example_inputs[name];
+    form[0].reset()
 
-     
-:deferjs
-  require(['rbbt.job', 'rbbt.views', 'rbbt.ci'], function(args){
+    for (var input in inputs){
+      var value = inputs[input]
+      var input = form.find('[name=' + input + ']')
+      if (input.is('[type=checkbox]')){
+        input.prop('checked', value)
+      }else{
+        input.val(value)
+      }
+    }
+    form.find('[name=jobname]').val(name)
+    return false
+  })
+
+  require(['rbbt.job', 'rbbt.views', 'rbbt.modal', 'rbbt.ci'], function(args){
     require(['rbbt.ci.controls', 'rbbt.ci.combinations', 'rbbt.ci.drugs'], function(args){
       m.module(document.getElementById("controls"), rbbt.ci.controls)
       m.module(document.getElementById("drugs"), rbbt.ci.drugs)
@@ -288,3 +181,4 @@
     })
   })
 
+  $('table').tablesorter()

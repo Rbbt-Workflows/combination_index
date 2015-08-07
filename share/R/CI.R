@@ -187,7 +187,7 @@ CI.plot_fit <- function(m, dm, data, data.me_points=NULL, modelfile=NULL, least_
 
 
 
-CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, effect, blue_data, red_data, data.blue_me_points, data.red_me_points, blue.modelfile = NULL, red.modelfile=NULL, least_squares=FALSE, blue.invert=FALSE, red.invert=FALSE, fix_ratio=FALSE, more_doses = NULL, more_effects = NULL, blue.random.samples=NULL, red.random.samples=NULL){
+CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, effect, blue_data, red_data, data.blue_me_points, data.red_me_points, blue.modelfile = NULL, red.modelfile=NULL, least_squares=FALSE, blue.invert=FALSE, red.invert=FALSE, fix_ratio=FALSE, more_doses = NULL, more_effects = NULL, blue.random.samples=NULL, red.random.samples=NULL, blue.fit_dose = NULL, red.fit_dose = NULL){
 
     data.blue_me = CI.me_curve(blue_m, blue_dm)
 
@@ -263,6 +263,13 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
 
     plot = ggplot(aes(x=as.numeric(Dose), y=as.numeric(Effect)), data=blue_data) 
 
+    if (!is.null(more_effects)){
+        len = min(c(length(more_doses), length(more_effects)))
+        md=more_doses[1:len]
+        me=more_effects[1:len]
+        plot = plot + geom_smooth(aes(x=Dose, y=Effect), data=data.frame(Dose=md, Effect=me), linetype='dashed', col='black', level=0.95)
+    }
+    
     if (!is.null(blue.random.samples) && !is.null(red.random.samples)){
         max = min(length(blue.random.samples), length(red.random.samples))
         for (i in seq(0,max/2)){
@@ -272,14 +279,15 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
             dm.red.s = red.random.samples[2*i+2]
             data.add.s = CI.add_curve(m.blue.s, m.red.s, dm.blue.s, dm.red.s, blue_dose, red_dose)
             data.add.s = CI.subset_data(data.add.s, min.dose, max.dose)
-            plot = plot + geom_line(data=data.add.s, col='grey', cex=2, linetype='solid', alpha=0.2)
+            plot = plot + geom_line(data=data.add.s, col='cyan', cex=2, linetype='solid', alpha=0.2)
         }
     }
 
     plot = plot +
         xlim(min.dose, max.dose) +
         ylim(min.effect, max.effect) +
-        scale_x_log10() + annotation_logticks() +
+        scale_x_log10() + 
+        annotation_logticks(side='b') +
         xlab("Combination dose") +
         ylab("Effect") +
         geom_point(data=blue_data, col='blue',cex=3,alpha=0.8) +
@@ -302,10 +310,14 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         geom_point(data=data.red_me_points, col='white', shape = 18, cex=4) 
 
     if (!is.null(more_effects)){
-        len = length(more_doses)
         for (i in seq(1, len)){
             plot = plot + geom_point(x=log10(more_doses[i]), y=more_effects[i], col='black', cex=2, alpha=0.4)
         }
+    }
+
+    if (!is.null(blue.fit_dose)){
+        plot = plot + geom_vline(x=blue.fit_dose*blue_ratio, col='blue', cex=1, linetype='dotted')
+        plot = plot + geom_vline(x=red.fit_dose*red_ratio, col='red', cex=1, linetype='dotted')
     }
 
     return(plot)

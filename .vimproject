@@ -2,8 +2,9 @@ CombinationIndex=/$PWD filter="*.rb" {
  workflow.rb
 
  lib=lib{
-  combination_index.rb
   sinatra.rb
+
+  combination_index.rb
   tasks=tasks{
    CI.rb
   }
@@ -18,6 +19,10 @@ CombinationIndex=/$PWD filter="*.rb" {
 
  www=www filter="*.haml *.js *.sass"{
   views=views{
+   compass=compass{
+    combination_index.sass
+   }
+
    layout.haml
    tasks.haml
    CombinationIndex=CombinationIndex{

@@ -93,7 +93,7 @@ module CombinationIndex
     dose
   end
 
-  def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5, model_type=':LL.5()')
+  def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5, model_type='LL.5')
     pairs = doses.zip(effects).sort_by{|d,e| d }
 
     max_dose = pairs.collect{|p| p.first.to_f}.max
@@ -181,7 +181,8 @@ module CombinationIndex
         R.eval 'library(drc)'
         model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "Effect ~ Dose", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
         begin
-          model.fit(data,'drm', :fct => model_type)
+          model_str = ":" << model_type  << "()"
+          model.fit(data,'drm', :fct => model_str)
           mean = Misc.mean effects
           
           effect1 = median_point - 0.15 * total_range
@@ -241,6 +242,18 @@ module CombinationIndex
     term_2 = dose_d2 / (dm_d2 * (effect_ratio  ** (1/m_d2)))
 
     term_1 + term_2
+  end
+
+  def self.ci_value_fit(dose_d1, dose_d2, effect, model1, model2, invert_d1, invert_d2)
+    fit_dose_d1 = adjust_dose(model1, effect.to_f, 0, 10000.0, invert_d1)
+    fit_dose_d2 = adjust_dose(model2, effect.to_f, 0, 10000.0, invert_d2)
+
+    term1 = dose_d1.to_i/fit_dose_d1
+    term2 = dose_d2.to_i/fit_dose_d2
+
+    ci = term1 + term2
+
+    [ci, fit_dose_d1, fit_dose_d2]
   end
 
   def self.combination_index(dose_d1_1, effect_d1_1, dose_d1_2, effect_d1_2, 

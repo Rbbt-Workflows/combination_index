@@ -3,9 +3,10 @@ ci.controls = {}
 ci.controls.vm = (function(){
   var vm = {}
   vm.init = function(){
-    vm.model_type = m.prop(":LL.5()")
+    vm.model_type = m.prop("least_squares")
     vm.median_point = m.prop(0.5)
     vm.fix_ratio = m.prop(false)
+    vm.direct_ci = m.prop(false)
 
     vm.job_cache = []
     vm.running_jobs = 0
@@ -60,9 +61,7 @@ ci.controls.controller = function(){
         var combination_value = combination_values[i]
 
         var blue_drug = combination.split("-")[0]
-        console.log(blue_drug)
         var blue_drug_info = ci.drug_info[blue_drug]
-        console.log(blue_drug_info)
         var blue_doses = blue_drug_info.map(function(p){return p[0]})
         var blue_effects = blue_drug_info.map(function(p){return p[1]})
 
@@ -74,11 +73,12 @@ ci.controls.controller = function(){
         var blue_dose = combination_value[0]
         var red_dose = combination_value[1]
         var effect = combination_value[2]
+
         var fix_ratio = ci.controls.vm.fix_ratio()
+        var direct_ci = ci.controls.vm.direct_ci()
         var model_type = ci.controls.vm.model_type()
 
-
-        var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type}
+        var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
         inputs.more_doses = more_doses
         inputs.more_effects = more_effects
 
@@ -98,15 +98,35 @@ ci.controls.controller = function(){
 }
 
 ci.controls.view = function(controller){
-  var median_point_input = m('.ui.small.input', [m('label', 'Median effect point'), m('input', {type: 'text', value: ci.controls.vm.median_point(),  onchange: m.withAttr('value', ci.controls.vm.median_point)})])
+
   var option_options = {onclick: m.withAttr('data-value', ci.controls.vm.model_type)}
-  var options = [m('.item[data-value=:least_squares]',option_options, ":least_squares"),m('.item[data-value=:LL.2()]',option_options, ":LL.2()"),m('.item[data-value=:LL.3()]',option_options, ":LL.3()"),m('.item[data-value=:LL.4()]',option_options, ":LL.4()"),m('.item[data-value=:LL.5()]',option_options, ":LL.5()")]
+  var options = [m('.item[data-value=least_squares]',option_options, "least_squares"),m('.item[data-value=LL.2]',option_options, "LL.2"),m('.item[data-value=LL.3]',option_options, "LL.3"),m('.item[data-value=LL.4]',option_options, "LL.4"),m('.item[data-value=LL.5]',option_options, "LL.5")]
   var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', ci.controls.vm.model_type()),m('i.dropdown.icon'), m('.menu',options)])
-  var fix_input = m('.ui.small.input', [m('label', 'Fix combination ratio'), m('input.ui.checkbox', {type: 'checkbox', checked: ci.controls.vm.fix_ratio(),  onchange: m.withAttr('checked', ci.controls.vm.fix_ratio)})])
+  var model_type_field = rbbt.mview.field(model_type_input, "Model type")
+
+  var median_point_field = rbbt.mview.field(
+    rbbt.mview.input('text', 'value', ci.controls.vm.median_point), 
+    "Median effect point for ME points in single drug plot"
+  )
+
+  var fix_field = rbbt.mview.field(
+    rbbt.mview.input('checkbox', 'checked', ci.controls.vm.fix_ratio, {id: 'fixratioinput'}), 
+    "Fix dosage ratio in combination plot"
+  )
+
+  var direct_ci_field = rbbt.mview.field(
+    rbbt.mview.input('checkbox', 'checked', ci.controls.vm.direct_ci, {id: 'directciinput'}), 
+    "Compute CI directly from the dose-response fit (instead of using ME points)"
+  )
+
+
   var batch_button = rbbt.mview.button({onclick: controller.batch}, "Batch")
-  var batch_count = m('p', "Number of finished jobs: " + Object.keys(ci.controls.vm.batch).length)
 
-  var control_panel =  m('.ui.basic.segment',[model_type_input, median_point_input, fix_input, batch_button])
-  return control_panel
+  var control_panel 
+  if (ci.controls.vm.model_type() == 'least_squares')
+    control_panel =  m('fieldset.ui.form',[model_type_field, fix_field, batch_button])
+  else
+    control_panel =  m('fieldset.ui.form',[model_type_field, median_point_field, fix_field, direct_ci_field, batch_button])
+
+  return [m('h3.header', "Analysis options"), control_panel]
 }
-

@@ -99,8 +99,15 @@ ci.drugs.controller = function(){
       job.get_info().then(function(info){
         if (info.status == "done"){
           ci.drugs.vm.plot.title("Fit plot for drug: " + drug)
-          var caption = ""
-          caption = "ME statistics for " + drug + ": m=" + info.m.toFixed(2) + ", dm=" + info.dm.toFixed(2) + "."
+          var caption = "The solid blue line represents the ME curve. The diamonds are the ME points."
+
+          if (rbbt.ci.controls.vm.model_type() != 'least_squares')
+            caption = caption + ' The dotted blue line is the fited curve.'
+
+          if (info.random_samples.length > 0)
+            caption = caption + ' Light blue lines are random ME curves from ME points drawn from the predictive distribution.'
+
+          caption = caption + " ME statistics for " + drug + ": m=" + info.m.toFixed(2) + ", dm=" + info.dm.toFixed(2) + "."
           caption = caption + " GI50=" + parseFloat(info.GI50).toFixed(2)
           ci.drugs.vm.plot.caption(caption)
         }else{
@@ -115,7 +122,7 @@ ci.drugs.controller = function(){
 
 ci.drugs.view = function(controller){
   var drug_details =  ci.drugs.view.drug_details(controller)
-  return drug_details
+  return [m('h3.header', "Drugs"), drug_details]
 }
 
 ci.drugs.view.drug_details = function(controller){
@@ -124,9 +131,9 @@ ci.drugs.view.drug_details = function(controller){
   var drug_tabs = []
 
   drug_tabs.push(m('.item.left.float.new_drug',
-                    m('.ui.icon.input.small', 
+                    m('.ui.action.input.small', 
                       [m('input[type=text]', {placeholder: "New drug", onchange: m.withAttr('value', ci.drugs.vm.new_drug)}), 
-                        m('i.icon.plus',{onclick: ci.drugs.vm.add_new_drug})
+                        m('.ui.button.icon',{onclick: ci.drugs.vm.add_new_drug},m('i.icon.plus'))
                       ])))
 
   drugs = Object.keys(drug_info).sort()
@@ -151,19 +158,21 @@ ci.drugs.view.drug_details = function(controller){
   var tabs = m('.ui.tabular.menu.top.attached', drug_tabs)
   var plot = rbbt.mview.plot(ci.drugs.vm.plot.content(), ci.drugs.vm.plot.title(), ci.drugs.vm.plot.caption())
 
-  var plot_column = m('.five.wide.plot.column', plot)
-  return m('.ui.three.column.grid', [m('.eleven.wide.column', [tabs, drug_details]), plot_column])
+  var plot_column = m('.six.wide.plot.column', plot)
+  return m('.ui.three.column.grid', [m('.ten.wide.column', [tabs, drug_details]), plot_column])
 }
 
 ci.drugs.view.drug_details.measurement_new = function(controller, drug){
-  var dose_input = m('.ui.small.input', [m('label', 'Dose'), m('input', {type: 'text', value: ci.drugs.vm.dose(), onchange: m.withAttr('value', ci.drugs.vm.dose)})])
-  var effect_input = m('.ui.small.input', [m('label', 'Effect'), m('input', {type: 'text', value: ci.drugs.vm.effect(),  onchange: m.withAttr('value', ci.drugs.vm.effect)})])
+  var dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.dose), "Dose")
+  var effect_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.effect), "Effect")
+  var fields = m('.ui.fields', [dose_field, effect_field])
 
   var submit = m('input[type=submit].ui.submit.button', {'data-drug': drug, onclick: m.withAttr('data-drug', ci.drugs.vm.add_measurement), value: 'Add measurement'})
   var display_plot = m('input[type=submit].ui.submit.button', {'data-drug': drug, onclick: m.withAttr('data-drug', controller.draw_fit), value: 'Display plot'})
   var buttons = m('.ui.buttons', [submit, display_plot])
 
-  var form = m('.ui.form', [dose_input, effect_input, buttons])
+  var form = m('.ui.form', [fields, buttons])
+
   return form
 }
 
@@ -176,7 +185,7 @@ ci.drugs.view.drug_details.measurement_table = function(controller, measurements
 
   var header = m('thead', m('tr', [m('th', 'Dose'), m('th', 'Effect'), m('th', '')]))
   var body = m('tbody', rows)
-  return m('table.measurements.ui.table.collapsing', header, body)
+  return m('table.measurements.ui.table.collapsing.unstackable', header, body)
 }
 
 ci.drugs.view.drug_details.measurement_row = function(controller, dose, effect){

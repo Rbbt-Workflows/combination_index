@@ -2,21 +2,13 @@
 
 %head
   = partial_render('layout/header')
+  = link_css '/stylesheets/combination_index'
 %body.preload
 
-  :sass
-    .title > a > .logo
-      font-size: 4em
-      text-align: center
-    .ui.tabular.menu .active.item
-      margin-bottom: -2px
-
-
   .ui.segment.title.bottom.attached
-    %a(href="/")
-      .ui.logo 
-        .span(style='color:blue;display:inline-block')>CI
-        .span(style='color:red;display:inline-block')>mbinator
+    .ui.logo 
+      .span(style='color:blue;display:inline-block')>CI
+      .span(style='color:red;display:inline-block')>mbinator
 
 
   #content.ui.basic.segment
@@ -33,3 +25,4 @@
   #coda
     =partial_render('layout/coda')
 
+  #modal.ui.modal
