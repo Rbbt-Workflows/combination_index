@@ -1,6 +1,81 @@
-.ui.basic.segment#help
 
-  :markdown
+.ui.basic.segment#help
+  .ui.header
+    The CImbinator: a web server for assessing drug combination synergies
+
+  .ui.description.content
+    = reveal "Display help" do
+      :markdown
+
+        Input
+        ---
+
+        The input for the CImbinator are dose-response data for individual drugs
+        and a dose-response data for combinations. The dose-response points for
+        combinations need to be specified with a consistent dosage ratio between
+        the drugs.
+
+        You can input the dose-response data one-by-one, or you can upload a file
+        with all the meassurements (some examples are provided). 
+
+        Dose response plots
+        ---
+
+        Individual drug dose-response curves can be estimated and visualized under
+        the 'Drugs' section. The type of curve fitted is determined by the option
+        'Model type' under 'Analysis options'. The default option 'least_squares'
+        is the original approach in the median-effect theory (ME theory), the
+        other are implemented in the DRC package. 
+        
+        When an option different of the 'least_squares' is used, the 'median
+        effect points' are computed by default centered at 0.5 effect (the
+        'median effect point'). The 'median effect point' option is only used by
+        these plots; when computing combination indices the median effect point
+        is set the effect level of the combination. To make it compatible
+        with the original median effect theory single drug plots using
+        'least_squares' have the y-axis transformed to show a linear fit.
+
+        DRC fits (LL.*) offer more general models to fit the dose-response that
+        can represent better certain regions of the curves where the
+        'least_squares' option might be too stringent. To make it compatible with
+        the rest of the theory, the DRC fit is used to derived the two 'median
+        effect points' (ME points) that will be used in the combination index
+        formulas. These plots will help determine how well the models fit the
+        data and thus how reliable the results are.
+
+        Combination Index plots
+        ---
+
+        Each combination dose-reponse pair has its own plot. This is because when
+        using DRC fits, the ME points will be choosen to be close to the effect
+        of the combination. These plots report the CI value, a range for these
+        values (derived from the uncertainty in the individual model fits), and
+        display the individual ME curves, the ME points, the fitted curves
+        (unless least_squares was used), a fit across the combination values and the
+        predicted additive line (where the combination values should be if the combination
+        had an additive effect). 
+
+        There is the option called to compute the CI values (just the values)
+        directly from the individual drug dose-response fits, circumventing the
+        use of the ME theory. Note that everyting else is computed using the ME
+        theory, including CI value ranges, so these might not match with the CI
+        value.
+
+        Since each combination dosage requires its separate analysis and has
+        associated its own CI value, an option is available from the 'Analysis
+        options' to compute the whole batch in sequence. The results will be
+        presented under the combination tabs using color codes so that
+        interesting synergies can be identified at a glance. Note that when using
+        any model other than 'least_squares' the individual drug dose-response
+        fits need to be adjusted so that ME points are taken close to the
+        combination effect level (this also affects the estimation of random
+        additive curves for confidence intervals) and requires more computations.
+        
+
+
+-#
+  -#
+
     CImbinator is a web server for the assesment of drug combination synergies.
     Here is a small tutorial on how to use this server:
 
@@ -12,7 +87,7 @@
       6. Click on [Drug combination] to open dose-response data information for this combination of drugs.
       7. Click on `Plot` to display A) single drug dose response curves, B) computed additive effect curve), and C) measured combination effects, along with CI values.
       8. Upload your own data.
- 
+
     CImbination offers several options to help analyze dose-response curves
     that deviate from the standard median effect theory.  The standard method
     is to use the `least squares` model type. Alternatively you can select one
@@ -20,75 +95,117 @@
     [DRC](https://cran.r-project.org/web/packages/drc/index.html). 
     
     Selecting the `fix dossage` option aligns the dosages for the single drug
-    points in the combination plot (as if the other drug is replaced by a
-    neutral substance). The `median effect point` is used to show how the ME
-    (median effect) points are selected for the single drug plots at different
-    effect levels; when using LL.* models to compute a synergy the median
-    effect point is placed at the combination effect level. Lastly, selecting
-    the option to `compute the CI directly from fit` the ME points and ME
-    statistics derived from the single drug fits are ignored and the CI is
-    computed directly from the dose-response fit for each drug; note that the
-    result might deviate a little from the alternative using the ME points, and
-    the additive line in the combination plot, as well as the random additive
-    lines and the CI ranges calculated from them, might not match exactly these
-    CI calculations.
+    points in the combination plot (as if they were combinations where the
+    other drug is replaced by a neutral substance at the same dose ratio). The
+    `median effect point` is used to show how the ME (median effect) points are
+    selected for the single drug plots at different effect levels; when using
+    LL.* models to compute a synergy the median effect point is placed at the
+    combination effect level. Lastly, selecting the option to `compute the CI
+    directly from fit` the ME points and ME statistics derived from the single
+    drug fits are ignored and the CI is computed directly from the
+    dose-response fit for each drug; note that the result might deviate a
+    little from the alternative using the ME points, and the additive line in
+    the combination plot, as well as the random additive lines and the CI
+    ranges calculated from them, might not match exactly these CI calculations.
+
+    When plotting single drug dose-response curves with the `least squares`
+    method, the plot's y-axis is transformed to reflect the standard ME theory
+    approach of doing a linear fit on the transformed data.
+
+.ui.basic.segment.ui.grid
+  .column.eight.wide.left#import
+    .ui.header
+      Import/Export data
+    .content
+      = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
+        - input :file, :file, "Data file"
+        - input :scale, :boolean, "Scale effect", true
+        - input :invert, :boolean, "Invert effect", false
+
+
+    .examples.ui.alert.message
+
+      .ui.header
+        Click below to load example data and hit Submit
+        
+      .content
+        :javascript
+          example_inputs = [];
+
+        %ul
+
+          - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Miller"]
+          - name = File.basename(example_dir)
+          - task_info = workflow.task_info 'combination_index_batch'
+          - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+          - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+          :javascript
+            example_inputs["#{ name }"] = #{inputs.to_json}
+
+          %li
+            %a.load_example(href="#" task='combination_index_batch' name=name)= name
+
+
+          - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Haagensen-fig1"]
+          - name = File.basename(example_dir)
+          - task_info = workflow.task_info 'combination_index_batch'
+          - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+          - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+          :javascript
+            example_inputs["#{ name }"] = #{inputs.to_json}
+          %li
+            %a.load_example(href="#" task='combination_index_batch' name=name)= name
+
+    .ui.alert.message
+
+      .ui.header
+        Export the current data in to a file or reset the page
+
+      .content
+        %div
+          .ui.small.two.wide.button#export
+            Export
+          .ui.small.two.wide.button#reset
+            Reset
 
 
 
-.ui.basic.segment#controls
+  .column.eight.wide.right
+    .ui.header
+      Analysis options
+    .ui.content#controls
+
+
+%hr.ui.rule
 
 .ui.basic.segment#drugs
+
+%hr.ui.rule
+
 .ui.basic.segment#combinations
 
-.ui.basic.segment#import
-  .ui.header
-    Import data
-  .content
-    = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
-      - input :file, :file, "Data file"
-      - input :scale, :boolean, "Scale effect", true
-      - input :invert, :boolean, "Invert effect", false
-
-  .examples
-
-    Click below to load example data:
-      
-    :javascript
-      example_inputs = [];
-
-    %ul
-
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Miller"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
-
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
 
 
-      - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Haagensen-fig1"]
-      - name = File.basename(example_dir)
-      - task_info = workflow.task_info 'combination_index_batch'
-      - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
-      - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
-      :javascript
-        example_inputs["#{ name }"] = #{inputs.to_json}
-      %li
-        %a.load_example(href="#" task='combination_index_batch' name=name)= name
 
-.ui.basic.segment#export
-  .ui.header
-    Export data
-  .content
-    .ui.button
-      Export
+     
+:deferjs
+  require_js(['/js-find/rbbt.ci', '/js-find/rbbt.ci.controls', '/js-find/rbbt.ci.combinations', '/js-find/rbbt.ci.drugs'], function(args){
+    $('table').tablesorter()
 
-  :deferjs
-    $('#export .ui.button').click(function(){
+    var form = $('#import form')
+
+    $('.ui.button#reset').click(function(){
+      //if (confirm("Clear all data?")){
+        rbbt.ci.drug_info = {}
+        rbbt.ci.combination_info = {}
+        rbbt.ci.drugs.vm.save()
+        rbbt.ci.combinations.vm.save()
+        m.redraw()
+      //}
+      return(false)
+    })
+
+    $('.ui.button#export').click(function(){
       var content = "#Treatment\tDose\tEffect\n"
 
       for (drug in rbbt.ci.drug_info){
@@ -134,51 +251,41 @@
     })
 
 
-
-     
-:deferjs
-  var form = $('#import form')
-
-  form.find('input[type=submit]').click(function(){
-    $('#import form').ajaxSubmit(function(response){
-      data = JSON.parse(response);
-      rbbt.ci.drug_info = data.drug_info;
-      rbbt.ci.combination_info = data.combination_info; 
-      rbbt.ci.drugs.vm.save()
-      rbbt.ci.drugs.vm.init()
-      rbbt.ci.combinations.vm.save()
-      rbbt.ci.combinations.vm.init()
-      m.redraw()
+    form.find('input[type=submit]').click(function(){
+      $('#import form').ajaxSubmit(function(response){
+        data = JSON.parse(response);
+        rbbt.ci.drug_info = data.drug_info;
+        rbbt.ci.combination_info = data.combination_info; 
+        rbbt.ci.drugs.vm.save()
+        rbbt.ci.drugs.vm.init()
+        rbbt.ci.combinations.vm.save()
+        rbbt.ci.combinations.vm.init()
+        m.redraw()
+      })
+      return false
     })
-    return false
-  })
 
-  $("a.load_example").click(function(){
-    var link = $(this);
-    var name = $(link).attr('name');
-    var inputs = example_inputs[name];
-    form[0].reset()
+    $("a.load_example").click(function(){
+      var link = $(this);
+      var name = $(link).attr('name');
+      var inputs = example_inputs[name];
+      form[0].reset()
 
-    for (var input in inputs){
-      var value = inputs[input]
-      var input = form.find('[name=' + input + ']')
-      if (input.is('[type=checkbox]')){
-        input.prop('checked', value)
-      }else{
-        input.val(value)
+      for (var input in inputs){
+        var value = inputs[input]
+        var input = form.find('[name=' + input + ']')
+        if (input.is('[type=checkbox]')){
+          input.prop('checked', value)
+        }else{
+          input.val(value)
+        }
       }
-    }
-    form.find('[name=jobname]').val(name)
-    return false
-  })
-
-  require(['rbbt.job', 'rbbt.views', 'rbbt.modal', 'rbbt.ci'], function(args){
-    require(['rbbt.ci.controls', 'rbbt.ci.combinations', 'rbbt.ci.drugs'], function(args){
-      m.module(document.getElementById("controls"), rbbt.ci.controls)
-      m.module(document.getElementById("drugs"), rbbt.ci.drugs)
-      m.module(document.getElementById("combinations"), rbbt.ci.combinations)
-      m.redraw()
+      form.find('[name=jobname]').val(name)
+      return false
     })
-  })
 
-  $('table').tablesorter()
+    m.mount(document.getElementById("controls"), rbbt.ci.controls)
+    m.mount(document.getElementById("drugs"), rbbt.ci.drugs)
+    m.mount(document.getElementById("combinations"), rbbt.ci.combinations)
+    m.redraw()
+  })

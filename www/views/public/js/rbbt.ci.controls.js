@@ -128,5 +128,5 @@ ci.controls.view = function(controller){
   else
     control_panel =  m('fieldset.ui.form',[model_type_field, median_point_field, fix_field, direct_ci_field, batch_button])
 
-  return [m('h3.header', "Analysis options"), control_panel]
+  return control_panel
 }

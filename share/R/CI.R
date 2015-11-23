@@ -288,7 +288,7 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         ylim(min.effect, max.effect) +
         scale_x_log10() + 
         annotation_logticks(side='b') +
-        xlab("Combination dose") +
+        xlab("Dose") +
         ylab("Effect") +
         geom_point(data=blue_data, col='blue',cex=3,alpha=0.8) +
         geom_point(data=red_data, col='red',cex=3,alpha=0.8) +

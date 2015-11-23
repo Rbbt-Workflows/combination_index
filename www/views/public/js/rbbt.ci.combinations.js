@@ -80,9 +80,7 @@ ci.combinations.controller = function(){
           if (rbbt.ci.controls.vm.model_type() != 'least_squares')
             caption = caption + ' The ME-curves are adjusted to fit the effect level of the combination (median effect point). The red and blue dashed lines are the model fit curves.'
 
-          console.log(info)
           var random_ci = info["random_CI"]
-          console.log(random_ci)
           if (random_ci.length > 0){
             var min = Math.min.apply(null, random_ci)
             var max = Math.max.apply(null, random_ci)

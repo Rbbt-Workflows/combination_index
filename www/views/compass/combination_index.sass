@@ -1,17 +1,20 @@
 @import 'screen_sizes'
 
+.top
+  display: flex
+
 #help
-  float: left
-  width: 50em
-  font-size: 1.1em
-
+  font-size: 1.4em
+  .header
+    font-size: 1.6em
 #controls
-  width: 40em
-  float: right
-
-#export, #import
-  width: 40em
+  width: 100%
+  max-width: 40em
   float: left
+  clear: both
+
+.examples
+  margin-top: 1em
 
 .tab 
   min-height: 35em
@@ -59,6 +62,7 @@
   .ci_value
     height: 7px
     background-color: attr('data-color')
+    display: inline-block
 
 #drugs, #combinations
   clear: both
@@ -154,3 +158,5 @@ code
   .ui.field
     padding-left: 0px !important
     
+  .tab > .ui.form
+    float: left !important
