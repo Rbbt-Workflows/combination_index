@@ -259,7 +259,7 @@ ci.combinations.view.combination_details = function(controller){
       var values = []
       var cinfo = combination_info[combination]
       var len = Object.keys(cinfo).length
-      cinfo = cinfo.sort(function(p1,p2){return(p1[0] - p2[0])})
+      cinfo = cinfo.sort(function(p1,p2){if (p1[0] == p2[0]){ return(p1[2] - p2[2])} else {return(p1[0] - p2[0])}})
       for (i in cinfo){
         var triplet = cinfo[i]
         var effect = triplet[2]
