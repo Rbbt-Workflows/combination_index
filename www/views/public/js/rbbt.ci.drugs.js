@@ -177,6 +177,7 @@ ci.drugs.view.drug_details.measurement_new = function(controller, drug){
 }
 
 ci.drugs.view.drug_details.measurement_table = function(controller, measurements){
+  measurements = measurements.sort(function(p1,p2){return(p1[0] - p2[0])})
   var rows = measurements.map(function(p){ 
     var dose = p[0]
     var effect = p[1]

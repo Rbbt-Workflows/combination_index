@@ -398,7 +398,7 @@ module CombinationIndex
     tsv.through do |k,values|
       if k.include? '-'
         combination_info[k] ||= []
-        values.zip_fields.each do |doses, response|
+        Misc.zip_fields(values).each do |doses, response|
           blue_dose, red_dose = doses.split("-")
           response = response.to_f
           response = (response - min) / (max - min) if scale 
@@ -408,7 +408,7 @@ module CombinationIndex
         end
       else
         drug_info[k] ||= []
-        values.zip_fields.each do |dose, response|
+        Misc.zip_fields(values).each do |dose, response|
           response = response.to_f
           response = (response - min) / (max - min) if scale 
           response = 1.0 - [1.0, response].min if invert
@@ -440,8 +440,6 @@ module CombinationIndex
       else
         set = nil
       end
-
-      next unless set == '5' #or set == '6'
 
       begin
         if k.include? '-'
