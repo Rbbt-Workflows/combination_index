@@ -45,6 +45,7 @@ ci.controls.vm.start_job_cache = function(){
 ci.controls.controller = function(){
   var controller = this
   ci.controls.vm.init()
+
   controller.batch = function(){
     ci.controls.vm.batch = {}
     ci.controls.vm.job_cache = []
@@ -52,42 +53,47 @@ ci.controls.controller = function(){
     combinations = Object.keys(ci.combination_info).sort()
     for (i in combinations){
       var combination = combinations[i]
-      var combination_values = ci.combination_info[combination]
 
-      var more_doses = combination_values.map(function(a){ return a[0] + a[1]})
-      var more_effects = combination_values.map(function(a){ return a[2]})
+      var drugs = combination.split("-")
+      var all_drugs = Object.keys(rbbt.ci.drug_info)
+      if (intersect(drugs,all_drugs).length == 2){
+        var combination_values = ci.combination_info[combination]
 
-      for (i in combination_values){
-        var combination_value = combination_values[i]
+        var more_doses = combination_values.map(function(a){ return a[0] + a[1]})
+        var more_effects = combination_values.map(function(a){ return a[2]})
 
-        var blue_drug = combination.split("-")[0]
-        var blue_drug_info = ci.drug_info[blue_drug]
-        var blue_doses = blue_drug_info.map(function(p){return p[0]})
-        var blue_effects = blue_drug_info.map(function(p){return p[1]})
+        for (i in combination_values){
+          var combination_value = combination_values[i]
 
-        var red_drug = combination.split("-")[1]
-        var red_drug_info = ci.drug_info[red_drug]
-        var red_doses = red_drug_info.map(function(p){return p[0]})
-        var red_effects = red_drug_info.map(function(p){return p[1]})
+          var blue_drug = combination.split("-")[0]
+          var blue_drug_info = ci.drug_info[blue_drug]
+          var blue_doses = blue_drug_info.map(function(p){return p[0]})
+          var blue_effects = blue_drug_info.map(function(p){return p[1]})
 
-        var blue_dose = combination_value[0]
-        var red_dose = combination_value[1]
-        var effect = combination_value[2]
+          var red_drug = combination.split("-")[1]
+          var red_drug_info = ci.drug_info[red_drug]
+          var red_doses = red_drug_info.map(function(p){return p[0]})
+          var red_effects = red_drug_info.map(function(p){return p[1]})
 
-        var fix_ratio = ci.controls.vm.fix_ratio()
-        var direct_ci = ci.controls.vm.direct_ci()
-        var model_type = ci.controls.vm.model_type()
+          var blue_dose = combination_value[0]
+          var red_dose = combination_value[1]
+          var effect = combination_value[2]
 
-        var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
-        inputs.more_doses = more_doses
-        inputs.more_effects = more_effects
+          var fix_ratio = ci.controls.vm.fix_ratio()
+          var direct_ci = ci.controls.vm.direct_ci()
+          var model_type = ci.controls.vm.model_type()
 
-        var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
+          var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
+          inputs.more_doses = more_doses
+          inputs.more_effects = more_effects
 
-        job.combination = combination
-        job.effect = effect
+          var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
-        ci.controls.vm.job_cache.push(job)
+          job.combination = combination
+          job.effect = effect
+
+          ci.controls.vm.job_cache.push(job)
+        }
       }
     }
     ci.controls.vm.start_job_cache()

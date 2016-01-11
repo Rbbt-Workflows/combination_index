@@ -246,67 +246,73 @@ ci.combinations.view.combination_details = function(controller){
                               m('.ui.icon.button',{onclick: ci.combinations.vm.add_new_combination}, m('i.icon.plus'))
                             ])))
 
-                            combinations = Object.keys(combination_info).sort()
-                            for (i in combinations){
-                              var combination = combinations[i]
-                              var klass = (ci.combinations.vm.combination() == combination ? 'active' : '')
-                              var batch = rbbt.ci.controls.vm.batch[combination]
-                              var values = []
-                              var cinfo = combination_info[combination]
-                              var len = Object.keys(cinfo).length
-                              cinfo = cinfo.sort(function(p1,p2){return(p1[0] - p2[0])})
-                              for (i in cinfo){
-                                var triplet = cinfo[i]
-                                var effect = triplet[2]
-                                if (batch && batch[effect]){
-                                  ci_val = batch[effect]
-                                  color = ci.combinations.view.get_color(ci_val)
-                                }else{
-                                  color = 'grey'
-                                  ci_val = 'NA'
-                                }
-                                var title = combination + ' ' + effect + ': ' + ci_val
-                                var style = {width: '' + (100 / len) + '%', 'backgroundColor': color, 'order': (effect * 100).toInteger}
-                                values.push(m('.ci_value', {title: title, 'data-effect': effect, 'data-ci': ci_val, style:style}))
-                              }
+  combinations = Object.keys(combination_info).sort()
+  for (i in combinations){
+    var combination = combinations[i]
 
-                              var ci_values 
+    var drugs = combination.split("-")
+    var all_drugs = Object.keys(rbbt.ci.drug_info)
 
-                              if (Object.keys(rbbt.ci.controls.vm.batch).length > 0 || rbbt.ci.controls.vm.running_jobs > 0)
-                                ci_values = m('.ci_values', values)
-                              else
-                                ci_values = []
+    if (intersect(drugs,all_drugs).length == 2){
+      var klass = (ci.combinations.vm.combination() == combination ? 'active' : '')
+      var batch = rbbt.ci.controls.vm.batch[combination]
+      var values = []
+      var cinfo = combination_info[combination]
+      var len = Object.keys(cinfo).length
+      cinfo = cinfo.sort(function(p1,p2){return(p1[0] - p2[0])})
+      for (i in cinfo){
+        var triplet = cinfo[i]
+        var effect = triplet[2]
+        if (batch && batch[effect]){
+          ci_val = batch[effect]
+          color = ci.combinations.view.get_color(ci_val)
+        }else{
+          color = 'grey'
+          ci_val = 'NA'
+        }
+        var title = combination + ' ' + effect + ': ' + ci_val
+        var style = {width: '' + (100 / len) + '%', 'backgroundColor': color, 'order': (effect * 100).toInteger}
+        values.push(m('.ci_value', {title: title, 'data-effect': effect, 'data-ci': ci_val, style:style}))
+      }
 
-                              var tab = m('.item[data-tab=' + combination + ']', {class: klass, onclick: m.withAttr('data-tab', ci.combinations.vm.combination)}, [ci_values, combination])
-                              combination_tabs.push(tab)
+      var ci_values 
 
-                              if (klass == 'active'){
-                                var table = ci.combinations.view.combination_details.measurement_table(controller, combination_info[combination])
-                                var close_icon = m('.ui.close.icon.labeled.button', 
-                                                   {"data-combination": combination, onclick: m.withAttr("data-combination", ci.combinations.vm.remove_combination) },
-                                                   [m('i.icon.close'), "Remove combination"])
+      if (Object.keys(rbbt.ci.controls.vm.batch).length > 0 || rbbt.ci.controls.vm.running_jobs > 0)
+        ci_values = m('.ci_values', values)
+      else
+        ci_values = []
 
-                                                   var new_measurement = ci.combinations.view.combination_details.measurement_new(controller, combination)
-                                                   details = m('.combination_details.ui.segment.tab.bottom.attached[data-tab=' + combination + ']', {class: klass}, [new_measurement, table, close_icon])
+      var tab = m('.item[data-tab=' + combination + ']', {class: klass, onclick: m.withAttr('data-tab', ci.combinations.vm.combination)}, [ci_values, combination])
+      combination_tabs.push(tab)
 
-                                                   combination_details.push(details)
-                              }
-                            }
+      if (klass == 'active'){
+        var table = ci.combinations.view.combination_details.measurement_table(controller, combination_info[combination])
+        var close_icon = m('.ui.close.icon.labeled.button', 
+                            {"data-combination": combination, onclick: m.withAttr("data-combination", ci.combinations.vm.remove_combination) },
+                            [m('i.icon.close'), "Remove combination"])
+
+                            var new_measurement = ci.combinations.view.combination_details.measurement_new(controller, combination)
+                            details = m('.combination_details.ui.segment.tab.bottom.attached[data-tab=' + combination + ']', {class: klass}, [new_measurement, table, close_icon])
+
+                            combination_details.push(details)
+      }
+    }
+  }
 
 
-                            var tabs = m('.ui.tabular.menu.top.attached', combination_tabs)
-                            var plot = rbbt.mview.plot(ci.combinations.vm.plot.content(), ci.combinations.vm.plot.title(), ci.combinations.vm.plot.caption())
+  var tabs = m('.ui.tabular.menu.top.attached', combination_tabs)
+  var plot = rbbt.mview.plot(ci.combinations.vm.plot.content(), ci.combinations.vm.plot.title(), ci.combinations.vm.plot.caption())
 
-                            //var option_options = {onclick: m.withAttr('data-value', ci.combinations.vm.model_type)}
-                            //var options = [m('.item[data-value=:LL.2()]',option_options, ":LL.2()"),m('.item[data-value=:LL.3()]',option_options, ":LL.3()"),m('.item[data-value=:LL.4()]',option_options, ":LL.4()"),m('.item[data-value=:LL.5()]',option_options, ":LL.5()")]
-                            //var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', "DRC Method"),m('i.dropdown.icon'),m('.menu',options)])
-                            //var fix_ratio = m('.ui.small.input', [m('label', 'Fix combination ratio'), m('input.ui.checkbox', {type: 'checkbox', checked: ci.combinations.vm.fix_ratio(),  onchange: m.withAttr('checked', ci.combinations.vm.fix_ratio)})])
+  //var option_options = {onclick: m.withAttr('data-value', ci.combinations.vm.model_type)}
+  //var options = [m('.item[data-value=:LL.2()]',option_options, ":LL.2()"),m('.item[data-value=:LL.3()]',option_options, ":LL.3()"),m('.item[data-value=:LL.4()]',option_options, ":LL.4()"),m('.item[data-value=:LL.5()]',option_options, ":LL.5()")]
+  //var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', "DRC Method"),m('i.dropdown.icon'),m('.menu',options)])
+  //var fix_ratio = m('.ui.small.input', [m('label', 'Fix combination ratio'), m('input.ui.checkbox', {type: 'checkbox', checked: ci.combinations.vm.fix_ratio(),  onchange: m.withAttr('checked', ci.combinations.vm.fix_ratio)})])
 
-                            //var plot_column = m('.five.wide.column', [model_type_input, fix_ratio, plot])
+  //var plot_column = m('.five.wide.column', [model_type_input, fix_ratio, plot])
 
-                            var plot_column = m('.six.wide.plot.column', plot)
+  var plot_column = m('.six.wide.plot.column', plot)
 
-                            return m('.ui.three.column.grid', [m('.ten.wide.column', [tabs, combination_details]), plot_column])
+  return m('.ui.three.column.grid', [m('.ten.wide.column', [tabs, combination_details]), plot_column])
 }
 
 ci.combinations.view.combination_details.measurement_new = function(controller, combination){
