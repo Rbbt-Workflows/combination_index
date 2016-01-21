@@ -96,17 +96,17 @@ CI.predict_line <- function(modelfile, doses, least_squares=FALSE, invert=FALSE,
             data.drc$Effect = CI.least_squares.fix_log(data.drc$Effect)  
 
             tryCatch({
-                data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'upr'];
-                data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'lwr'];
-                data.drc$Effect.upr = CI.least_squares.fix_log(data.drc$Effect.upr)  
-                data.drc$Effect.lwr = CI.least_squares.fix_log(data.drc$Effect.lwr)  
+                data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose), interval="confidence", level=level)[,'upr'];
+                data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose), interval="confidence", level=level)[,'lwr'];
+                data.drc$Effect.upr = CI.least_squares.fix_log(data.drc$Effect.upr)   
+                data.drc$Effect.lwr = CI.least_squares.fix_log(data.drc$Effect.lwr)   
             })
 
         }else{
             data.drc$Effect = predict(model, data.drc)
             tryCatch({
-                data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'Upper'];
-                data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose),interval="confidence",level=level)[,'Lower'];
+                data.drc$Effect.upr = predict(model, data.frame(Dose=data.drc$Dose), interval="confidence", level=level)[,'Upper'];
+                data.drc$Effect.lwr = predict(model, data.frame(Dose=data.drc$Dose), interval="confidence", level=level)[,'Lower'];
             })
         }
         if (invert){
