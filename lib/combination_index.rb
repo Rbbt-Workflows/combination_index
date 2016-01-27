@@ -127,6 +127,12 @@ module CombinationIndex
       median_point = max_effect * 0.9 if median_point > max_effect
       median_point = min_effect * 1.1 if median_point < min_effect
 
+      effect1 = median_point - 0.15 * total_range
+      effect2 = median_point + 0.15 * total_range
+      effect1 = 0.05 if effect1 < 0.05
+      effect2 = 0.95 if effect2 > 0.95
+
+
       if model_type.to_s =~ /least_squares/
         model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect/(1-Effect)) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
         begin
@@ -139,11 +145,6 @@ module CombinationIndex
           end
           model.fit(data,'lm')
           mean = Misc.mean effects
-
-          effect1 = median_point - 0.15 * total_range
-          effect2 = median_point + 0.15 * total_range
-          effect1 = 0.05 if effect1 < 0.05
-          effect2 = 0.95 if effect2 > 0.95
 
           dose1 = adjust_dose(model, Math.log(effect1/(1-effect1)), min_dose, max_dose, inverse)
           dose2 = adjust_dose(model, Math.log(effect2/(1-effect2)), min_dose, max_dose, inverse)
@@ -185,11 +186,6 @@ module CombinationIndex
           model.fit(data,'drm', :fct => model_str)
           mean = Misc.mean effects
           
-          effect1 = median_point - 0.15 * total_range
-          effect2 = median_point + 0.15 * total_range
-          effect1 = 0.05 if effect1 < 0.05
-          effect2 = 0.95 if effect2 > 0.95
-
           dose1 = adjust_dose(model, effect1, min_dose, max_dose, inverse)
           dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
           gi50 = adjust_dose(model, 0.5, min_dose, max_dose, inverse)

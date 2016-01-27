@@ -24,13 +24,15 @@ module CombinationIndex
       FileUtils.mkdir_p files_dir
       modelfile = file(:model)
       if invert
-        m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples = CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
+        m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples = 
+          CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
         m = - m if m
         random_samples = random_samples.collect{|_m,_dm| [-_m, _dm] }
         effect1 = 1.0 - effect1
         effect2 = 1.0 - effect2
       else
-        m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples  = CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
+        m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples  = 
+          CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
         raise "Error computing m and dm" if m.to_s == "NaN"
       end
 
