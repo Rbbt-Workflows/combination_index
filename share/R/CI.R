@@ -30,6 +30,8 @@ CI.misc.log_seq <- function(center.point){
         res = c(res, n)
         n = center.point * 32^i
         res = c(res, n)
+        n = center.point * 64^i
+        res = c(res, n)
         n = center.point / i
         res = c(res, n)
         n = center.point / 2^i
@@ -44,6 +46,10 @@ CI.misc.log_seq <- function(center.point){
         res = c(res, n)
         n = center.point / 64^i
         res = c(res, n)
+    }
+
+    for (i in seq(0,100, by=1)) {
+        res = c(res, i)
     }
 
     return(sort(res))
@@ -267,7 +273,7 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
         len = min(c(length(more_doses), length(more_effects)))
         md=more_doses[1:len]
         me=more_effects[1:len]
-        plot = plot + geom_smooth(aes(x=Dose, y=Effect), data=data.frame(Dose=md, Effect=me), linetype='dashed', col='black', level=0.95)
+        plot = plot + geom_smooth(aes(x=Dose, y=Effect), data=data.frame(Dose=md, Effect=me), linetype='dashed', col='black', level=0.95, se=FALSE)
     }
     
     if (!is.null(blue.random.samples) && !is.null(red.random.samples)){

@@ -150,9 +150,10 @@ module CombinationIndex
           dose2 = adjust_dose(model, Math.log(effect2/(1-effect2)), min_dose, max_dose, inverse)
           gi50 = adjust_dose(model, Math.log(0.5/(1-0.5)), min_dose, max_dose, inverse)
 
-          if (dose1 - dose2).abs < dose1 / 10
-            dose1 -= dose1/10
-            dose2 += dose2/10
+          if (dose2 - dose1).abs < dose2 / 10
+            dose1 = min_dose + (dose1 - min_dose)/10
+            dose2 += (max_dose - dose2)/10
+            dose2 = max_dose if dose2 > max_dose
           end
 
           predict1_info = model.predict_interval(dose1)
@@ -189,6 +190,12 @@ module CombinationIndex
           dose1 = adjust_dose(model, effect1, min_dose, max_dose, inverse)
           dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
           gi50 = adjust_dose(model, 0.5, min_dose, max_dose, inverse)
+
+          if (dose2 - dose1).abs < dose2 / 10
+            dose1 = min_dose + (dose1 - min_dose)/10
+            dose2 += (max_dose - dose2)/10
+            dose2 = max_dose if dose2 > max_dose
+          end
 
           effect1_info = model.predict_interval(dose1)
           effect2_info = model.predict_interval(dose2)

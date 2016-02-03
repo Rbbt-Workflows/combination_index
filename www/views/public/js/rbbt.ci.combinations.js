@@ -70,7 +70,7 @@ ci.combinations.controller = function(){
         var job = this
         job.load().then(ci.combinations.vm.plot.content, job_error)
         var title = "Fit plot for combination: " + blue_drug + " and " + red_drug
-        var caption = blue_drug + " (blue), " + red_drug + " (red) ME curves, and additive combination line (black). The dashed black line is a loess fit across the real combination values with 95% confidence bands."
+        var caption = blue_drug + " (blue), " + red_drug + " (red) ME curves, and additive combination line (black). The dashed black line is a loess fit across the observed combination values."
         if (info.status == "done"){
           var ci_value = parseFloat(info["CI"])
           var gi50 = parseFloat(info["GI50"])

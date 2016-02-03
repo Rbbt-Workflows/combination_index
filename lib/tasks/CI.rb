@@ -52,7 +52,7 @@ module CombinationIndex
         CI.plot_fit(m,dm,data,data.me_points, modelfile, least_squares, invert, random_samples)
       EOF
 
-      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib)
+      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib), :R_monitor => true
     rescue Exception
       Log.exception $!
       if invert
