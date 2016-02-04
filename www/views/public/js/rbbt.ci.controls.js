@@ -126,7 +126,7 @@ ci.controls.view = function(controller){
   )
 
 
-  var batch_button = rbbt.mview.button({onclick: controller.batch}, "Batch")
+  var batch_button = rbbt.mview.button({onclick: controller.batch}, "Analyze all in Batch")
 
   var control_panel 
   if (ci.controls.vm.model_type() == 'least_squares')

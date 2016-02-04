@@ -93,6 +93,16 @@ module CombinationIndex
     dose
   end
 
+  def self.separate_doses(dose1, dose2, min_dose, max_dose)
+    if (dose2 - dose1).abs < dose2/Math.log(dose2)
+      dose1 = min_dose + (dose1 - min_dose)/10
+      dose2 += (max_dose - dose2)/10
+      dose2 = max_dose if dose2 > max_dose
+    end
+
+    [dose1, dose2]
+  end
+
   def self.fit_m_dm(doses, effects, model_file = nil, median_point = 0.5, model_type='LL.5')
     pairs = doses.zip(effects).sort_by{|d,e| d }
 
@@ -150,11 +160,7 @@ module CombinationIndex
           dose2 = adjust_dose(model, Math.log(effect2/(1-effect2)), min_dose, max_dose, inverse)
           gi50 = adjust_dose(model, Math.log(0.5/(1-0.5)), min_dose, max_dose, inverse)
 
-          if (dose2 - dose1).abs < dose2 / 10
-            dose1 = min_dose + (dose1 - min_dose)/10
-            dose2 += (max_dose - dose2)/10
-            dose2 = max_dose if dose2 > max_dose
-          end
+          dose1, dose2 = self.separate_doses dose1, dose2, min_dose, max_dose
 
           predict1_info = model.predict_interval(dose1)
           predict2_info = model.predict_interval(dose2)
@@ -191,11 +197,7 @@ module CombinationIndex
           dose2 = adjust_dose(model, effect2, min_dose, max_dose, inverse)
           gi50 = adjust_dose(model, 0.5, min_dose, max_dose, inverse)
 
-          if (dose2 - dose1).abs < dose2 / 10
-            dose1 = min_dose + (dose1 - min_dose)/10
-            dose2 += (max_dose - dose2)/10
-            dose2 = max_dose if dose2 > max_dose
-          end
+          dose1, dose2 = self.separate_doses dose1, dose2, min_dose, max_dose
 
           effect1_info = model.predict_interval(dose1)
           effect2_info = model.predict_interval(dose2)
