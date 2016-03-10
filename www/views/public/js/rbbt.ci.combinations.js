@@ -59,7 +59,7 @@ ci.combinations.controller = function(){
 
     var job_error = function(e){ci.combinations.vm.plot.content = m.prop('<div class="ui error message">Error producing plot</div>') }
 
-    var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci }
+    var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
     inputs.more_doses = more_doses
     inputs.more_effects = more_effects
 
@@ -84,7 +84,7 @@ ci.combinations.controller = function(){
           if (random_ci.length > 0){
             var min = Math.min.apply(null, random_ci)
             var max = Math.max.apply(null, random_ci)
-            title = title + ' [' + min.toFixed(2) + ',' + max.toFixed(2) + ']'
+            title = title + ' [ ' + min.toFixed(2) + ', ' + max.toFixed(2) + ' ]'
             caption = caption + ' Light blue lines represent additive lines for random ME-curves, and are used to calculate the CI range values.'
           }
 

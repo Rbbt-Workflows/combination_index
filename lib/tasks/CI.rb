@@ -52,7 +52,9 @@ module CombinationIndex
         CI.plot_fit(m,dm,data,data.me_points, modelfile, least_squares, invert, random_samples)
       EOF
 
-      R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib)
+      log(:plot, "Drawing plot") do
+        R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib)
+      end
     rescue Exception
       Log.exception $!
       if invert
@@ -63,9 +65,8 @@ module CombinationIndex
         retry
       end
     ensure
-      {:random_samples => random_samples, :m => m, :dm => dm, :dose1 => dose1, :dose2 => dose2, :effect1 => effect1, :effect2 => effect2, :invert => invert}.each do |k,v|
-        set_info k, v
-      end
+      log(:saving_info, "Saving information") 
+      merge_info({:random_samples => random_samples, :m => m, :dm => dm, :dose1 => dose1, :dose2 => dose2, :effect1 => effect1, :effect2 => effect2, :invert => invert})
     end
   end
 
