@@ -26,6 +26,9 @@ CombinationIndex=/$PWD filter="*.rb" {
    layout.haml
    tasks.haml
    CombinationIndex=CombinationIndex{
+    report=report{
+     job_result.haml
+    }
     m_dm=m_dm{
      job_result.haml
     }

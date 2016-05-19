@@ -18,6 +18,9 @@
         You can input the dose-response data one-by-one, or you can upload a file
         with all the measurements (some examples are provided). 
 
+        IMPORTANT: Drug names may not contain the dash character `-` since it
+        has a special meaning for combinations.
+
         Dose response plots
         ---
 
@@ -142,25 +145,25 @@
 
           - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Miller"]
           - name = File.basename(example_dir)
-          - task_info = workflow.task_info 'combination_index_batch'
+          - task_info = workflow.task_info 'report'
           - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
           - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
           :javascript
             example_inputs["#{ name }"] = #{inputs.to_json}
 
           %li
-            %a.load_example(href="#" task='combination_index_batch' name=name)= name
+            %a.load_example(href="#" task='report' name=name)= name
 
 
-          - example_dir = CombinationIndex.libdir.examples['combination_index_batch']["Haagensen-fig1"]
+          - example_dir = CombinationIndex.libdir.examples['report']["Haagensen-fig1"]
           - name = File.basename(example_dir)
-          - task_info = workflow.task_info 'combination_index_batch'
+          - task_info = workflow.task_info 'report'
           - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
           - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
           :javascript
             example_inputs["#{ name }"] = #{inputs.to_json}
           %li
-            %a.load_example(href="#" task='combination_index_batch' name=name)= name
+            %a.load_example(href="#" task='report' name=name)= name
 
     .ui.alert.message.clearfix
 
@@ -173,6 +176,8 @@
             Export
           .ui.small.two.wide.button#reset
             Reset
+          .ui.small.two.wide.button#report
+            Produce Report
 
 
 
@@ -255,6 +260,56 @@
       saveAs(blob, "CI-binator-export.txt");
       return(false)
     })
+
+    $('.ui.button#report').click(function(){
+      var content = "#Treatment\tDose\tEffect\n"
+
+      $(this).addClass('loading')
+      for (drug in rbbt.ci.drug_info){
+        var line = ""
+        var regimes = rbbt.ci.drug_info[drug]
+        var doses = []
+        var effects = []
+
+        line = line + drug + "\t"
+        
+        for (i = 0; i < regimes.length; i++){
+          var pair = regimes[i]
+          doses.push(pair[0])
+          effects.push(pair[1])
+        }
+        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+
+        content = content + line
+      }
+
+      for (combination in rbbt.ci.combination_info){
+        var line = ""
+        var regimes = rbbt.ci.combination_info[combination]
+        var doses = []
+        var effects = []
+
+        line = line + combination + "\t"
+        
+        for (i = 0; i < regimes.length; i++){
+          var pair = regimes[i]
+          doses.push([pair[0],pair[1]].join("-"))
+          effects.push(pair[2])
+        }
+        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+
+        content = content + line
+      }
+
+      var job = new rbbt.Job('CombinationIndex', 'report', {file: content, model_type: 'least_squares'})
+      job.issue().then(function(){
+        window.location = job.jobURL()
+      }, function(){
+        $(this).removeClass('loading')
+        console.log("The report is still in process. Try again after a while", "Report in process")
+      })
+    })
+
 
 
     form.find('input[type=submit]').click(function(){

@@ -207,7 +207,7 @@ module CombinationIndex
 
         rescue Exception
           Log.warn "Fit exception: #{$!.message}"
-          Log.exception $!
+          #Log.exception $!
           cmp = pairs[0..-2].zip(pairs[1..-1]).reject{|p1,p2| p1.first == p2.first}.sort_by{|p1,p2| (p1.last - median_point).abs}.first
           dose1, effect1, dose2, effect2 = cmp.flatten
         end
@@ -235,7 +235,7 @@ module CombinationIndex
       [m, dm, dose1, effect1, dose2, effect2, gi50] + random_samples
     rescue Exception
       Log.warn "M Dm exception: #{$!.message}"
-      Log.exception $!
+      #Log.exception $!
       [nil, nil]
     end
   end

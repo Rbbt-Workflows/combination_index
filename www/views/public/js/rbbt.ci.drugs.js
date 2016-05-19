@@ -93,6 +93,8 @@ ci.drugs.controller = function(){
 
     var inputs = {doses: doses.join("|"), effects: effects.join("|"), median_point: ci.controls.vm.median_point(), model_type: ci.controls.vm.model_type()}
 
+    inputs.jobname = drug
+
     var job = new rbbt.Job('CombinationIndex', 'fit', inputs)
 
     job.run().then(ci.drugs.vm.plot.content, job_error).then(function(){

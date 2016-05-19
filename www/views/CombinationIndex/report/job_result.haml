@@ -1,0 +1,94 @@
+- if job 
+  .job_control
+    = workflow_partial('job_result/job_control', workflow, task, locals)
+
+= table do
+  - job.load.unzip
+
+- combinations = {}
+- job.info[:jobs].each do |dep_path|
+  - dep = CombinationIndex.load_step dep_path
+  - blue_drug, red_drug = dep.clean_name.split("-")
+  - combination = [blue_drug, red_drug] * "-"
+  - combinations[combination] ||= []
+  - combinations[combination] << dep
+
+- combination_names = combinations.sort_by{|k,v| k}.collect{|k,v| k }
+-#
+  .ui.top.attached.tabular.menu
+    - combination_names.each do |name|
+      .item(data-tab=name)=name
+
+  - combination_names.each do |name|
+    - deps = combinations[name]
+    .ui.segment.bottom.attached.tab(data-tab=name)
+      .ui.description.grid
+        - fragment_url = fragment do |code|
+          - deps.sort_by{|dep| dep.inputs[:red_dose].to_f}.each do |dep|
+            - blue_dose = dep.info[:inputs][:blue_dose]
+            - red_dose = dep.info[:inputs][:red_dose]
+            - random_CI = dep.info[:random_CI]
+            .ui.basic.segment.six.wide.column(data-job_path="#{dep.path}")
+              .ui.header
+                - url = "/" + ["CombinationIndex", dep.task_name, dep.name] * "/"
+                %a(href=url)= [blue_dose, red_dose] * "-"
+                %br
+                CI Value: 
+                - if random_CI.any?
+                  == #{"%.3f" % dep.info[:CI]} [#{"%.3f" % random_CI.min}, #{"%.3f" % random_CI.max}]
+                - else
+                  == #{"%.3f" % dep.info[:CI]}
+              .ui.description
+                = File.read(dep.path)
+
+- urls = {}
+- combination_names.each do |name|
+  - deps = combinations[name]
+  - fragment_code = fragment false do |code|
+    - deps.sort_by{|dep| dep.inputs[:red_dose].to_f}.each do |dep|
+      - blue_dose = dep.info[:inputs][:blue_dose]
+      - red_dose = dep.info[:inputs][:red_dose]
+      - random_CI = dep.info[:random_CI]
+      .ui.basic.segment.six.wide.column(data-job_path="#{dep.path}")
+        .ui.header
+          - url = "/" + ["CombinationIndex", dep.task_name, dep.name] * "/"
+          %a(href=url)= [blue_dose, red_dose] * "-"
+          %br
+          CI Value: 
+          - if random_CI.any?
+            == #{"%.3f" % dep.info[:CI]} [#{"%.3f" % random_CI.min}, #{"%.3f" % random_CI.max}]
+          - else
+            == #{"%.3f" % dep.info[:CI]}
+        .ui.description
+          = File.read(dep.path)
+  - urls[name] = fragment_code
+
+.ui.top.attached.tabular.menu
+  - urls.each do |name,code|
+    .item(data-tab=name)=name
+
+- urls.each do |name,code|
+  - deps = combinations[name]
+  .ui.segment.bottom.attached.tab(data-tab=name data-code=code)
+    .ui.description.grid
+
+:deferjs
+  $('.menu .item').click(function(){ 
+    var item = $(this)
+    item.siblings().removeClass('active')
+    item.addClass('active')
+    var tab = item.attr('data-tab')
+    var active = $('.tab[data-tab=' + tab + ']')
+    active.siblings().removeClass('active').find('.ui.description').html("")
+    active.addClass('loading').addClass('active')
+    var code = active.attr('data-code')
+    var url = '?_fragment=' + code
+    rbbt.ajax({url: url, deserialize: function(x){return x}}).then(function(data){
+      active.removeClass('loading')
+      active.find('.ui.description').html(data)
+    })
+
+  
+  })
+
+  $('.menu .item').first().click()

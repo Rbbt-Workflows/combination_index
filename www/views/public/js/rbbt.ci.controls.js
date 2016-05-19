@@ -87,6 +87,8 @@ ci.controls.controller = function(){
           inputs.more_doses = more_doses
           inputs.more_effects = more_effects
 
+          inputs.jobname = blue_drug + '-' + red_drug
+
           var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
           job.combination = combination
@@ -126,7 +128,7 @@ ci.controls.view = function(controller){
   )
 
 
-  var batch_button = rbbt.mview.button({onclick: controller.batch}, "Analyze all in Batch")
+  var batch_button = rbbt.mview.button({onclick: controller.batch}, "Analyze All in Batch")
 
   var control_panel 
   if (ci.controls.vm.model_type() == 'least_squares')

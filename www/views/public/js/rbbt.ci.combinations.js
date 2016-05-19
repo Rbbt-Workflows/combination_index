@@ -62,6 +62,7 @@ ci.combinations.controller = function(){
     var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
     inputs.more_doses = more_doses
     inputs.more_effects = more_effects
+    inputs.jobname = combination
 
     var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
