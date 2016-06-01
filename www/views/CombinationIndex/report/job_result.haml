@@ -56,9 +56,9 @@
           %br
           CI Value: 
           - if random_CI.any?
-            == #{"%.3f" % dep.info[:CI]} [#{"%.3f" % random_CI.min}, #{"%.3f" % random_CI.max}]
+            == #{"%.3e" % dep.info[:CI]} [#{"%.3e" % random_CI.min}, #{"%.3e" % random_CI.max}]
           - else
-            == #{"%.3f" % dep.info[:CI]}
+            == #{"%.3e" % dep.info[:CI]}
         .ui.description
           = File.read(dep.path)
   - urls[name] = fragment_code
