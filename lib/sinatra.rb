@@ -6,6 +6,9 @@
 #  template_render('CombinationIndex/combination_index_batch/details', @clean_params)
 #end
 
+module NumericValue
+  format = ["CI", "CI low", "CI high"]
+end
 
 $title = "CImbinator"
 

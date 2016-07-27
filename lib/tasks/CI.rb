@@ -35,7 +35,7 @@ module CombinationIndex
       else
         m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples  = 
           CombinationIndex.fit_m_dm(doses, effects, modelfile, median_point, model_type)
-        raise "Error computing m and dm" if m.to_s == "NaN"
+        raise RbbtException, "Error computing m and dm" if m.to_s == "NaN"
       end
 
       set_info 'GI50', gi50
@@ -60,7 +60,7 @@ module CombinationIndex
     rescue Exception
       Log.exception $!
       if invert
-        raise "Could not draw fit"
+        raise RbbtException, "Could not draw fit"
       else
         Log.warn "Invert and repeat"
         invert = true
@@ -149,7 +149,11 @@ module CombinationIndex
         end
 
         set_info :CI, ci
-        set_info :random_CI, random_ci.sort.reject{|ci| ci.to_s == "Infinity"}
+        begin
+          set_info :random_CI, random_ci.sort.reject{|ci| ci.to_s == "Infinity"}
+        rescue Exception
+          set_info :random_CI, []
+        end
         set_info :GI50, CombinationIndex.additive_dose(0.5, blue_dose, red_dose, blue_m, blue_dm, red_m, red_dm)
       else
         ci, fit_dose_d1, fit_dose_d2 = CombinationIndex.ci_value_fit(blue_dose, red_dose, effect, R::Model.load(blue_modelfile), R::Model.load(red_modelfile), blue_m < 0, red_m < 0)

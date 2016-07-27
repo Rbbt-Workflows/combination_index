@@ -2,6 +2,9 @@
   .job_control
     = workflow_partial('job_result/job_control', workflow, task, locals)
 
+- header "CI", NumericValue
+- header "CI low", NumericValue
+- header "CI high", NumericValue
 = table do
   - job.load.unzip
 
