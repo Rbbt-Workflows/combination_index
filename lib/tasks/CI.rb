@@ -29,6 +29,9 @@ module CombinationIndex
         m, dm, dose1, effect1, dose2, effect2, gi50, *random_samples = 
           CombinationIndex.fit_m_dm(doses, effects.collect{|e| 1.0 - e}, modelfile, 1.0 - median_point, model_type)
         m = - m if m
+
+        raise "Error computing fit" if effect1.nil? or effect2.nil?
+
         random_samples = random_samples.collect{|_m,_dm| [-_m, _dm] }
         effect1 = 1.0 - effect1
         effect2 = 1.0 - effect2
@@ -58,7 +61,7 @@ module CombinationIndex
         R::SVG.ggplotSVG tsv, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find(:lib)
       end
     rescue Exception
-      Log.exception $!
+      Log.warn $!.message
       if invert
         raise RbbtException, "Could not draw fit"
       else
@@ -85,7 +88,7 @@ module CombinationIndex
   input :more_effects, :array, "More combination effects"
   input :direct_ci, :boolean, "Compute CI directly from model instead of through ME points (for models other than least squares)", false
   extension :svg
-  dep do |jobname, options|
+  dep :compute => :produce do |jobname, options|
     model_type = options[:model_type]
 
     if jobname.include? "-"
@@ -230,79 +233,6 @@ module CombinationIndex
     end
   end
 
-  #input :file, :tsv, "Dose response file"
-  #dep :ci do |jobname,inputs|
-  #  file = inputs[:file]
-  #  file = TSV.open(file) unless TSV === file
-  #  treatments = file.keys
-  #  combinations = treatments.select{|t| t.include? '-'}
-  #  drugs = treatments - combinations
-
-  #  jobs = []
-  #  combinations.each do |combination|
-  #    blue_drug, red_drug = combination.split("-")
-
-  #    blue_doses, blue_effects = file[blue_drug]
-  #    red_doses, red_effects = file[red_drug]
-
-  #    combination_doses, combination_effects = file[combination]
-  #    Misc.zip_fields([combination_doses, combination_effects]).each do |doses,effect|
-  #      blue_dose, red_dose = doses.split("-")
-  #      more_doses = combination_doses.collect{|p| p.split("-").inject(0){|acc,e| acc += e.to_f} }
-  #      more_effects = combination_effects
-
-  #      job_inputs = {
-  #        :blue_doses => blue_doses.collect{|v| v.to_f},
-  #        :blue_effects => blue_effects.collect{|v| v.to_f},
-  #        :blue_dose => blue_dose.to_f,
-  #        :red_doses => red_doses.collect{|v| v.to_f},
-  #        :red_effects => red_effects.collect{|v| v.to_f},
-  #        :red_dose => red_dose.to_f,
-  #        :more_doses => more_doses,
-  #        :more_effects => more_effects,
-  #        :effect => effect.to_f,
-  #      }
-
-  #      job = CombinationIndex.job(:ci, [blue_drug, red_drug] * "-", inputs.merge(job_inputs))
-  #      job.set_info :red_drug, red_drug
-  #      job.set_info :blue_drug, blue_drug
-  #      jobs << job
-  #    end
-  #  end
-  #  good_jobs = []
-  #  jobs
-  #  Misc.bootstrap(jobs) do |job| 
-  #    begin
-  #      job.run(true)
-  #    rescue
-  #      Log.warn $!.message
-  #      next
-  #    end
-  #  end
-  #  jobs.each do |job|
-  #    next unless job.done?
-  #    good_jobs << job
-  #  end
-  #  good_jobs
-  #end
-  #task :report => :tsv do |file|
-  #  tsv = TSV.setup({}, :key_field => "Combination", :fields => ["Doses", "Effect", "CI", "CI low", "CI high"], :type => :double)
-  #  TSV.traverse dependencies, :type => :array, :into => tsv do |dep|
-  #    blue_drug = dep.info[:blue_drug]
-  #    red_drug = dep.info[:red_drug]
-  #    blue_dose = dep.inputs[:blue_dose]
-  #    red_dose = dep.inputs[:red_dose]
-  #    effect = dep.inputs[:effect]
-  #    ci = dep.info[:CI]
-  #    random_CI = dep.info[:random_CI]
-  #    doses = [blue_dose, red_dose] * "-"
-  #    combination = [blue_drug, red_drug] * "-"
-  #    [combination,[doses, effect, ci, random_CI.min, random_CI.max]]
-  #  end
-
-  #  tsv.slice(tsv.fields - ["File"])
-  #end
-
   input :file, :tsv, "Dose response file"
   input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
   task :report => :tsv do |file,model_type|
@@ -322,6 +252,7 @@ module CombinationIndex
 
       combination_doses, combination_effects = file[combination]
       Misc.zip_fields([combination_doses, combination_effects]).each do |doses,effect|
+        begin
         blue_dose, red_dose = doses.split("-")
         more_doses = combination_doses.collect{|p| p.split("-").inject(0){|acc,e| acc += e.to_f} }
         more_effects = combination_effects
@@ -341,6 +272,9 @@ module CombinationIndex
 
         job = CombinationIndex.job(:ci, [blue_drug, red_drug] * "-", job_inputs)
         jobs << job
+        rescue Exception
+          Log.exception $!
+        end
       end
     end
 
@@ -350,8 +284,6 @@ module CombinationIndex
       begin
         job.produce(false)
       rescue Exception
-        Log.warn $!.message
-        next
       end
     end
 
