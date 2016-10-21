@@ -16,15 +16,15 @@
     m = #{R.ruby2R m.to_f}
     dm = #{R.ruby2R dm.to_f}
     dose_1 = #{R.ruby2R inputs[:dose_1].to_f}
-    effect_1 = #{R.ruby2R inputs[:effect_1].to_f}
+    response_1 = #{R.ruby2R inputs[:response_1].to_f}
     dose_2 = #{R.ruby2R inputs[:dose_2].to_f}
-    effect_2 = #{R.ruby2R inputs[:effect_2].to_f}
+    response_2 = #{R.ruby2R inputs[:response_2].to_f}
 
     doses = c(dm, dose_1, dose_2)
-    effects = c(0.5, effect_1, effect_2)
+    responses = c(0.5, response_1, response_2)
     dose_names = c('Median', 'Dose 1', 'Dose 2')
 
-    data = data.frame(Dose=doses, Effect=effects, names=dose_names)
+    data = data.frame(Dose=doses, Effect=responses, names=dose_names)
 
     data.me = CI.me_curve(m, dm)
 

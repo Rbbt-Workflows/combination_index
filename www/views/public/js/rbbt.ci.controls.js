@@ -23,9 +23,9 @@ ci.controls.vm.batch_complete_function = function(){
       if (undefined === batch[this.combination]) batch[this.combination] = {}
 
       if (info.status == 'done')
-        batch[this.combination][this.effect] = info.CI
+        batch[this.combination][this.response] = info.CI
       else
-        batch[this.combination][this.effect] = info.status
+        batch[this.combination][this.response] = info.status
 
       m.redraw()
       ci.controls.vm.running_jobs = ci.controls.vm.running_jobs - 1
@@ -60,7 +60,7 @@ ci.controls.controller = function(){
         var combination_values = ci.combination_info[combination]
 
         var more_doses = combination_values.map(function(a){ return a[0] + a[1]})
-        var more_effects = combination_values.map(function(a){ return a[2]})
+        var more_responses = combination_values.map(function(a){ return a[2]})
 
         for (i in combination_values){
           var combination_value = combination_values[i]
@@ -68,31 +68,31 @@ ci.controls.controller = function(){
           var blue_drug = combination.split("-")[0]
           var blue_drug_info = ci.drug_info[blue_drug]
           var blue_doses = blue_drug_info.map(function(p){return p[0]})
-          var blue_effects = blue_drug_info.map(function(p){return p[1]})
+          var blue_responses = blue_drug_info.map(function(p){return p[1]})
 
           var red_drug = combination.split("-")[1]
           var red_drug_info = ci.drug_info[red_drug]
           var red_doses = red_drug_info.map(function(p){return p[0]})
-          var red_effects = red_drug_info.map(function(p){return p[1]})
+          var red_responses = red_drug_info.map(function(p){return p[1]})
 
           var blue_dose = combination_value[0]
           var red_dose = combination_value[1]
-          var effect = combination_value[2]
+          var response = combination_value[2]
 
           var fix_ratio = ci.controls.vm.fix_ratio()
           var direct_ci = ci.controls.vm.direct_ci()
           var model_type = ci.controls.vm.model_type()
 
-          var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
+          var inputs = {red_doses: red_doses.join("|"), red_responses: red_responses.join("|"), blue_doses: blue_doses.join("|"), blue_responses: blue_responses.join("|"), blue_dose: blue_dose, red_dose: red_dose, response: response, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
           inputs.more_doses = more_doses
-          inputs.more_effects = more_effects
+          inputs.more_responses = more_responses
 
           inputs.jobname = blue_drug + '-' + red_drug
 
           var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
 
           job.combination = combination
-          job.effect = effect
+          job.response = response
 
           ci.controls.vm.job_cache.push(job)
         }
@@ -114,7 +114,7 @@ ci.controls.view = function(controller){
 
   var median_point_field = rbbt.mview.field(
     rbbt.mview.input('text', 'value', ci.controls.vm.median_point), 
-    "Median effect point for ME points in single drug plot"
+    "Median response point for ME points in single drug plot"
   )
 
   var fix_field = rbbt.mview.field(

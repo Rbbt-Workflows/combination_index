@@ -27,7 +27,7 @@ ci.drugs.vm = (function(){
     vm.new_drug = m.prop()
 
     vm.dose = m.prop("")
-    vm.effect = m.prop("")
+    vm.response = m.prop("")
     vm.median_point = m.prop(0.5)
     vm.model_type = m.prop(":LL.2()")
 
@@ -42,21 +42,21 @@ ci.drugs.vm = (function(){
     vm.add_measurement = function(){
       var drug = vm.drug()
       var dose = vm.dose()
-      var effect = vm.effect()
+      var response = vm.response()
       if (undefined === ci.drug_info[drug]) ci.drug_info[drug] = {}
-      ci.drug_info[drug].push([dose, effect])
+      ci.drug_info[drug].push([dose, response])
       vm.save()
       return false
     }
 
     vm.remove_measurement = function(measurement){
       var dose = measurement.split(":")[0]
-      var effect = measurement.split(":")[1]
+      var response = measurement.split(":")[1]
       var drug = ci.drugs.vm.drug()
       var new_list = [];
       for (i in ci.drug_info[drug]){
         var p = ci.drug_info[drug][i]
-        if (p[0] != dose || p[1] != effect) new_list.push(p)
+        if (p[0] != dose || p[1] != response) new_list.push(p)
       }
       ci.drug_info[drug] = new_list
       vm.save()
@@ -84,14 +84,14 @@ ci.drugs.controller = function(){
     var drug_info = ci.drug_info[drug]
 
     var doses = drug_info.map(function(p){return p[0]})
-    var effects = drug_info.map(function(p){return p[1]})
+    var responses = drug_info.map(function(p){return p[1]})
 
     ci.drugs.vm.plot.title = m.prop('loading')
     m.redraw()
 
     var job_error = function(e){ci.drugs.vm.plot.content = m.prop('<div class="ui error message">Error producing plot</div>') }
 
-    var inputs = {doses: doses.join("|"), effects: effects.join("|"), median_point: ci.controls.vm.median_point(), model_type: ci.controls.vm.model_type()}
+    var inputs = {doses: doses.join("|"), responses: responses.join("|"), median_point: ci.controls.vm.median_point(), model_type: ci.controls.vm.model_type()}
 
     inputs.jobname = drug
 
@@ -166,8 +166,8 @@ ci.drugs.view.drug_details = function(controller){
 
 ci.drugs.view.drug_details.measurement_new = function(controller, drug){
   var dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.dose), "Dose")
-  var effect_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.effect), "Effect")
-  var fields = m('.ui.fields', [dose_field, effect_field])
+  var response_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.response), "Effect")
+  var fields = m('.ui.fields', [dose_field, response_field])
 
   var submit = m('input[type=submit].ui.submit.button', {'data-drug': drug, onclick: m.withAttr('data-drug', ci.drugs.vm.add_measurement), value: 'Add measurement'})
   var display_plot = m('input[type=submit].ui.submit.button', {'data-drug': drug, onclick: m.withAttr('data-drug', controller.draw_fit), value: 'Display plot'})
@@ -184,8 +184,8 @@ ci.drugs.view.drug_details.measurement_table = function(controller, measurements
 
   var rows = measurements.map(function(p){ 
     var dose = p[0]
-    var effect = p[1]
-    return ci.drugs.view.drug_details.measurement_row(controller, dose, effect)
+    var response = p[1]
+    return ci.drugs.view.drug_details.measurement_row(controller, dose, response)
   })
 
   var header = m('thead', m('tr', [m('th', 'Dose'), m('th', 'Effect'), m('th', '')]))
@@ -193,9 +193,9 @@ ci.drugs.view.drug_details.measurement_table = function(controller, measurements
   return m('table.measurements.ui.table.collapsing.unstackable', header, body)
 }
 
-ci.drugs.view.drug_details.measurement_row = function(controller, dose, effect){
-  var remove = m('i.ui.icon.minus', {measurement: [dose,effect].join(":"), onclick: m.withAttr('measurement', ci.drugs.vm.remove_measurement)})
-  return m('tr', [m('td', dose), m('td', effect), m('td', remove)])
+ci.drugs.view.drug_details.measurement_row = function(controller, dose, response){
+  var remove = m('i.ui.icon.minus', {measurement: [dose,response].join(":"), onclick: m.withAttr('measurement', ci.drugs.vm.remove_measurement)})
+  return m('tr', [m('td', dose), m('td', response), m('td', remove)])
 }
 
 

@@ -4,11 +4,11 @@
 - ci_value = result
 - inputs = job.info[:inputs].dup
 
-- m, dm = CombinationIndex.m_dm(inputs[:dose_d1_1], inputs[:effect_d1_1], inputs[:dose_d1_2], inputs[:effect_d1_2])
+- m, dm = CombinationIndex.m_dm(inputs[:dose_d1_1], inputs[:response_d1_1], inputs[:dose_d1_2], inputs[:response_d1_2])
 - inputs[:m_d1] = m
 - inputs[:dm_d1] = dm
 
-- m, dm = CombinationIndex.m_dm(inputs[:dose_d2_1], inputs[:effect_d2_1], inputs[:dose_d2_2], inputs[:effect_d2_2])
+- m, dm = CombinationIndex.m_dm(inputs[:dose_d2_1], inputs[:response_d2_1], inputs[:dose_d2_2], inputs[:response_d2_2])
 - inputs[:m_d2] = m
 - inputs[:dm_d2] = dm
 
@@ -47,11 +47,11 @@
     dose_d2_c = #{R.ruby2R inputs[:dose_c_d2].to_f}
     combination_dose = dose_d1_c + dose_d2_c
 
-    effect_d1_1 = #{R.ruby2R inputs[:effect_d1_1].to_f}
-    effect_d1_2 = #{R.ruby2R inputs[:effect_d1_2].to_f}
-    effect_d2_1 = #{R.ruby2R inputs[:effect_d2_1].to_f}
-    effect_d2_2 = #{R.ruby2R inputs[:effect_d2_2].to_f}
-    effect_c = #{R.ruby2R inputs[:effect_c].to_f}
+    response_d1_1 = #{R.ruby2R inputs[:response_d1_1].to_f}
+    response_d1_2 = #{R.ruby2R inputs[:response_d1_2].to_f}
+    response_d2_1 = #{R.ruby2R inputs[:response_d2_1].to_f}
+    response_d2_2 = #{R.ruby2R inputs[:response_d2_2].to_f}
+    response_c = #{R.ruby2R inputs[:response_c].to_f}
 
     dose_2 = #{R.ruby2R inputs[:dose_d2].to_f}
     dm_1 = #{R.ruby2R inputs[:dm_d1].to_f}
@@ -75,15 +75,15 @@
       geom_line(data=data.add, aes(x=Dose, y=Effect), col='black') +
       scale_x_log10(limits=c(min(c(data.me_1$Dose, data.me_2$Dose)),max(c(data.me_1$Dose, data.me_2$Dose)))) + annotation_logticks() +
 
-      geom_point(x=log10(combination_dose), y=effect_c, cex=5) +
+      geom_point(x=log10(combination_dose), y=response_c, cex=5) +
 
-      geom_point(x=log10(dose_d1_1 * ratio_1), y=effect_d1_1, cex=5, col='red') +
-      geom_point(x=log10(dose_d1_2 * ratio_1), y=effect_d1_2, cex=5, col='red') +
+      geom_point(x=log10(dose_d1_1 * ratio_1), y=response_d1_1, cex=5, col='red') +
+      geom_point(x=log10(dose_d1_2 * ratio_1), y=response_d1_2, cex=5, col='red') +
 
-      geom_point(x=log10(dose_d2_1 * ratio_2), y=effect_d2_1, cex=5, col='blue') +
-      geom_point(x=log10(dose_d2_2 * ratio_2), y=effect_d2_2, cex=5, col='blue') 
+      geom_point(x=log10(dose_d2_1 * ratio_2), y=response_d2_1, cex=5, col='blue') +
+      geom_point(x=log10(dose_d2_2 * ratio_2), y=response_d2_2, cex=5, col='blue') 
 
-    #ggplot(data) + geom_point(aes(x=combination_doses, y=effects, col = names), cex=5) +
+    #ggplot(data) + geom_point(aes(x=combination_doses, y=responses, col = names), cex=5) +
       #scale_x_log10()
 
   EOF
@@ -94,10 +94,10 @@
 
     Doses represent combination dosages following the ratio from the two drugs
     (#{inputs[:dose_c_d1]} / #{inputs[:dose_c_d2]}).  The point represents the
-    combination dosage and effect. The red (drug 1) and blue (drug 2) lines
+    combination dosage and response. The red (drug 1) and blue (drug 2) lines
     represent the response for each drug respectively if they where combined
     with a neutral buffer at the same ratio. The black line represents the
-    additive effect. The combination dose/effect can be compared directly with
-    each drug separatedly and with the theoretical additive effect.
+    additive response. The combination dose/response can be compared directly with
+    each drug separatedly and with the theoretical additive response.
 
 

@@ -27,22 +27,22 @@
         Individual drug dose-response curves can be estimated and visualized under
         the 'Drugs' section. The type of curve fitted is determined by the option
         'Model type' under 'Analysis options'. The default option 'least_squares'
-        is the original approach in the median-effect theory (ME theory), the
+        is the original approach in the median-response theory (ME theory), the
         other are implemented in the DRC package. 
         
         When an option different of the 'least_squares' is used, the 'median
-        effect points' are computed by default centered at 0.5 effect (the
-        'median effect point'). The 'median effect point' option is only used by
-        these plots; when computing combination indices the median effect point
-        is set to the effect level of the combination. To make it compatible
-        with the original median effect theory, single drug plots using
+        response points' are computed by default centered at 0.5 response (the
+        'median response point'). The 'median response point' option is only used by
+        these plots; when computing combination indices the median response point
+        is set to the response level of the combination. To make it compatible
+        with the original median response theory, single drug plots using
         'least_squares' have the y-axis transformed to show a linear fit.
 
         DRC fits (LL.*) offer more general models to fit the dose-response that
         can represent better certain regions of the curves where the
         'least_squares' option might be too stringent. To make it compatible with
         the rest of the theory, the DRC fit is used to derived the two 'median
-        effect points' (ME points) that will be used in the combination index
+        response points' (ME points) that will be used in the combination index
         formulas. 
         
         These plots will help determine how well the models fit the data and
@@ -55,14 +55,14 @@
         need not be constant across the whole range. Furthermore, When using
         any model other than 'least_squares' the models for each individual
         drug are re-computed; this is because when using DRC fits, the ME
-        points will be chosen to be close to the effect of the combination.
+        points will be chosen to be close to the response of the combination.
 
         Combination Index plots report the CI value, a range for these values
         (derived from the uncertainty in the individual model fits), and
         display the individual ME curves, the ME points, the fitted curves
         (unless 'least_squares' was used), a fit across the combination values,
         and the predicted additive line (where the combination values should be
-        if the combination had an additive effect). 
+        if the combination had an additive response). 
 
         There is the option to compute the CI values (just the values) directly
         from the individual drug dose-response circumventing the use of the ME
@@ -76,7 +76,7 @@
         interesting synergies can be identified at a glance. Note that, as we
         mentioned before, when using any model other than 'least_squares' the
         individual drug dose-response fits need to be adjusted so that ME
-        points are taken close to the combination effect level (this also
+        points are taken close to the combination response level (this also
         affects the estimation of random additive curves for confidence
         intervals) and requires more computations.
         
@@ -90,15 +90,15 @@
 
       1. Load example data
       2. Select dose response fit model, for instance "least_squares".
-      3. Click Batch to compute dose-response series and combination effects
+      3. Click Batch to compute dose-response series and combination responses
       4. Click on [Drug] to open dose-response data information..
       5. Click on `Display plot` to display dose response curve and compute GI50 values.
       6. Click on [Drug combination] to open dose-response data information for this combination of drugs.
-      7. Click on `Plot` to display A) single drug dose response curves, B) computed additive effect curve), and C) measured combination effects, along with CI values.
+      7. Click on `Plot` to display A) single drug dose response curves, B) computed additive response curve), and C) measured combination responses, along with CI values.
       8. Upload your own data.
 
     CImbination offers several options to help analyze dose-response curves
-    that deviate from the standard median effect theory.  The standard method
+    that deviate from the standard median response theory.  The standard method
     is to use the `least squares` model type. Alternatively you can select one
     of the `LL.*` methods from the R package
     [DRC](https://cran.r-project.org/web/packages/drc/index.html). 
@@ -106,10 +106,10 @@
     Selecting the `fix dossage` option aligns the dosages for the single drug
     points in the combination plot (as if they were combinations where the
     other drug is replaced by a neutral substance at the same dose ratio). The
-    `median effect point` is used to show how the ME (median effect) points are
-    selected for the single drug plots at different effect levels; when using
-    LL.* models to compute a synergy the median effect point is placed at the
-    combination effect level. Lastly, selecting the option to `compute the CI
+    `median response point` is used to show how the ME (median response) points are
+    selected for the single drug plots at different response levels; when using
+    LL.* models to compute a synergy the median response point is placed at the
+    combination response level. Lastly, selecting the option to `compute the CI
     directly from fit` the ME points and ME statistics derived from the single
     drug fits are ignored and the CI is computed directly from the
     dose-response fit for each drug; note that the result might deviate a
@@ -128,8 +128,8 @@
     .content
       = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
         - input :file, :file, "Data file"
-        - input :scale, :boolean, "Scale effect", true
-        - input :invert, :boolean, "Invert effect", false
+        - input :scale, :boolean, "Scale response", true
+        - input :invert, :boolean, "Invert response", false
 
 
     .examples.ui.alert.message
@@ -223,16 +223,16 @@
         var line = ""
         var regimes = rbbt.ci.drug_info[drug]
         var doses = []
-        var effects = []
+        var responses = []
 
         line = line + drug + "\t"
         
         for (i = 0; i < regimes.length; i++){
           var pair = regimes[i]
           doses.push(pair[0])
-          effects.push(pair[1])
+          responses.push(pair[1])
         }
-        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+        line = line + doses.join("|") + "\t" + responses.join("|") + "\n"
 
         content = content + line
       }
@@ -241,7 +241,7 @@
         var line = ""
         var regimes = rbbt.ci.combination_info[combination]
         var doses = []
-        var effects = []
+        var responses = []
 
         line = line + combination + "\t"
         
@@ -249,9 +249,9 @@
         for (i = 0; i < regimes.length; i++){
           var pair = regimes[i]
           doses.push([pair[0],pair[1]].join("-"))
-          effects.push(pair[2])
+          responses.push(pair[2])
         }
-        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+        line = line + doses.join("|") + "\t" + responses.join("|") + "\n"
 
         content = content + line
       }
@@ -269,16 +269,16 @@
         var line = ""
         var regimes = rbbt.ci.drug_info[drug]
         var doses = []
-        var effects = []
+        var responses = []
 
         line = line + drug + "\t"
         
         for (i = 0; i < regimes.length; i++){
           var pair = regimes[i]
           doses.push(pair[0])
-          effects.push(pair[1])
+          responses.push(pair[1])
         }
-        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+        line = line + doses.join("|") + "\t" + responses.join("|") + "\n"
 
         content = content + line
       }
@@ -287,16 +287,16 @@
         var line = ""
         var regimes = rbbt.ci.combination_info[combination]
         var doses = []
-        var effects = []
+        var responses = []
 
         line = line + combination + "\t"
         
         for (i = 0; i < regimes.length; i++){
           var pair = regimes[i]
           doses.push([pair[0],pair[1]].join("-"))
-          effects.push(pair[2])
+          responses.push(pair[2])
         }
-        line = line + doses.join("|") + "\t" + effects.join("|") + "\n"
+        line = line + doses.join("|") + "\t" + responses.join("|") + "\n"
 
         content = content + line
       }

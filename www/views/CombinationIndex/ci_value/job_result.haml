@@ -36,7 +36,7 @@
     dm_2 = #{R.ruby2R inputs[:dm_d2].to_f}
     m_1 = #{R.ruby2R inputs[:m_d1].to_f}
     m_2 = #{R.ruby2R inputs[:m_d2].to_f}
-    effect = #{R.ruby2R inputs[:effect].to_f}
+    response = #{R.ruby2R inputs[:response].to_f}
 
     combination_dose = dose_1 + dose_2
     ratio_1 = 1 + dose_2/dose_1
@@ -54,7 +54,7 @@
       geom_line(data=data.me_2, aes(x=Dose, y=Effect), col='blue') +
       geom_line(data=data.add, aes(x=Dose, y=Effect), col='black') +
       scale_x_log10(limits=c(min(c(data.me_1$Dose, data.me_2$Dose)),max(c(data.me_1$Dose, data.me_2$Dose)))) + annotation_logticks() +
-      geom_point(x=log10(combination_dose), y=effect, cex=5) 
+      geom_point(x=log10(combination_dose), y=response, cex=5) 
 
   EOF
 
@@ -64,10 +64,10 @@
 
     Doses represent combination dosages following the ratio from the two drugs
     (#{inputs[:dose_d1]} / #{inputs[:dose_d2]}).  The point represents the
-    combination dosage and effect. The red (drug 1) and blue (drug 2) lines
+    combination dosage and response. The red (drug 1) and blue (drug 2) lines
     represent the response for each drug respectively if they where combined
     with a neutral buffer at the same ratio. The black line represents the
-    additive effect. The combination dose/effect can be compared directly with
-    each drug separatedly and with the theoretical additive effect.
+    additive response. The combination dose/response can be compared directly with
+    each drug separatedly and with the theoretical additive response.
 
 

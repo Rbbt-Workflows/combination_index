@@ -16,30 +16,30 @@ ci.combinations.controller = function(){
     var blue_drug_info = ci.drug_info[blue_drug]
     rbbt.exception.null(blue_drug_info, "Drug " + blue_drug + " was not found")
     var blue_doses = blue_drug_info.map(function(p){return p[0]})
-    var blue_effects = blue_drug_info.map(function(p){return p[1]})
+    var blue_responses = blue_drug_info.map(function(p){return p[1]})
 
     var red_drug = combination.split("-")[1]
     var red_drug_info = ci.drug_info[red_drug]
     rbbt.exception.null(red_drug_info, "Drug " + red_drug + " was not found")
     var red_doses = red_drug_info.map(function(p){return p[0]})
-    var red_effects = red_drug_info.map(function(p){return p[1]})
+    var red_responses = red_drug_info.map(function(p){return p[1]})
 
 
     if (undefined === meassurement) {
       var values = ci.combination_info[combination][0]
       var blue_dose = values[0]
       var red_dose = values[1]
-      var effect = values[2]
+      var response = values[2]
     }else{
       var values = meassurement.split(":")
       var blue_dose = parseFloat(values[0])
       var red_dose = parseFloat(values[1])
-      var effect = parseFloat(values[2])
+      var response = parseFloat(values[2])
     }
 
     var all_values = ci.combination_info[combination]
     var more_doses = []
-    var more_effects = []
+    var more_responses = []
 
     var ratio = blue_dose / red_dose
     for (var i = 0; i < all_values.length; i++){
@@ -47,7 +47,7 @@ ci.combinations.controller = function(){
       var diff = Math.abs(pair[0] / pair[1] - ratio)
       if (diff < 0.001){
         more_doses.push(pair[0] + pair[1])
-        more_effects.push(pair[2])
+        more_responses.push(pair[2])
       }
     }
 
@@ -59,9 +59,9 @@ ci.combinations.controller = function(){
 
     var job_error = function(e){ci.combinations.vm.plot.content = m.prop('<div class="ui error message">Error producing plot</div>') }
 
-    var inputs = {red_doses: red_doses.join("|"), red_effects: red_effects.join("|"), blue_doses: blue_doses.join("|"), blue_effects: blue_effects.join("|"), blue_dose: blue_dose, red_dose: red_dose, effect: effect, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
+    var inputs = {red_doses: red_doses.join("|"), red_responses: red_responses.join("|"), blue_doses: blue_doses.join("|"), blue_responses: blue_responses.join("|"), blue_dose: blue_dose, red_dose: red_dose, response: response, fix_ratio: fix_ratio, model_type: model_type, direct_ci: direct_ci}
     inputs.more_doses = more_doses
-    inputs.more_effects = more_effects
+    inputs.more_responses = more_responses
     inputs.jobname = combination
 
     var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
@@ -79,7 +79,7 @@ ci.combinations.controller = function(){
           title = title + '. CI=' + ci_value.toFixed(2)
 
           if (rbbt.ci.controls.vm.model_type() != 'least_squares')
-            caption = caption + ' The ME-curves are adjusted to fit the effect level of the combination (median effect point). The red and blue dashed lines are the model fit curves.'
+            caption = caption + ' The ME-curves are adjusted to fit the response level of the combination (median response point). The red and blue dashed lines are the model fit curves.'
 
           var random_ci = info["random_CI"]
           if (random_ci.length > 0){
@@ -90,7 +90,7 @@ ci.combinations.controller = function(){
           }
 
           if (info.fit_dose_d1 !== undefined)
-            caption = caption + ' Blue and red vertical dotted lines represents the dosages for each drug that achieve the same effect as the combination and are used for the CI calculation (instead of the ME points).'
+            caption = caption + ' Blue and red vertical dotted lines represents the dosages for each drug that achieve the same response as the combination and are used for the CI calculation (instead of the ME points).'
 
           var blue_dose = parseFloat(info.inputs.blue_dose)
           var red_dose = parseFloat(info.inputs.red_dose)
@@ -128,7 +128,7 @@ ci.combinations.vm = (function(){
       drug2: m.prop(),
       dose1: m.prop(),
       dose2: m.prop(),
-      effect: m.prop()
+      response: m.prop()
     }
 
     vm.ls_key = 'rbbt.ci.combination_info'
@@ -157,7 +157,7 @@ ci.combinations.vm = (function(){
 
     vm.blue_dose = m.prop("")
     vm.red_dose = m.prop("")
-    vm.effect = m.prop("")
+    vm.response = m.prop("")
     vm.fix_ratio = m.prop(false)
 
     vm.plot = {content: m.prop(), title: m.prop(), caption: m.prop()}
@@ -172,10 +172,10 @@ ci.combinations.vm = (function(){
       var combination = vm.combination()
       var blue_dose = vm.blue_dose()
       var red_dose = vm.red_dose()
-      var effect = vm.effect()
+      var response = vm.response()
 
       if (undefined === ci.combination_info[combination]) ci.combination_info[combination] = {}
-      ci.combination_info[combination].push([parseFloat(blue_dose), parseFloat(red_dose), parseFloat(effect)])
+      ci.combination_info[combination].push([parseFloat(blue_dose), parseFloat(red_dose), parseFloat(response)])
       vm.save()
       return false
     }
@@ -183,12 +183,12 @@ ci.combinations.vm = (function(){
     vm.remove_measurement = function(measurement){
       var blue_dose = measurement.split(":")[0]
       var red_dose = measurement.split(":")[1]
-      var effect = measurement.split(":")[2]
+      var response = measurement.split(":")[2]
       var combination = vm.combination()
       var new_list = [];
       for (i in ci.combination_info[combination]){
         var p = ci.combination_info[combination][i]
-        if (p[0] != blue_dose || p[1] != red_dose || p[2] != effect) new_list.push(p)
+        if (p[0] != blue_dose || p[1] != red_dose || p[2] != response) new_list.push(p)
       }
       ci.combination_info[combination] = new_list
       vm.save()
@@ -263,17 +263,17 @@ ci.combinations.view.combination_details = function(controller){
       cinfo = cinfo.sort(function(p1,p2){if (p1[0] == p2[0]){ return(p1[2] - p2[2])} else {return(p1[0] - p2[0])}})
       for (i in cinfo){
         var triplet = cinfo[i]
-        var effect = triplet[2]
-        if (batch && batch[effect]){
-          ci_val = batch[effect]
+        var response = triplet[2]
+        if (batch && batch[response]){
+          ci_val = batch[response]
           color = ci.combinations.view.get_color(ci_val)
         }else{
           color = 'grey'
           ci_val = 'NA'
         }
-        var title = combination + ' ' + effect + ': ' + ci_val
-        var style = {width: '' + (100 / len) + '%', 'backgroundColor': color, 'order': (effect * 100).toInteger}
-        values.push(m('.ci_value', {title: title, 'data-effect': effect, 'data-ci': ci_val, style:style}))
+        var title = combination + ' ' + response + ': ' + ci_val
+        var style = {width: '' + (100 / len) + '%', 'backgroundColor': color, 'order': (response * 100).toInteger}
+        values.push(m('.ci_value', {title: title, 'data-response': response, 'data-ci': ci_val, style:style}))
       }
 
       var ci_values 
@@ -320,8 +320,8 @@ ci.combinations.view.combination_details.measurement_new = function(controller, 
 
   var blue_dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.blue_dose), "Blue dose")
   var red_dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.red_dose), "Red dose")
-  var effect_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.effect), "Effect")
-  var fields = m('.ui.fields', [blue_dose_field, red_dose_field, effect_field])
+  var response_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.response), "Effect")
+  var fields = m('.ui.fields', [blue_dose_field, red_dose_field, response_field])
 
   var submit = m('input[type=submit].ui.submit.button', {'data-combination': combination, onclick: m.withAttr('data-combination', ci.combinations.vm.add_measurement), value: 'Add measurement'})
   var display_plot = m('input[type=submit].ui.submit.button', {'data-combination': combination, onclick: m.withAttr('data-combination', controller.draw_CI), value: 'Display plot'})
@@ -335,8 +335,8 @@ ci.combinations.view.combination_details.measurement_table = function(controller
   var rows = measurements.map(function(p){ 
     var blue_dose = p[0]
     var red_dose = p[1]
-    var effect = p[2]
-    return ci.combinations.view.combination_details.measurement_row(controller, blue_dose, red_dose, effect)
+    var response = p[2]
+    return ci.combinations.view.combination_details.measurement_row(controller, blue_dose, red_dose, response)
   })
 
   var header = m('thead', m('tr', [m('th', 'Blue dose'), m('th', 'Red dose'), m('th', 'Effect'), m('th', '')]))
@@ -344,15 +344,15 @@ ci.combinations.view.combination_details.measurement_table = function(controller
   return m('table.measurements.ui.table.collapsing.unstackable', header, body)
 }
 
-ci.combinations.view.combination_details.measurement_row = function(controller, blue_dose, red_dose, effect){
-  var remove = m('i.ui.icon.minus', {measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', ci.combinations.vm.remove_measurement)})
-  //var plot = m('i.ui.icon.send', {measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', controller.draw_CI)})
+ci.combinations.view.combination_details.measurement_row = function(controller, blue_dose, red_dose, response){
+  var remove = m('i.ui.icon.minus', {measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', ci.combinations.vm.remove_measurement)})
+  //var plot = m('i.ui.icon.send', {measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', controller.draw_CI)})
   var style = {}
   var batch = rbbt.ci.controls.vm.batch
-  if (batch[ci.combinations.vm.combination()] && batch[ci.combinations.vm.combination()][effect])
-    style['backgroundColor'] = ci.combinations.view.get_color(batch[ci.combinations.vm.combination()][effect])
-  var plot = m('input[type=submit].ui.submit.button', {style: style, measurement: [blue_dose, red_dose, effect].join(":"), onclick: m.withAttr('measurement', controller.draw_CI),value: "Plot"})
-  return m('tr', [m('td', blue_dose), m('td', red_dose), m('td', effect), m('td', [remove, plot])])
+  if (batch[ci.combinations.vm.combination()] && batch[ci.combinations.vm.combination()][response])
+    style['backgroundColor'] = ci.combinations.view.get_color(batch[ci.combinations.vm.combination()][response])
+  var plot = m('input[type=submit].ui.submit.button', {style: style, measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', controller.draw_CI),value: "Plot"})
+  return m('tr', [m('td', blue_dose), m('td', red_dose), m('td', response), m('td', [remove, plot])])
 }
 
 
