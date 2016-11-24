@@ -160,7 +160,8 @@ module CombinationIndex
 
   input :file, :tsv, "Dose response file", nil, :stream => true
   input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
-  task :report => :tsv do |file,model_type|
+  input :fix_ratio, :boolean, "Fix combination ratio dose", false
+  task :report => :tsv do |file,model_type,fix_ratio|
 
     file = inputs[:file]
     file = TSV.open(file, :merge => true) unless TSV === file
@@ -192,6 +193,7 @@ module CombinationIndex
           :more_doses => more_doses,
           :more_responses => more_responses,
           :response => response.to_f,
+          :fix_ratio => fix_ratio,
           :model_type => model_type
         }
 

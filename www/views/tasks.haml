@@ -128,7 +128,7 @@
     .content
       = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
         - input :file, :file, "Data file"
-        - input :scale, :boolean, "Scale response", true
+        - input :scale, :boolean, "Scale response", false
         - input :invert, :boolean, "Invert response", false
 
 

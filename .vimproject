@@ -5,17 +5,21 @@ CombinationIndex=/$PWD filter="*.rb" {
   sinatra.rb
 
   combination_index.rb
+
   tasks=tasks{
    CI.rb
+
    CI=CI{
     fit.rb
     ci.rb
     bliss.rb
    }
+
   }
   rbbt=rbbt{
   }
  }
+
  share=share{
   R=R{
    CI.R

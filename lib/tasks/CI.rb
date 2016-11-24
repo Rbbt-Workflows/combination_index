@@ -8,5 +8,5 @@ require 'tasks/CI/bliss'
 
 module CombinationIndex
  
-  export_asynchronous :fit, :ci, :report
+  export_asynchronous :fit, :ci, :report, :bliss, :report_bliss
 end

@@ -5,7 +5,7 @@ ci.controls.vm = (function(){
   vm.init = function(){
     vm.model_type = m.prop("least_squares")
     vm.median_point = m.prop(0.5)
-    vm.fix_ratio = m.prop(false)
+    vm.fix_ratio = m.prop(true)
     vm.direct_ci = m.prop(false)
 
     vm.job_cache = []
@@ -23,7 +23,10 @@ ci.controls.vm.batch_complete_function = function(){
       if (undefined === batch[this.combination]) batch[this.combination] = {}
 
       if (info.status == 'done')
-        batch[this.combination][this.response] = info.CI
+        if (info.CI)
+          batch[this.combination][this.response] = {value: info.CI, type: 'CI'}
+        else
+          batch[this.combination][this.response] = { value: info.bliss_excess, type: 'bliss'}
       else
         batch[this.combination][this.response] = info.status
 
@@ -89,7 +92,12 @@ ci.controls.controller = function(){
 
           inputs.jobname = blue_drug + '-' + red_drug
 
-          var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
+          var job
+          if (model_type == 'bliss')
+            job = new rbbt.Job('CombinationIndex', 'bliss', inputs)
+          else
+            job = new rbbt.Job('CombinationIndex', 'ci', inputs)
+            
 
           job.combination = combination
           job.response = response
@@ -108,7 +116,7 @@ ci.controls.controller = function(){
 ci.controls.view = function(controller){
 
   var option_options = {onclick: m.withAttr('data-value', ci.controls.vm.model_type)}
-  var options = [m('.item[data-value=least_squares]',option_options, "least_squares"),m('.item[data-value=LL.2]',option_options, "LL.2"),m('.item[data-value=LL.3]',option_options, "LL.3"),m('.item[data-value=LL.4]',option_options, "LL.4"),m('.item[data-value=LL.5]',option_options, "LL.5")]
+  var options = [m('.item[data-value=bliss]',option_options, "bliss"), m('.item[data-value=least_squares]',option_options, "least_squares"),m('.item[data-value=LL.2]',option_options, "LL.2"),m('.item[data-value=LL.3]',option_options, "LL.3"),m('.item[data-value=LL.4]',option_options, "LL.4"),m('.item[data-value=LL.5]',option_options, "LL.5")]
   var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', ci.controls.vm.model_type()),m('i.dropdown.icon'), m('.menu',options)])
   var model_type_field = rbbt.mview.field(model_type_input, "Model type")
 
@@ -131,7 +139,7 @@ ci.controls.view = function(controller){
   var batch_button = rbbt.mview.button({onclick: controller.batch}, "Analyze All in Batch")
 
   var control_panel 
-  if (ci.controls.vm.model_type() == 'least_squares')
+  if (ci.controls.vm.model_type() == 'least_squares' || ci.controls.vm.model_type() == 'bliss')
     control_panel =  m('fieldset.ui.form',[model_type_field, fix_field, batch_button])
   else
     control_panel =  m('fieldset.ui.form',[model_type_field, median_point_field, fix_field, direct_ci_field, batch_button])

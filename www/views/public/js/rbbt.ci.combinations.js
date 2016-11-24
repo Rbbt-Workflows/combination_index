@@ -64,7 +64,11 @@ ci.combinations.controller = function(){
     inputs.more_responses = more_responses
     inputs.jobname = combination
 
-    var job = new rbbt.Job('CombinationIndex', 'ci', inputs)
+    var job;
+    if (model_type == 'bliss')
+      job = new rbbt.Job('CombinationIndex', 'bliss', inputs);
+    else
+      job = new rbbt.Job('CombinationIndex', 'ci', inputs);
 
     job.run().then(function(){
       this.get_info().then(function(info){
@@ -72,21 +76,36 @@ ci.combinations.controller = function(){
         job.load().then(ci.combinations.vm.plot.content, job_error)
         var title = "Fit plot for combination: " + blue_drug + " and " + red_drug
         var caption = blue_drug + " (blue), " + red_drug + " (red) ME curves, and additive combination line (black). The dashed black line is a loess fit across the observed combination values."
+
         if (info.status == "done"){
-          var ci_value = parseFloat(info["CI"])
-          var gi50 = parseFloat(info["GI50"])
+          var value 
 
-          title = title + '. CI=' + ci_value.toFixed(2)
+          if (info.CI){
+            value = info.CI
+            title = title + '. CI =' + value.toFixed(2)
+          }else{
+            value = info.bliss_excess
+            title = title + '. Bliss excess =' + value.toFixed(2)
+          }
+            
+          value = parseFloat(value)
 
-          if (rbbt.ci.controls.vm.model_type() != 'least_squares')
+          var gi50
+          if (info.gi50)
+            gi50 = parseFloat(info["GI50"])
+
+
+          if (rbbt.ci.controls.vm.model_type() != 'least_squares' && rbbt.ci.controls.vm.model_type() != 'bliss')
             caption = caption + ' The ME-curves are adjusted to fit the response level of the combination (median response point). The red and blue dashed lines are the model fit curves.'
 
-          var random_ci = info["random_CI"]
-          if (random_ci.length > 0){
-            var min = Math.min.apply(null, random_ci)
-            var max = Math.max.apply(null, random_ci)
-            title = title + ' [ ' + min.toFixed(2) + ', ' + max.toFixed(2) + ' ]'
-            caption = caption + ' Light blue lines represent additive lines for random ME-curves, and are used to calculate the CI range values.'
+          if (info["random_CI"]){
+            var random_ci = info["random_CI"]
+            if (random_ci.length > 0){
+              var min = Math.min.apply(null, random_ci)
+              var max = Math.max.apply(null, random_ci)
+              title = title + ' [ ' + min.toFixed(2) + ', ' + max.toFixed(2) + ' ]'
+              caption = caption + ' Light blue lines represent additive lines for random ME-curves, and are used to calculate the CI range values.'
+            }
           }
 
           if (info.fit_dose_d1 !== undefined)
@@ -98,11 +117,17 @@ ci.combinations.controller = function(){
           var blue_ratio = blue_dose/total_dose
           var red_ratio = red_dose/total_dose
 
-          var blue_gi50 = gi50 * blue_ratio
-          var red_gi50 = gi50 * red_ratio
+          var blue_gi50;
+          var red_gi50;
 
-          caption = caption + ' The combination GI50 at this ratio is ' + gi50.toFixed(2) + 
-            ' (' + blue_gi50.toFixed(2) + ' ' + blue_drug + ' and ' + red_gi50.toFixed(2) + ' ' + red_drug + ')'
+          if (gi50){
+            blue_gi50 = gi50 * blue_ratio
+            red_gi50 = gi50 * red_ratio
+
+            caption = caption + ' The combination GI50 at this ratio is ' + gi50.toFixed(2) + 
+              ' (' + blue_gi50.toFixed(2) + ' ' + blue_drug + ' and ' + red_gi50.toFixed(2) + ' ' + red_drug + ')'
+          }
+
 
           ci.combinations.vm.plot.title(title)
           ci.combinations.vm.plot.caption(caption)
@@ -211,7 +236,27 @@ ci.combinations.view = function(controller){
   return [m('h3.header', "Combinations"), ci.combinations.view.combination_details(controller)]
 }
 
-ci.combinations.view.get_color = function(ci_val){
+ci.combinations.view.get_color_bliss = function(bliss_val){
+
+  var additive = net.brehaut.Color('yellow')
+  var syn = net.brehaut.Color('#0F0')
+  var ant = net.brehaut.Color('#F00')
+  if (bliss_val == 'error'){
+    color = 'blue'
+  }else{
+    if (bliss_val > 0){
+      color= additive.blend(ant, 0.1 + bliss_val*0.9)
+    }else{
+      if (bliss_val < -0){
+        color= additive.blend(syn, 0.1 - bliss_val*0.9)
+      }else{
+        color= additive
+      }
+    }
+  }
+  return color
+}
+ci.combinations.view.get_color_ci = function(ci_val){
 
   var additive = net.brehaut.Color('yellow')
   var syn = net.brehaut.Color('#0F0')
@@ -234,6 +279,17 @@ ci.combinations.view.get_color = function(ci_val){
   }
   return color
 }
+
+ci.combinations.view.get_color = function(val){
+  if (val == 'error')
+    return ci.combinations.view.get_color_ci(val)
+
+  if (val.type == 'CI')
+    return ci.combinations.view.get_color_ci(val.value)
+
+  return ci.combinations.view.get_color_bliss(val.value)
+}
+
 ci.combinations.view.combination_details = function(controller){
   var combination_details = []
   var combination_info = ci.combination_info
@@ -349,9 +405,22 @@ ci.combinations.view.combination_details.measurement_row = function(controller, 
   //var plot = m('i.ui.icon.send', {measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', controller.draw_CI)})
   var style = {}
   var batch = rbbt.ci.controls.vm.batch
-  if (batch[ci.combinations.vm.combination()] && batch[ci.combinations.vm.combination()][response])
+  if (batch[ci.combinations.vm.combination()] && batch[ci.combinations.vm.combination()][response]){
     style['backgroundColor'] = ci.combinations.view.get_color(batch[ci.combinations.vm.combination()][response])
-  var plot = m('input[type=submit].ui.submit.button', {style: style, measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', controller.draw_CI),value: "Plot"})
+    if (batch[ci.combinations.vm.combination()][response].value > 5){
+      val_str = "> 5"
+    }else{
+      if (batch[ci.combinations.vm.combination()][response].value.toFixed){
+        val_str = " " + batch[ci.combinations.vm.combination()][response].value.toFixed(2);
+      }else{
+        val_str = ""
+      }
+    }
+  }else{
+    val_str = ""
+  }
+
+  var plot = m('input[type=submit].ui.submit.button', {style: style, measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', controller.draw_CI),value: "Plot" + val_str})
   return m('tr', [m('td', blue_dose), m('td', red_dose), m('td', response), m('td', [remove, plot])])
 }
 
