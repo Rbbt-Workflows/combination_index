@@ -83,8 +83,8 @@
         Manual Input
         ------------
 
-        From the 'Drugs' and 'Combinations' tabs you migh input new datapoints
-        manually. This functionality can be use to extend or ammend data imported
+        From the 'Drugs' and 'Combinations' tabs you might input new data-points
+        manually. This functionality can be use to extend or amend data imported
         from a file or to input a new dataset by hand. Remember that your changes
         will be saved on the browser memory, but you can also export them to file
         to restore them at a later time.
@@ -100,5 +100,108 @@
 
         Source code
         -----------
+ 
+        The source code for this software is available at
+        [github](https://github.com/Rbbt-Workflows/combination_index).  Its
+        programmed in Ruby and uses R to produce the plots. The code is
+        organized as an [Rbbt](http://mikisvaz.github.io/rbbt/) workflow. The
+        Rbbt workflow is called CombinationIndex (CImbinator is just the name
+        for the web-app and Docker image)
 
-        The
+        Installation
+        ------------
+
+        You will need a working ruby installation, such as those typically
+        provided by Linux distributions. In addition to that you will need to
+        have the Rbbt gems, and a working R installation with some packages
+        installed. 
+        
+        To install Rbbt you can consult [the getting started
+        documentation](http://mikisvaz.github.io/rbbt/tutorial/getting_started/).
+        The R packages you need to install are best consulted in the
+        [CImbinator
+        Dockerfile](https://github.com/Rbbt-Images/rbbt-docker-CImbinator/blob/master/Dockerfile.)
+
+        In fact, you may also use the Docker image [mikisvaz/rbbt-ci_mbinator](https://hub.docker.com/r/mikisvaz/rbbt-ci_mbinator/)
+
+        Starting a server
+        -----------------
+
+        There are two basic ways to use CImbinator: through the web interface or through the command line. You may use
+        this web interface or you might start your own server on a local install doing:
+
+        ```
+        rbbt workflow server CombinationIndex -e production -p 2887
+        ```
+
+        Or, using Docker:
+
+        ```
+        docker run -ti -p 127.0.0.1:2887:2887 -e DISPLAY=$DISPLAY mikisvaz/rbbt-ci_mbinator
+        ```
+
+        You can now access the server
+        [http://localhost:2887/](http://localhost:2887/). Allow a couple of
+        minutes on the first visit for the JavaScript and CSS assets to be
+        prepared.
+
+        Command-line use
+        ----------------
+
+        You may issue analysis jobs directly from the command-line. All the
+        functionalities are used through the `rbbt` command.  See the [Rbbt
+        documentation](http://mikisvaz.github.io/rbbt/) for more information on
+        how to use it. Here are some examples:
+
+        See the available functionalities:
+
+        ```
+          rbbt workflow task CombinationIndex
+        ```
+
+        Check the parameters for any of the functionalities
+
+        ```
+          rbbt workflow task CombinationIndex report -h
+        ```
+
+        Note that when using any of the `report` functionalities the file needs
+        to be a *TSV* file in any of the two *collapsed* formats
+
+        Check the parameters for any of the functionalities
+
+        ```
+          rbbt workflow task CombinationIndex report --file=~/share/data/CI/CI-mbinator-export.Miller.tsv --model_type=bliss --fix_ratio --printpath
+        ```
+
+        The result files of any of the tasks will be saved on this and will be
+        re-used appropriately; for instance when single drug dose response fits
+        are reused across combinations that feature them. To view the result file you
+        can use the `--printpath` flag. Otherwise the result is printed into STDOUT
+
+        ```
+          rbbt workflow task CombinationIndex report --file=~/share/data/CI/CI-mbinator-export.Miller.tsv --model_type=bliss --fix_ratio --printpath
+        ```
+        
+        When using any of the `report` features all the plots produced by the
+        single combination evaluations are collected into a directory. You can find
+        this directory along side the result file, with a `.files` extension.
+
+        If you are using the [docker
+        image](https://hub.docker.com/r/mikisvaz/rbbt-ci_mbinator/) instead of
+        the local installation you can just prepend `docker run -ti -e
+        DISPLAY=$DISPLAY mikisvaz/rbbt-ci_mbinator` to any of the commands.
+        Note of course that, as usual with Docker, any files passed to the
+        commands must be available to the docker image, specifically when using
+        the `report` methods, so you might need to mount a local directory into
+        docker to make them available.
+
+
+
+
+
+
+        
+
+
+
