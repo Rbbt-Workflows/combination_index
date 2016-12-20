@@ -410,3 +410,71 @@ CI.plot_combination.bliss <- function(blue_dose, red_dose, response, blue_data, 
 
     return(plot)
 }
+
+CI.plot_combination.hsa <- function(blue_dose, red_dose, response, blue_data, red_data, hsa_data, additive_data, fix_ratio=FALSE, more_doses = NULL, more_responses = NULL){
+
+    max = max(c(blue_data$Dose, red_data$Dose))
+    min = min(c(blue_data$Dose, red_data$Dose))
+
+    if (fix_ratio){
+        blue_ratio = (blue_dose + red_dose)/blue_dose
+        red_ratio = (blue_dose + red_dose)/red_dose
+    }else{
+        blue_ratio = red_ratio = 1
+    }
+
+
+    blue_data$Dose = blue_data$Dose * blue_ratio
+
+    red_data$Dose = red_data$Dose * red_ratio
+
+    min.response=min(as.numeric(c(0,response, blue_data$Response, red_data$Response, hsa_data$Response)))
+    max.response=max(as.numeric(c(1,response, blue_data$Response, red_data$Response, hsa_data$Response)))
+
+    if (!is.null(more_responses)){
+        min.response=min(c(min.response, more_responses))
+        max.response=max(c(max.response, more_responses))
+    }
+
+    max.response = min(c(1.2, max.response))
+    min.response = max(c(-0.2, min.response))
+
+    all.doses = c(more_doses)
+    min.dose = min(all.doses)
+    max.dose = max(all.doses)
+
+    plot = ggplot(aes(x=as.numeric(Dose), y=as.numeric(Response)), data=blue_data) +
+        xlim(min.dose, max.dose) +
+        ylim(min.response, max.response)
+
+    str(max.response)
+    str(min.response)
+
+    if (!is.null(more_responses)){
+        len = min(c(length(more_doses), length(more_responses)))
+        md=more_doses[1:len]
+        me=more_responses[1:len]
+        plot = plot + geom_smooth(aes(x=Dose, y=Response), data=data.frame(Dose=md, Response=me), linetype='dashed', col='black', method="loess", level=0.95, se=FALSE)
+    }
+    
+    plot = plot +
+        scale_x_log10() + 
+        annotation_logticks(side='b') +
+        xlab("Dose") +
+        ylab("Response") +
+        geom_point(data=blue_data, col='blue',cex=3,alpha=0.8) +
+        geom_point(data=red_data, col='red',cex=3,alpha=0.8) +
+        geom_point(data=hsa_data, col='purple',cex=3,alpha=0.8) +
+        geom_smooth(data=hsa_data, linetype='dashed', col='purple',method="loess",  level=0.95, se=FALSE) +
+
+        geom_point(x=log10(blue_dose + red_dose), y=response, col='black',cex=5,alpha=0.8) 
+
+
+    if (!is.null(more_responses)){
+        for (i in seq(1, len)){
+            plot = plot + geom_point(x=log10(more_doses[i]), y=more_responses[i], col='black', cex=2, alpha=0.4)
+        }
+    }
+
+    return(plot)
+}

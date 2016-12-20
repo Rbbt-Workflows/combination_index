@@ -10,7 +10,7 @@ ci.drugs.vm = (function(){
   vm.init = function(){
 
 
-    vm.ls_key = 'rbbt.ci.drug_info'
+    vm.ls_key = 'ci.drug_info'
 
     vm.save = function(){
       localStorage[vm.ls_key] = JSON.stringify(ci.drug_info)
@@ -103,7 +103,7 @@ ci.drugs.controller = function(){
           ci.drugs.vm.plot.title("Fit plot for drug: " + drug)
           var caption = "The solid blue line represents the ME curve. The diamonds are the ME points."
 
-          if (rbbt.ci.controls.vm.model_type() != 'least_squares')
+          if (ci.controls.vm.model_type() != 'least_squares')
             caption = caption + ' The dotted blue line is the fited curve.'
 
           if (info.random_samples.length > 0)

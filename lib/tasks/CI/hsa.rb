@@ -13,8 +13,7 @@ module CombinationIndex
   input :more_responses, :array, "More combination responses"
   input :response_type, :select, "Type of response: viability or effect", :viability, :select_options => [:viability, :effect]
   extension :svg
-  task :bliss => :text do |blue_doses,blue_responses,red_doses,red_responses,blue_dose,red_dose,response,fix_ratio,model_type,more_doses,more_responses, response_type|
-
+  task :hsa => :text do |blue_doses,blue_responses,red_doses,red_responses,blue_dose,red_dose,response,fix_ratio,model_type,more_doses,more_responses, response_type|
     #{{{ CALCULATE BLISS
     blue_doses = blue_doses.collect{|v| v.to_f}
     blue_responses = blue_responses.collect{|v| v.to_f}
@@ -40,23 +39,23 @@ module CombinationIndex
     blue_doses.each do |bd|
       rd = red_doses.sort_by{|d| (bd.to_f - combination_ratio * d.to_f).abs}.first
       pa = if response_type.to_s == "viability"
-             1 - CombinationIndex.predicted_bliss(1 - blue_mean_dose_responses[bd], 1 - red_mean_dose_responses[rd])
+             CombinationIndex.predicted_hsa(blue_mean_dose_responses[bd], red_mean_dose_responses[rd])
            else
-             CombinationIndex.predicted_bliss(blue_mean_dose_responses[bd], red_mean_dose_responses[rd])
+             1 - CombinationIndex.predicted_hsa(1 - blue_mean_dose_responses[bd], 1 - red_mean_dose_responses[rd])
            end
       cd = bd + rd
       additive_predictions[cd] = pa
     end
 
     if response_type.to_s == "viability"
-      predicted_additive = 1 - CombinationIndex.predicted_bliss(1 - blue_mean_dose_responses[blue_dose], 1 - red_mean_dose_responses[red_dose])
+      predicted_additive = 1 - CombinationIndex.predicted_hsa(1 - blue_mean_dose_responses[blue_dose], 1 - red_mean_dose_responses[red_dose])
     else
-      predicted_additive = CombinationIndex.predicted_bliss(blue_mean_dose_responses[blue_dose], red_mean_dose_responses[red_dose])
+      predicted_additive = CombinationIndex.predicted_hsa(blue_mean_dose_responses[blue_dose], red_mean_dose_responses[red_dose])
     end
     excess = response - predicted_additive 
 
-    set_info :bliss_excess, excess
-    set_info :bliss_prediction, predicted_additive
+    set_info :hsa_excess, excess
+    set_info :hsa_prediction, predicted_additive
 
     #{{{ MAKE BLISS PLOT
     blue_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
@@ -69,9 +68,9 @@ module CombinationIndex
       red_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
     end
 
-    bliss_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
+    hsa_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
     additive_predictions.each do |dose, response|
-      bliss_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
+      hsa_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
     end
 
     #blue_m, blue_dm, blue_dose_1, blue_response_1, blue_dose_2, blue_response_2, blue_invert  = blue_step.info.values_at :m, :dm, :dose1, :response1, :dose2, :response2, :invert
@@ -90,8 +89,8 @@ module CombinationIndex
       Open.write(blue_data, blue_tsv.to_s)
       TmpFile.with_file(nil, false) do |red_data|
         Open.write(red_data, red_tsv.to_s)
-      TmpFile.with_file(nil, false) do |bliss_data|
-        Open.write(bliss_data, bliss_tsv.to_s)
+      TmpFile.with_file(nil, false) do |hsa_data|
+        Open.write(hsa_data, hsa_tsv.to_s)
 
 
         plot_script =<<-EOF
@@ -107,7 +106,7 @@ module CombinationIndex
 
           blue_data = rbbt.tsv(file='#{blue_data}')
           red_data = rbbt.tsv(file='#{red_data}')
-          bliss_data = rbbt.tsv(file='#{bliss_data}')
+          hsa_data = rbbt.tsv(file='#{hsa_data}')
 
           #data.blue_me_points = data.frame(Dose={R.ruby2R [blue_dose_1, blue_dose_2]}, Response={R.ruby2R [blue_response_1, blue_response_2]})
           #data.red_me_points = data.frame(Dose={R.ruby2R [red_dose_1, red_dose_2]}, Response={R.ruby2R [red_response_1, red_response_2]})
@@ -135,8 +134,8 @@ module CombinationIndex
           #  blue.modelfile = blue.modelfile, red.modelfile=red.modelfile, least_squares=least_squares, blue.invert=blue.invert, red.invert=red.invert, 
           #  fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses, blue.random.samples = blue.random.samples, red.random.samples = red.random.samples, blue.fit_dose = blue.fit_dose, red.fit_dose = red.fit_dose)
           
-          CI.plot_combination.bliss(blue_dose, red_dose, response,
-            blue_data, red_data, bliss_data,
+          CI.plot_combination.hsa(blue_dose, red_dose, response,
+            blue_data, red_data, hsa_data,
             fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses)
         EOF
 
@@ -150,7 +149,7 @@ module CombinationIndex
   input :file, :tsv, "Dose response file", nil, :stream => true
   input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
   input :fix_ratio, :boolean, "Fix combination ratio dose", false
-  task :report_bliss => :tsv do |file,model_type,fix_ratio|
+  task :report_hsa => :tsv do |file,model_type,fix_ratio|
 
     file = TSV.open(file, :merge => true) unless TSV === file
     treatments = file.keys
@@ -187,7 +186,7 @@ module CombinationIndex
           :model_type => model_type
         }
 
-        job = CombinationIndex.job(:bliss, [blue_drug, red_drug] * "-", job_inputs)
+        job = CombinationIndex.job(:hsa, [blue_drug, red_drug] * "-", job_inputs)
         jobs << job
         rescue Exception
           Log.exception $!

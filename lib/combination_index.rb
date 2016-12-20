@@ -1,6 +1,8 @@
 require 'rbbt/util/R/model'
 
-R.eval_a 'library(drc)'
+Log._ignore_stderr do
+  R.eval_a 'library(drc)'
+end
 module CombinationIndex
 
   def self.response_ratio(response, max = 1.0)
@@ -268,6 +270,9 @@ module CombinationIndex
     response_d1 + response_d2 - (response_d1 * response_d2)
   end
 
+  def self.predicted_hsa(response_d1, response_d2)
+    response_d1 < response_d2 ? response_d1 : response_d2
+  end
 
   def self.combination_index(dose_d1_1, response_d1_1, dose_d1_2, response_d1_2, 
                                dose_d2_1, response_d2_1, dose_d2_2, response_d2_2,
@@ -398,109 +403,4 @@ module CombinationIndex
     [drug_info, combination_info]
   end
 
-  def self.import_expanded(tsv, scale, invert)
-    drug_info = {}
-    combination_info = {}
-
-    if scale
-      values = tsv.values.collect{|v| v[1] }.flatten.uniq.collect{|v| v.to_f}
-      max = values.max + 0.0001
-      min = values.min - 0.0001
-    end
-
-    tsv.through do |k,values|
-      if k.include? '-'
-        combination_info[k] ||= []
-        Misc.zip_fields(values).each do |doses, response|
-          blue_dose, red_dose = doses.split("-")
-          response = response.to_f
-          response = (response - min) / (max - min) if scale 
-          response = 1.0 - [1.0, response].min if invert
-          response = response.round(5)
-          combination_info[k] << [blue_dose.to_f, red_dose.to_f, response]
-        end
-      else
-        drug_info[k] ||= []
-        Misc.zip_fields(values).each do |dose, response|
-          response = response.to_f
-          response = (response - min) / (max - min) if scale 
-          response = 1.0 - [1.0, response].min if invert
-          response = response.round(5)
-          drug_info[k] << [dose.to_f, response]
-        end
-      end
-    end
-
-    [drug_info, combination_info]
-  end
-
-  def self.import_compact(tsv, scale, invert)
-    drug_info = {}
-    combination_info = {}
-
-    if scale
-      values = tsv.values.collect{|v| v }.flatten.uniq.collect{|v| v.to_f}
-      max = values.max
-      min = values.min
-    end
-
-    tsv.through do |k,values|
-      values = values[0]
-      values = [values] unless Array === values
-      if k =~ /\s*set\s*(\d+)/
-        k = $`
-        set = $1
-      else
-        set = nil
-      end
-
-      begin
-        if k.include? '-'
-          blue_drug_info, red_drug_info = k.split("-")
-
-          blue_drug, blue_dose = blue_drug_info.split("=")
-          red_drug, red_dose = red_drug_info.split("=")
-          if blue_drug == red_drug
-
-            k = [blue_drug, (red_dose.to_f + blue_dose.to_f).to_s] * "="
-            raise TryAgain
-          end
-
-          combination = [blue_drug, red_drug] * "-"
-          combination_info[combination] ||= []
-
-          values.each do |response|
-            response = response.to_f
-            blue_dose = blue_dose.to_f
-          red_dose = red_dose.to_f
-
-          response = (response - min) / (max - min) if scale 
-          response = 1.0 - [1.0, response].min if invert
-          response = response.round(5)
-
-          combination_info[combination] << [blue_dose.to_f, red_dose.to_f, response, set]
-          end
-        else
-          drug, dose = k.split("=")
-
-          drug_info[drug] ||= []
-
-          values.each do |response|
-            response = response.to_f
-            dose = dose.to_f
-
-            response = (response - min) / (max - min) if scale 
-            response = 1.0 - [1.0, response].min if invert
-            response = response.round(5)
-
-            drug_info[drug] << [dose, response, set]
-          end
-        end
-      rescue TryAgain
-        retry
-      end
-    end
-
-    [drug_info, combination_info]
-  end
 end

@@ -1,12 +1,12 @@
 
 module CombinationIndex
-  input :blue_doses, :array, "Blue doses"
-  input :blue_responses, :array, "Blue doses"
-  input :red_doses, :array, "Red doses"
-  input :red_responses, :array, "Red doses"
-  input :blue_dose, :float, "Blue combination dose"
-  input :red_dose, :float, "Blue combination dose"
-  input :response, :float, "Combination response"
+  input :blue_doses, :array, "Blue doses", :required
+  input :blue_responses, :array, "Blue doses", :required
+  input :red_doses, :array, "Red doses", :required
+  input :red_responses, :array, "Red doses", :required
+  input :blue_dose, :float, "Blue combination dose", :required
+  input :red_dose, :float, "Blue combination dose", :required
+  input :response, :float, "Combination response", :required
   input :fix_ratio, :boolean, "Fix combination ratio dose", false
   input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
   input :more_doses, :array, "More combination dose"
@@ -14,10 +14,11 @@ module CombinationIndex
   input :direct_ci, :boolean, "Compute CI directly from model instead of through ME points (for models other than least squares)", false
   extension :svg
   dep :compute => :produce do |jobname, options|
+
     model_type = options[:model_type]
 
     if jobname.include? "-"
-      blue_drug, red_drug = jobname.split("-")
+      blue_drug, red_drug = jobname.split(CombinationIndex::COMBINATION_SEP)
     else
       blue_drug = red_drug = jobname
     end
@@ -106,6 +107,9 @@ module CombinationIndex
       set_info :CI, nil
     end
 
+    more_doses = [] if more_doses.nil?
+    more_responses = [] if more_responses.nil?
+
     log :CI_plot, "Drawing CI plot"
     svg = TmpFile.with_file do |blue_data|
       Open.write(blue_data, blue_tsv.to_s)
@@ -171,7 +175,7 @@ module CombinationIndex
 
     jobs = []
     combinations.each do |combination|
-      blue_drug, red_drug = combination.split("-")
+      blue_drug, red_drug = combination.split(CombinationIndex::COMBINATION_SEP)
 
       blue_doses, blue_responses = file[blue_drug]
       red_doses, red_responses = file[red_drug]
@@ -179,9 +183,11 @@ module CombinationIndex
       combination_doses, combination_responses = file[combination]
       Misc.zip_fields([combination_doses, combination_responses]).each do |doses,response|
         begin
-        blue_dose, red_dose = doses.split("-")
-        more_doses = combination_doses.collect{|p| p.split("-").inject(0){|acc,e| acc += e.to_f} }
-        more_responses = combination_responses
+        blue_dose, red_dose = doses.split(CombinationIndex::COMBINATION_SEP)
+        ratio = blue_dose.to_f / red_dose.to_f
+        good_doses = combination_doses.collect{|p| r,b = p.split(CombinationIndex::COMBINATION_SEP); Misc.in_delta?(r.to_f / b.to_f, ratio) }
+        more_doses = Misc.choose(combination_doses, good_doses).collect{|p| p.split(CombinationIndex::COMBINATION_SEP).inject(0){|acc,e| acc += e.to_f} }
+        more_responses = Misc.choose(combination_responses, good_doses)
 
         job_inputs = {
           :blue_doses => blue_doses.collect{|v| v.to_f},
@@ -197,7 +203,11 @@ module CombinationIndex
           :model_type => model_type
         }
 
-        job = CombinationIndex.job(:ci, [blue_drug, red_drug] * "-", job_inputs)
+        if model_type == 'bliss'
+          job = CombinationIndex.job(:bliss, [blue_drug, red_drug] * "-", job_inputs)
+        else
+          job = CombinationIndex.job(:ci, [blue_drug, red_drug] * "-", job_inputs)
+        end
         jobs << job
         rescue Exception
           Log.exception $!
@@ -223,7 +233,7 @@ module CombinationIndex
 
     tsv = TSV.setup({}, :key_field => "Combination", :fields => ["Doses", "Response", "CI", "CI low", "CI high"], :type => :double)
     TSV.traverse good_jobs, :type => :array, :into => tsv do |dep|
-      blue_drug, red_drug = dep.clean_name.split("-")
+      blue_drug, red_drug = dep.clean_name.split(CombinationIndex::COMBINATION_SEP)
       blue_dose = dep.inputs[:blue_dose]
       red_dose = dep.inputs[:red_dose]
       response = dep.inputs[:response]

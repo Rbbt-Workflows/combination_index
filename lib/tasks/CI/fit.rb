@@ -1,7 +1,8 @@
 
 module CombinationIndex
-  input :doses, :array, "Doses"
-  input :responses, :array, "Responses 0 to 1"
+
+  input :doses, :array, "Doses", :required
+  input :responses, :array, "Responses 0 to 1", :required
   input :median_point, :float, "If fitted, point around which predictions are made", 0.5
   input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
   extension :svg

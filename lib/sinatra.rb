@@ -12,12 +12,58 @@ end
 
 $title = "CImbinator"
 
+require 'formats'
+
 post '/import' do
+  filename = @clean_params["file__param_file"][:filename] if @clean_params["file__param_file"]
   invert = prepare_input @clean_params, :invert, :boolean
   scale = prepare_input @clean_params, :scale, :boolean
   content = prepare_input @clean_params, :file, :file
 
-  tsv = TSV.open(content.strip, :sep => /\s+/, :merge => true)
-  drug_info, combination_info = CombinationIndex.import_expanded(tsv, scale, invert)
+  excel = filename and filename.include?('.xls') ? filename.split(".").last : false
+
+  drug_info, combination_info = CombinationIndex.import(content, excel, scale, invert)
+  
+  #tsv = TSV.open(content.strip, :sep => /\s+/, :merge => true)
+  #drug_info, combination_info = CombinationIndex.import_expanded(tsv, scale, invert)
   halt 200, {:drug_info => drug_info, :combination_info => combination_info}.to_json
+end
+
+post '/excel' do
+  content = prepare_input @clean_params, :tsv, :file
+  tsv = TSV.open(content.strip, :sep => /\s+/, :merge => true)
+  TmpFile.with_file(nil, false, :extension => 'xlsx') do |tmp|
+    CombinationIndex.export_excel(tsv, tmp, true, true)
+    require 'base64'
+    Base64.encode64(Open.read(tmp, :mode => 'rb'))
+  end
+end
+
+post '/export' do
+  format = @clean_params[:format]
+  compact = @clean_params[:compact]
+  content = prepare_input @clean_params, :tsv, :file
+
+  tsv = TSV.open(content.strip, :sep => /\s+/, :merge => true)
+
+  case compact
+  when 'none'
+    unmerge, expand = true, true
+  when 'columns'
+    unmerge, expand = true, false
+  else
+    unmerge, expand = false, false 
+  end
+
+  extension = format == 'excel' ? 'xlsx' : 'tsv'
+  TmpFile.with_file(nil, false, :extension => extension) do |tmp|
+    if format == 'excel'
+      CombinationIndex.export_excel(tsv, tmp, unmerge, expand)
+      require 'base64'
+      Base64.encode64(Open.read(tmp, :mode => 'rb'))
+    else
+      CombinationIndex.export_tsv(tsv, tmp, unmerge, expand)
+      Open.read(tmp)
+    end
+  end
 end

@@ -1,0 +1,88 @@
+.ui.basic.segment
+  #import
+    .ui.header
+      Import/Export data
+    .content
+      :sass
+        #import
+          .action_parameters
+            background: none
+            box-shadow: none
+          .field
+            max-width: none
+            textarea
+              width: 100%
+              height: 70vmin
+            input[type=checkbox]
+              margin-right: 80vmin
+
+      = action_parameters nil, {}, :action => '/import', :method => 'POST', :enctype => "multipart/form-data" do
+        - input :file, :file, "Data file"
+        - input :scale, :boolean, "Scale response", true
+        - input :invert, :boolean, "Invert response", false
+
+
+    .examples.ui.alert.message
+
+      .ui.header
+        Click below to load example data and hit Submit
+        
+      .content
+        :javascript
+          example_inputs = [];
+
+        %ul
+          - ["Miller", "Haagensen", "Szwajda"].each do |dataset|
+            - name = dataset + ' dataset'
+
+            - example_dir = CombinationIndex.libdir.examples['report'][dataset]
+            - task_info = workflow.task_info 'report'
+            - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+            - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+            :javascript
+              example_inputs["#{ dataset }"] = #{inputs.to_json}
+
+            %li
+              %a.load_example(href="#" task='report' name=dataset)= name
+
+
+:deferjs
+
+    var form = $('#import form')
+
+
+    form.find('input[type=submit]').click(function(elem){
+      var target = form.attr('action')
+      form.ajaxSubmit(function(data){
+
+        data = JSON.parse(data)
+        ci.drug_info = data.drug_info;
+        ci.combination_info = data.combination_info; 
+        ci.drugs.vm.save()
+        ci.drugs.vm.init()
+        ci.combinations.vm.save()
+        ci.combinations.vm.init()
+        m.redraw()
+      })
+      return false
+    })
+
+    $("a.load_example").click(function(){
+      var link = $(this);
+      var name = $(link).attr('name');
+      var inputs = example_inputs[name];
+      form[0].reset()
+
+      for (var input in inputs){
+        var value = inputs[input]
+        var input = form.find('[name=' + input + ']')
+        if (input.is('[type=checkbox]')){
+          input.prop('checked', value)
+        }else{
+          input.val(value)
+        }
+      }
+      form.find('[name=jobname]').val(name)
+      return false
+    })
+

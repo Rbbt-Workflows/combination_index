@@ -6,6 +6,7 @@ require_relative 'lib/combination_index'
 
 module CombinationIndex
   extend Workflow
+  COMBINATION_SEP = "-"
 
 end
 

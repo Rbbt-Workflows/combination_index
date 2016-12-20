@@ -38,9 +38,9 @@ ci.combinations.controller = function(){
     }
 
     var all_values = ci.combination_info[combination]
+    
     var more_doses = []
     var more_responses = []
-
     var ratio = blue_dose / red_dose
     for (var i = 0; i < all_values.length; i++){
       var pair = all_values[i]
@@ -68,7 +68,10 @@ ci.combinations.controller = function(){
     if (model_type == 'bliss')
       job = new rbbt.Job('CombinationIndex', 'bliss', inputs);
     else
-      job = new rbbt.Job('CombinationIndex', 'ci', inputs);
+      if (model_type == 'hsa')
+        job = new rbbt.Job('CombinationIndex', 'hsa', inputs);
+      else
+        job = new rbbt.Job('CombinationIndex', 'ci', inputs);
 
     job.run().then(function(){
       this.get_info().then(function(info){
@@ -84,8 +87,13 @@ ci.combinations.controller = function(){
             value = info.CI
             title = title + '. CI =' + value.toFixed(2)
           }else{
-            value = info.bliss_excess
-            title = title + '. Bliss excess =' + value.toFixed(2)
+            if (info.bliss_excess){
+              value = info.bliss_excess
+              title = title + '. Bliss excess =' + value.toFixed(2)
+            }else{
+              value = info.hsa_excess
+              title = title + '. HSA excess =' + value.toFixed(2)
+            }
           }
             
           value = parseFloat(value)
@@ -95,7 +103,7 @@ ci.combinations.controller = function(){
             gi50 = parseFloat(info["GI50"])
 
 
-          if (rbbt.ci.controls.vm.model_type() != 'least_squares' && rbbt.ci.controls.vm.model_type() != 'bliss')
+          if (ci.controls.vm.model_type() != 'least_squares' && ci.controls.vm.model_type() != 'bliss')
             caption = caption + ' The ME-curves are adjusted to fit the response level of the combination (median response point). The red and blue dashed lines are the model fit curves.'
 
           if (info["random_CI"]){
@@ -156,7 +164,7 @@ ci.combinations.vm = (function(){
       response: m.prop()
     }
 
-    vm.ls_key = 'rbbt.ci.combination_info'
+    vm.ls_key = 'ci.combination_info'
 
     vm.save = function(){
       localStorage[vm.ls_key] = JSON.stringify(ci.combination_info)
@@ -308,11 +316,11 @@ ci.combinations.view.combination_details = function(controller){
     var combination = combinations[i]
 
     var drugs = combination.split("-")
-    var all_drugs = Object.keys(rbbt.ci.drug_info)
+    var all_drugs = Object.keys(ci.drug_info)
 
     if (intersect(drugs,all_drugs).length == 2){
       var klass = (ci.combinations.vm.combination() == combination ? 'active' : '')
-      var batch = rbbt.ci.controls.vm.batch[combination]
+      var batch = ci.controls.vm.batch[combination]
       var values = []
       var cinfo = combination_info[combination]
       var len = Object.keys(cinfo).length
@@ -334,7 +342,7 @@ ci.combinations.view.combination_details = function(controller){
 
       var ci_values 
 
-      if (Object.keys(rbbt.ci.controls.vm.batch).length > 0 || rbbt.ci.controls.vm.running_jobs > 0)
+      if (Object.keys(ci.controls.vm.batch).length > 0 || ci.controls.vm.running_jobs > 0)
         ci_values = m('.ci_values', values)
       else
         ci_values = []
@@ -404,7 +412,7 @@ ci.combinations.view.combination_details.measurement_row = function(controller, 
   var remove = m('i.ui.icon.minus', {measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', ci.combinations.vm.remove_measurement)})
   //var plot = m('i.ui.icon.send', {measurement: [blue_dose, red_dose, response].join(":"), onclick: m.withAttr('measurement', controller.draw_CI)})
   var style = {}
-  var batch = rbbt.ci.controls.vm.batch
+  var batch = ci.controls.vm.batch
   if (batch[ci.combinations.vm.combination()] && batch[ci.combinations.vm.combination()][response]){
     style['backgroundColor'] = ci.combinations.view.get_color(batch[ci.combinations.vm.combination()][response])
     if (batch[ci.combinations.vm.combination()][response].value > 5){

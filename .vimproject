@@ -1,10 +1,12 @@
 CombinationIndex=/$PWD filter="*.rb" {
  workflow.rb
+ workflow.md
 
  lib=lib{
   sinatra.rb
 
   combination_index.rb
+  formats.rb
 
   tasks=tasks{
    CI.rb
@@ -13,6 +15,7 @@ CombinationIndex=/$PWD filter="*.rb" {
     fit.rb
     ci.rb
     bliss.rb
+    hsa.rb
    }
 
   }
@@ -32,10 +35,20 @@ CombinationIndex=/$PWD filter="*.rb" {
     combination_index.sass
    }
 
+   partials=partials{
+    input.haml
+   }
+
    layout.haml
    tasks.haml
    CombinationIndex=CombinationIndex{
     report=report{
+     job_result.haml
+    }
+    report_bliss=report_bliss{
+     job_result.haml
+    }
+    report_hsa=report_hsa{
      job_result.haml
     }
     m_dm=m_dm{

@@ -3,8 +3,7 @@
     = workflow_partial('job_result/job_control', workflow, task, locals)
 
 - header "CI", NumericValue
-- header "CI low", NumericValue
-- header "CI high", NumericValue
+- header "Hsa excess", NumericValue
 = table do
   - job.load.unzip
 
@@ -51,22 +50,14 @@
     - deps.sort_by{|dep| dep.inputs[:red_dose].to_f}.each do |dep|
       - blue_dose = dep.info[:inputs][:blue_dose]
       - red_dose = dep.info[:inputs][:red_dose]
-      - random_CI = dep.info[:random_CI]
       .ui.basic.segment.six.wide.column(data-job_path="#{dep.path}")
         .ui.header
           - url = "/" + ["CombinationIndex", dep.task_name, dep.name] * "/"
           %a(href=url)= [blue_dose, red_dose] * "-"
           %br
-          CI Value: 
-          - if random_CI.any?
-            == #{"%.3g" % dep.info[:CI]} [#{"%.3g" % random_CI.min}, #{"%.3g" % random_CI.max}]
-          - else
-            - begin
-              == #{"%.3g" % dep.info[:CI]}
-            - rescue
-              - iii dep.info[:CI]
-              -Log.exception $!
-              NA
+          Bliss excess: 
+          - e = dep.info[:hsa_excess].to_f
+          == #{"%.3g" % e}
         .ui.description
           = File.read(dep.path)
   - urls[name] = fragment_code
