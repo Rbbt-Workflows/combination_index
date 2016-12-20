@@ -39,8 +39,19 @@ CombinationIndex=/$PWD filter="*.rb" {
     input.haml
    }
 
+   main=main{
+    import_export.haml
+    input.haml
+    drugs.haml
+    combinations.haml
+    help.haml
+   }
+
+
    layout.haml
    tasks.haml
+   tasks.haml.save
+   tasks.haml.save2
    CombinationIndex=CombinationIndex{
     report=report{
      job_result.haml

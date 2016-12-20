@@ -24,12 +24,12 @@
     responses = c(0.5, response_1, response_2)
     dose_names = c('Median', 'Dose 1', 'Dose 2')
 
-    data = data.frame(Dose=doses, Effect=responses, names=dose_names)
+    data = data.frame(Dose=doses, Response=responses, names=dose_names)
 
     data.me = CI.me_curve(m, dm)
 
-    ggplot(data) + geom_point(aes(x=Dose, y=Effect, col = names), cex=5) + 
-      geom_line(data=data.me, aes(x=Dose, y=Effect)) + 
+    ggplot(data) + geom_point(aes(x=Dose, y=Response, col = names), cex=5) + 
+      geom_line(data=data.me, aes(x=Dose, y=Response)) + 
       scale_x_log10(limits=c(min(data.me$Dose),max(data.me$Dose)))
 
   EOF

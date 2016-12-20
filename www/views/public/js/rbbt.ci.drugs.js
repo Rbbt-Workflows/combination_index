@@ -131,12 +131,30 @@ ci.drugs.view.drug_details = function(controller){
   var drug_details = []
   var drug_info = ci.drug_info
   var drug_tabs = []
+  
+  var new_drug_input = m('.ui.action.input.small', 
+                           [m('input[type=text]', {placeholder: "New drug", onchange: m.withAttr('value', ci.drugs.vm.new_drug)}), 
+                             m('.ui.button.icon',{onclick: ci.drugs.vm.add_new_drug},m('i.icon.plus'))
+                           ])
 
-  drug_tabs.push(m('.item.left.float.new_drug',
-                    m('.ui.action.input.small', 
-                      [m('input[type=text]', {placeholder: "New drug", onchange: m.withAttr('value', ci.drugs.vm.new_drug)}), 
-                        m('.ui.button.icon',{onclick: ci.drugs.vm.add_new_drug},m('i.icon.plus'))
-                      ])))
+  var option_options = {onclick: m.withAttr('data-value', ci.controls.vm.model_type)}
+  var options = [
+    m('.item[data-value=bliss]',option_options, "Bliss independence"), 
+    m('.item[data-value=hsa]',option_options, "Highest Single Agent"), 
+    m('.item[data-value=least_squares]',option_options, "Loewe additivity"),
+    m('.item[data-value=LL.2]',option_options, "Loewe additivity (LL.2)"),
+    m('.item[data-value=LL.3]',option_options, "Loewe additivity (LL.3)"),
+    m('.item[data-value=LL.4]',option_options, "Loewe additivity (LL.4)"),
+    m('.item[data-value=LL.5]',option_options, "Loewe additivity (LL.5)")]
+  var model_type_input = m('.ui.selection.dropdown', {config:function(e){$(e).dropdown()}},[m('input[type=hidden]'),m('.default.text', "Loewe additivity"),m('i.dropdown.icon'), m('.menu',options)])
+  var model_type_field = rbbt.mview.field(model_type_input, "Model type")
+
+  var median_point_field = rbbt.mview.field(
+    rbbt.mview.input('text', 'value', ci.controls.vm.median_point), 
+    "Median response point for ME points in single drug plot"
+  )
+  
+  var model_field_set = m('fieldset.controls.ui.form', [model_type_field, median_point_field])
 
   drugs = Object.keys(drug_info).sort()
   for (i in drugs){
@@ -161,12 +179,12 @@ ci.drugs.view.drug_details = function(controller){
   var plot = rbbt.mview.plot(ci.drugs.vm.plot.content(), ci.drugs.vm.plot.title(), ci.drugs.vm.plot.caption())
 
   var plot_column = m('.six.wide.plot.column', plot)
-  return m('.ui.three.column.grid', [m('.ten.wide.column', [tabs, drug_details]), plot_column])
+  return m('.ui.sixteen.column.grid', [m('.ten.wide.column', [new_drug_input, tabs, drug_details]), plot_column])
 }
 
 ci.drugs.view.drug_details.measurement_new = function(controller, drug){
   var dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.dose), "Dose")
-  var response_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.response), "Effect")
+  var response_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.drugs.vm.response), "Response")
   var fields = m('.ui.fields', [dose_field, response_field])
 
   var submit = m('input[type=submit].ui.submit.button', {'data-drug': drug, onclick: m.withAttr('data-drug', ci.drugs.vm.add_measurement), value: 'Add measurement'})
@@ -188,7 +206,7 @@ ci.drugs.view.drug_details.measurement_table = function(controller, measurements
     return ci.drugs.view.drug_details.measurement_row(controller, dose, response)
   })
 
-  var header = m('thead', m('tr', [m('th', 'Dose'), m('th', 'Effect'), m('th', '')]))
+  var header = m('thead', m('tr', [m('th', 'Dose'), m('th', 'Response'), m('th', '')]))
   var body = m('tbody', rows)
   return m('table.measurements.ui.table.collapsing.unstackable', header, body)
 }

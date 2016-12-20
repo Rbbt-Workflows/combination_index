@@ -119,7 +119,7 @@ module CombinationIndex
     dose1, response1, dose2, response2 = nil
     if pairs.collect{|p| p.first }.uniq.length > 2 
 
-      data = TSV.setup({}, :key_field => "Sample", :fields => ["Dose", "Effect"], :type => :list, :cast => :to_f)
+      data = TSV.setup({}, :key_field => "Sample", :fields => ["Dose", "Response"], :type => :list, :cast => :to_f)
       pairs.each{|p| 
         k = _k = p.first.to_s
         i = 1
@@ -146,9 +146,9 @@ module CombinationIndex
 
 
       if model_type.to_s =~ /least_squares/
-        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Effect/(1-Effect)) ~ log(Dose)", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
+        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "log(Response/(1-Response)) ~ log(Dose)", nil, "Dose" => :numeric, "Response" => :numeric, :model_file => model_file
         begin
-          data.process "Effect" do |response|
+          data.process "Response" do |response|
             if response <= 0 
               0.00001
             else
@@ -189,7 +189,7 @@ module CombinationIndex
 
       else
         R.eval 'library(drc)'
-        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "Effect ~ Dose", nil, "Dose" => :numeric, "Effect" => :numeric, :model_file => model_file
+        model = R::Model.new "Fit m dm [#{model_type}] #{Misc.digest(data.inspect)}", "Response ~ Dose", nil, "Dose" => :numeric, "Response" => :numeric, :model_file => model_file
         begin
           model_str = ":" << model_type  << "()"
           model.fit(data,'drm', :fct => model_str)

@@ -303,13 +303,13 @@ ci.combinations.view.combination_details = function(controller){
   var combination_info = ci.combination_info
   var combination_tabs = []
 
-  combination_tabs.push(m('.item.left.float.new_combination',
-                          m('.ui.action.input.small', 
+  var new_combination = m('.ui.action.input.small', 
                             [
                               m('input[type=text]', {placeholder: "Blue drug", onchange: m.withAttr('value', ci.combinations.vm.blue_drug)}), 
                               m('input[type=text]', {placeholder: "Red drug", onchange: m.withAttr('value', ci.combinations.vm.red_drug)}), 
                               m('.ui.icon.button',{onclick: ci.combinations.vm.add_new_combination}, m('i.icon.plus'))
-                            ])))
+                            ])
+  //combination_tabs.push(m('.item.left.float.new_combination',new_combination))
 
   combinations = Object.keys(combination_info).sort()
   for (i in combinations){
@@ -377,14 +377,14 @@ ci.combinations.view.combination_details = function(controller){
 
   var plot_column = m('.six.wide.plot.column', plot)
 
-  return m('.ui.three.column.grid', [m('.ten.wide.column', [tabs, combination_details]), plot_column])
+  return m('.ui.three.column.grid', [m('.ten.wide.column', [new_combination, tabs, combination_details]), plot_column])
 }
 
 ci.combinations.view.combination_details.measurement_new = function(controller, combination){
 
   var blue_dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.blue_dose), "Blue dose")
   var red_dose_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.red_dose), "Red dose")
-  var response_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.response), "Effect")
+  var response_field = rbbt.mview.field(rbbt.mview.input('text', 'value', ci.combinations.vm.response), "Response")
   var fields = m('.ui.fields', [blue_dose_field, red_dose_field, response_field])
 
   var submit = m('input[type=submit].ui.submit.button', {'data-combination': combination, onclick: m.withAttr('data-combination', ci.combinations.vm.add_measurement), value: 'Add measurement'})
@@ -403,7 +403,7 @@ ci.combinations.view.combination_details.measurement_table = function(controller
     return ci.combinations.view.combination_details.measurement_row(controller, blue_dose, red_dose, response)
   })
 
-  var header = m('thead', m('tr', [m('th', 'Blue dose'), m('th', 'Red dose'), m('th', 'Effect'), m('th', '')]))
+  var header = m('thead', m('tr', [m('th', 'Blue dose'), m('th', 'Red dose'), m('th', 'Response'), m('th', '')]))
   var body = m('tbody', rows)
   return m('table.measurements.ui.table.collapsing.unstackable', header, body)
 }

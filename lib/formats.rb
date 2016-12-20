@@ -125,8 +125,6 @@ module CombinationIndex
     drug_info = {}
     combination_info = {}
 
-    Log.tsv tsv
-    ppp tsv.to_s
     if scale
       values = tsv.values.collect{|v| v[1] }.flatten.uniq.collect{|v| v.to_f}
       max = values.max + 0.0001

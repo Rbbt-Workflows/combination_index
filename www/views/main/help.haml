@@ -1,0 +1,104 @@
+:sass
+  .documentation
+    th, td
+      padding: 5px 10px
+      border: 1px solid #999
+    .vertical.menu
+      .item
+        display: block !important
+
+.documentation.ui.grid
+  .ui.four.wide.column
+    .ui.vertical.fluid.tabular.menu
+      .item.active(data-tab="data_format") Data Format
+      .item(data-tab="turorial") Tutorial
+      .item(data-tab="avail") Availability
+
+  .ui.twelve.wide.stretched.column
+    .ui.tab.very.basic.segment.active(data-tab='data_format')
+      :markdown
+        Data format
+        ===========
+
+        CImbinator requires dose-response data for single drugs and for drug
+        combinations. This information can be imported from a file or entered
+        manually.
+
+        Import / Export
+        ---------------
+
+        For the convenience of the user, CImbinator supports two file types for
+        importing and exporting data: Tab Separated Value files (TSV) and Excel
+        spreadsheets (XSL or XSLX). Information in these files can also be laid out
+        in several ways: expanded, collapsed columns and collapsed.
+
+        | Drug    | Second drug | Drug dose | Sencond drug dose | Response |
+        |---------|-------------|----------:|------------------:|---------:|
+        | BEZ235  |             | 5.25      |                   | 0.84818  |
+        | BEZ235  |             | 21        |                   | 0.44215  |
+        | AZD6244 |             | 78        |                   | 0.679    |
+        | AZD6244 |             | 312       |                   | 0.45525  |
+        | BEZ235  | AZD6244     | 5.25      | 78                | 0.60587  |
+        | BEZ235  | AZD6244     | 21        | 312               | 0.22932  |
+
+        *Example of expanded format*
+
+        
+        | Treatment      | Dose    | Response |
+        |----------------|--------:|---------:|
+        | BEZ235         | 5.25    | 0.84818  |
+        | BEZ235         | 21      | 0.44215  |
+        | AZD6244        | 78      | 0.679    |
+        | AZD6244        | 312     | 0.45525  |
+        | BEZ235-AZD6244 | 5.25-78 | 0.60587  |
+        | BEZ235-AZD6244 | 21-312  | 0.22932  |
+
+        *Example of collapsed column format*
+
+        
+        | Treatment      | Dose           | Response        |
+        |----------------|----------------|-----------------|
+        | BEZ235         | 5.25\|21        | 0.84818\|0.44215 |
+        | AZD6244        | 78\|312         | 0.679\|0.45525   |
+        | BEZ235-AZD6244 | 5.25-78\|21-312 | 0.60587\|0.22932 |
+
+
+        *Example of collapsed format*
+
+        To see some examples you can load any the sample datasets provided in the
+        "Import / Export" section and export them to any of these three layouts in
+        either TSV or Excel files. When importing the data from files the column
+        header row must be present but the text of the headers is ignored, all that
+        matters is the order of the columns. 
+
+        Once the data is Imported you may open the tabs 'Drugs' and 'Combinations' to
+        examine the data and produce the plots. The tab 'Configure' allows you to specified
+        the details of how these are produced, as well as issue batch analysis.
+
+        The data loaded in the 'Drugs' and 'Combinations' tabs is saved on your
+        browsers memory and restored whenever to page is loaded. You may empty it
+        using the 'Reset' button, or you might introduce your own data points
+        manually.
+
+        Manual Input
+        ------------
+
+        From the 'Drugs' and 'Combinations' tabs you migh input new datapoints
+        manually. This functionality can be use to extend or ammend data imported
+        from a file or to input a new dataset by hand. Remember that your changes
+        will be saved on the browser memory, but you can also export them to file
+        to restore them at a later time.
+
+    .ui.tab.very.basic.segment(data-tab='turorial')
+    .ui.tab.very.basic.segment(data-tab='avail')
+      :markdown
+
+        Availability
+        ============
+
+        This software is free to use and is released with an open-source licence.
+
+        Source code
+        -----------
+
+        The

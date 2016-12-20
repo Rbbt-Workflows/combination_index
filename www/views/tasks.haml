@@ -1,7 +1,30 @@
+
 :javascript
   var ci = {}
 
+.ui.top.attached.tabular.menu
+  .ui.item.active(data-tab="export") Export / Import data
+  .ui.item(data-tab="configure") Configure 
+  .ui.item(data-tab="drugs") Drugs 
+  .ui.item(data-tab="combinations") Combinations 
+  .ui.item(data-tab="help") Help 
+
+.ui.bottom.attached.tab.segment.active(data-tab="export")
+  = partial_render('main/import_export')
+.ui.bottom.attached.tab.segment(data-tab="configure")
+  .ui.basic.segment#controls
+.ui.bottom.attached.tab.segment(data-tab="drugs")
+  .ui.basic.segment#drugs
+.ui.bottom.attached.tab.segment(data-tab="combinations")
+  .ui.basic.segment#combinations
+.ui.bottom.attached.tab.segment(data-tab="help")
+  = partial_render('main/help')
+
 :sass
+  .tab .form
+    max-width: 100% !important
+    width: 100%
+
   span.or
     display: inline-block
       margin: 0 3em
@@ -22,17 +45,131 @@
     &:not(.show)
       display: none
 
-.ui.very.basic.segment#import_controls
+:deferjs
+  $('.menu .item').tab()
+
+  $('.ui.button#reset').click(function(){
+      ci.drug_info = {}
+      ci.combination_info = {}
+      ci.drugs.vm.save()
+      ci.combinations.vm.save()
+      $('textarea')[0].value = ''
+      $('[type=file]')[0].value = ''
+      m.redraw()
+    return(false)
+  })
+
+  var export_controls = ci.export_controls = rbbt.mview.component({format: 'excel', compact:'none'})
+
+  export_controls.prepare_inputs = function(){
+    var content = "#Treatment\tDose\tResponse\n"
+
+    for (drug in ci.drug_info){
+      var line = ""
+      var regimes = ci.drug_info[drug]
+      var doses = []
+      var responses = []
+
+      line = line + drug + "\t"
+      
+      for (i = 0; i < regimes.length; i++){
+        var pair = regimes[i]
+        doses.push(pair[0])
+        responses.push(pair[1])
+      }
+      line = line + doses.join("|") + "\t" + responses.join("|") + "\n"
+
+      content = content + line
+    }
+
+    for (combination in ci.combination_info){
+      var line = ""
+      var regimes = ci.combination_info[combination]
+      var doses = []
+      var responses = []
+
+      line = line + combination + "\t"
+      
+      for (i = 0; i < regimes.length; i++){
+        var pair = regimes[i]
+        doses.push([pair[0],pair[1]].join("-"))
+        responses.push(pair[2])
+      }
+      line = line + doses.join("|") + "\t" + responses.join("|") + "\n"
+
+      content = content + line
+    }
+
+    return content;
+  }
+  export_controls.save = function(data){
+    if (export_controls.vm.format() == 'excel'){
+      var file = "CI-mbinator-export.xlsx"
+      var type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      save_base64(data, file, type)
+    }else{
+      var file = "CI-mbinator-export.tsv"
+      var type = "text/tab-separated-values"
+      save_file(data, file, type)
+    }
+  }
+
+  export_controls.view = function(){
+    var export_format = rbbt.mview.field(rbbt.mview.select('format', {'Excel':'excel', 'TSV':'tsv'}, export_controls.vm.format), 'Format')
+    var export_compact = rbbt.mview.field(rbbt.mview.select('compact', ['none', 'columns','all'], export_controls.vm.compact), 'Compact')
+    var export_button = rbbt.mview.button({onclick: function(){
+      var content = export_controls.prepare_inputs()
+      console.log(content)
+      rbbt.post('/export', {tsv: content, format: export_controls.vm.format(), compact: export_controls.vm.compact()}, {deserialize:function(d){return d}}).then(export_controls.save)
+    }}, "Export")
+
+    return [export_format, export_compact, export_button]
+  }
+
+  m.mount(document.getElementById("export_controls"), export_controls)
+
+  require_js(['/js-find/rbbt.ci', '/js-find/rbbt.ci.controls', '/js-find/rbbt.ci.combinations', '/js-find/rbbt.ci.drugs'], function(args){
+    m.mount(document.getElementById("controls"), ci.controls)
+    m.mount(document.getElementById("drugs"), ci.drugs)
+    m.mount(document.getElementById("combinations"), ci.combinations)
+    m.redraw()
+  })
+
+-#:javascript
+  var ci = {}
+
+-#:sass
+  span.or
+    display: inline-block
+      margin: 0 3em
+  #import_controls
+    display: inline-block
+  #export_controls
+    display: inline-block
+    
+    .ui.field
+      display: inline-block
+    label
+    select
+      width: 10em
+      display: inline-block
+      margin: 0 1em
+
+  .toggle
+    &:not(.show)
+      display: none
+
+-#.ui.very.basic.segment#import_controls
   %a.ui.button Import New Data
   :deferjs
     $('#import_controls .button').click(function(){
       $('#import_form').toggleClass('show')
     })
 
-.ui.small.two.wide.button#reset
+-#.ui.small.two.wide.button#reset
   Reset
 
-:deferjs
+-#:deferjs
 
     $('.ui.button#reset').click(function(){
         ci.drug_info = {}
@@ -45,17 +182,17 @@
       return(false)
     })
 
-%fieldset#export_controls
+-#%fieldset#export_controls
 
-.toggle#import_form
+-#.toggle#import_form
   = partial_render('partials/input', :workflow => workflow)
 
-:deferjs
+-#:deferjs
 
     var export_controls = ci.export_controls = rbbt.mview.component({format: 'excel', compact:'none'})
 
     export_controls.prepare_inputs = function(){
-      var content = "#Treatment\tDose\tEffect\n"
+      var content = "#Treatment\tDose\tResponse\n"
 
       for (drug in ci.drug_info){
         var line = ""
@@ -121,24 +258,24 @@
 
     m.mount(document.getElementById("export_controls"), export_controls)
 
-.ui.basic.segment
+-#.ui.basic.segment
   .ui.header
     Analysis options
   .ui.content#controls
 
-%hr.ui.rule
+-#%hr.ui.rule
 
-.ui.basic.segment#drugs
+-#.ui.basic.segment#drugs
 
-%hr.ui.rule
+-#%hr.ui.rule
 
-.ui.basic.segment#combinations
+-#.ui.basic.segment#combinations
 
 
 
 
      
-:deferjs
+-#:deferjs
   require_js(['/js-find/rbbt.ci', '/js-find/rbbt.ci.controls', '/js-find/rbbt.ci.combinations', '/js-find/rbbt.ci.drugs'], function(args){
     $('table').tablesorter()
 

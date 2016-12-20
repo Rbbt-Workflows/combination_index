@@ -1,7 +1,8 @@
+- workflow = CombinationIndex
 .ui.basic.segment
   #import
     .ui.header
-      Import/Export data
+      Import
     .content
       :sass
         #import
@@ -44,11 +45,20 @@
 
             %li
               %a.load_example(href="#" task='report' name=dataset)= name
+    .ui.small.two.wide.button#reset
+      Reset
 
+    .ui.header
+      Export
+    .ui.basic.segment#export_controls
 
 :deferjs
 
     var form = $('#import form')
+
+    form.find('input[type=file]').change(function(){
+      $('textarea')[0].value = ''
+    })
 
 
     form.find('input[type=submit]').click(function(elem){

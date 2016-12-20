@@ -70,9 +70,9 @@
     data.me_2$Dose = data.me_2$Dose * ratio_2
 
     ggplot(data.me_1) + 
-      geom_line(data=data.me_1, aes(x=Dose, y=Effect), col='red') +
-      geom_line(data=data.me_2, aes(x=Dose, y=Effect), col='blue') +
-      geom_line(data=data.add, aes(x=Dose, y=Effect), col='black') +
+      geom_line(data=data.me_1, aes(x=Dose, y=Response), col='red') +
+      geom_line(data=data.me_2, aes(x=Dose, y=Response), col='blue') +
+      geom_line(data=data.add, aes(x=Dose, y=Response), col='black') +
       scale_x_log10(limits=c(min(c(data.me_1$Dose, data.me_2$Dose)),max(c(data.me_1$Dose, data.me_2$Dose)))) + annotation_logticks() +
 
       geom_point(x=log10(combination_dose), y=response_c, cex=5) +
