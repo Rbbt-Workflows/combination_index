@@ -84,7 +84,7 @@ module CombinationIndex
     #lss = true if model_type =~ /least_squares/
 
 
-    log :CI_plot, "Drawing CI plot"
+    log :CI_plot, "Drawing HSA plot"
     svg = TmpFile.with_file(nil, false) do |blue_data|
       Open.write(blue_data, blue_tsv.to_s)
       TmpFile.with_file(nil, false) do |red_data|
