@@ -50,8 +50,6 @@ CombinationIndex=/$PWD filter="*.rb" {
 
    layout.haml
    tasks.haml
-   tasks.haml.save
-   tasks.haml.save2
    CombinationIndex=CombinationIndex{
     report=report{
      job_result.haml

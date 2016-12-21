@@ -22,9 +22,12 @@ post '/import' do
 
   excel = filename and filename.include?('.xls') ? filename.split(".").last : false
 
-  drug_info, combination_info = CombinationIndex.import(content, excel, scale, invert)
-  
-  halt 200, {:drug_info => drug_info, :combination_info => combination_info}.to_json
+  begin
+    drug_info, combination_info = CombinationIndex.import(content, excel, scale, invert)
+    halt 200, {:drug_info => drug_info, :combination_info => combination_info}.to_json
+  rescue
+    halt 500, "Could not parse content"
+  end
 end
 
 post '/excel' do

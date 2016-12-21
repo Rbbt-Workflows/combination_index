@@ -6,6 +6,12 @@
     .vertical.menu
       .item
         display: block !important
+    figure
+      max-width: 100vmin
+      img
+        max-width: 100%
+      figcaption
+        font-size: 0.9em
 
 .documentation.ui.grid
   .ui.four.wide.column
@@ -30,9 +36,9 @@
         For the convenience of the user, CImbinator supports two file types for
         importing and exporting data: Tab Separated Value files (TSV) and Excel
         spreadsheets (XSL or XSLX). Information in these files can also be laid
-        out in several ways: expanded, collapsed columns and collapsed.  In the
-        fully collapsed formats (rows and columns) drugs are separated by
-        hyphens (-), and doses/responses in a vector are separated by the pipe
+        out in several ways: expanded, collapsed columns and collapsed. In the
+        collapsed formats (rows and columns) drugs are separated by hyphens
+        (-), and doses/responses in a vector are separated by the pipe
         character (|)
 
         | Drug    | Second drug | Drug dose | Sencond drug dose | Response |
@@ -94,6 +100,108 @@
         to restore them at a later time.
 
     .ui.tab.very.basic.segment(data-tab='turorial')
+      :markdown
+
+        Quick introduction in three steps
+        ========
+
+        *Step 1: Importing data.* The CImbinator web-page
+        (http://cimbinator.bioinfo.cnio.es/) can be accessed through a standard
+        modern web browser. At the top of the web page the user can access
+        different parts of the service by selecting the relevant tab from the
+        set of available tabs _Export/Import data_, _Configure_, _Drugs_,
+        _Combinations_ and _Help_. Typically one would start by importing data,
+        which can be done by selecting _Export/Import_ data (see Fig. S1). The
+        import of data can be done either from loading a data file (see
+        Supplementary Material chapter 4), or by pasting the data as text into
+        the textbox. To import one of the example datasets provided by the web
+        page select the  "Miller dataset" and next click "Submit".
+
+        <figure>
+        <img src="/images/Fig-S1.jpg"/>
+        <figcaption><em>Fig. S1: Import and Export data to and from CImbinator.</em>
+        Data can be imported either from file by selecting "Choose
+        File" or by pasting text input to the textbox. Data can also be
+        exported to either Excel files or tab separated files.
+        </figcaption>
+        </figure>
+
+        *Step 2: Configuring drug combination response analysis.* After data has
+        been imported and submitted the analysis can be configured by accessing
+        the second tab _Configure_. In the dropdown menu _Model type_ the user can
+        choose a relevant drug combination model that is used to calculate the
+        expected combination response, e.g. _Loewe additivity_ (see Fig. S2). If
+        the user next select _Analyze all in batch_ the web server will issue a
+        batch analysis to report on drug combination effects for all drug
+        combinations submitted.
+
+        <figure>
+        <img src="/images/Fig-S2.jpg"/>
+        <figcaption><em>Fig. S2. Configuring the analysis.</em>
+        The user can choose one of several model types that is used to
+        calculate the expectation combination response. This expectation is
+        used to quantify synergy, which is the excess between the observed
+        effect to the expected effect.
+        </figcaption>
+        </figure>
+
+        *Step 3: Study drug responses.* After submitting data and configuring the
+        analysis CImbinator allows exploration of single and combination drug
+        responses. The single drug responses can be found in the tab _Drugs_.
+        This tab also allows for manual editing of existing data and entering
+        of new data. The add a drug to the dataset input the drug name followed
+        by the selecting the plus sign, and then one can add measurements by
+        inputting _Dose_ and _Response_ for the new drug. Fig. S3 shows an example
+        of what this tab can look like for the Miller dataset, and Fig. S4
+        shows an example of the drug combination overview matrix for the Miller
+        dataset.
+
+        <figure>
+        <img src="/images/Fig-S3.jpg"/>
+        <figcaption>
+        <em>
+        Fig. S3. Single drug responses.
+        </em>
+
+        In the Drugs tab the single drug dose response fits can be displayed by
+        selecting Display plot. New drugs and observations can be added
+        manually by typing in the name of a new drug followed by clicking the
+        plus sign, or by adding Dose and Response data for the new drug.
+        Existing drugs can be removed by selecting Remove drug, and
+        observations can be removed by clicking the minus sign in the rightmost
+        column in the dose-response table.
+
+        </figcaption>
+        </figure>
+
+
+        <figure>
+        <img src="/images/Fig-S4.jpg"/>
+        <figcaption>
+        <em>
+        Fig. S4. Drug combination responses.
+        </em>
+         Drug combation response matrix
+        ('birds eye overview') for the Miller dataset, and detailed
+        dose response plot for the drug combination AG-SL. The matrix displays
+        a color-coded bar above each drug pair, which is a graded synergy
+        assessment across increasing doses from left to right (green = synergy,
+        yellow = additive, red = antagonism). Example: If a bar is yellow at
+        the left end and green at the right end it means this drug combination
+        acts additively at low doses and synergistically at higher doses. The
+        detailed dose response plot is displayed by first selecting a drug pair
+        in the matrix, and then selecting Plot in the dose response table. The
+        Plot button also displays the quantified synergy score as a number,
+        e.g. Combination Index (CI) values for Loewe additivity analyses. The
+        detailed dose response plot also gives confidence scores for the CI
+        values. In the example of drugs AG and SL the CI value is 0.02, with
+        confidence bands indicating the CI value to lie between 0.00 and 0.06.
+        </figcaption>
+        </figure>
+
+
+
+
     .ui.tab.very.basic.segment(data-tab='avail')
       :markdown
 
