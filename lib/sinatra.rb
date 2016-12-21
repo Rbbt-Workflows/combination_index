@@ -24,8 +24,6 @@ post '/import' do
 
   drug_info, combination_info = CombinationIndex.import(content, excel, scale, invert)
   
-  #tsv = TSV.open(content.strip, :sep => /\s+/, :merge => true)
-  #drug_info, combination_info = CombinationIndex.import_expanded(tsv, scale, invert)
   halt 200, {:drug_info => drug_info, :combination_info => combination_info}.to_json
 end
 
@@ -44,7 +42,7 @@ post '/export' do
   compact = @clean_params[:compact]
   content = prepare_input @clean_params, :tsv, :file
 
-  tsv = TSV.open(content.strip, :sep => /\s+/, :merge => true)
+  tsv = TSV.open(content.strip, :sep => /\s/, :merge => true)
 
   case compact
   when 'none'

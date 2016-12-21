@@ -2,7 +2,7 @@ require 'rbbt/tsv/excel'
 module CombinationIndex
   def self.export_excel(tsv, file, unmerge = true, expand = true)
     if expand
-      new = TSV.setup({}, :key_field => "Drug", :fields => ["Second drug", "Drug dose", "Sencond drug dose", "Response"], :type => :double, :cast => :to_f)
+      new = TSV.setup({}, :key_field => "Drug", :fields => ["Second drug", "Drug dose", "Second drug dose", "Response"], :type => :double, :cast => :to_f)
       TSV.traverse tsv, :into => new do |key, values|
         blue_drug, red_drug = key.split(CombinationIndex::COMBINATION_SEP)
         doses, responses = values
@@ -27,7 +27,7 @@ module CombinationIndex
 
   def self.export_tsv(tsv, file, unmerge = true, expand = true)
     if expand
-      new = TSV.setup({}, :key_field => "Drug", :fields => ["Second drug", "Drug dose", "Sencond drug dose", "Response"], :type => :double, :cast => :to_f)
+      new = TSV.setup({}, :key_field => "Drug", :fields => ["Second drug", "Drug dose", "Second drug dose", "Response"], :type => :double, :cast => :to_f)
       TSV.traverse tsv, :into => new do |key, values|
         blue_drug, red_drug = key.split(CombinationIndex::COMBINATION_SEP)
         doses, responses = values
@@ -186,7 +186,6 @@ module CombinationIndex
           end
         end
         res.extend MultipleResult
-        iii res
         res
       end
 

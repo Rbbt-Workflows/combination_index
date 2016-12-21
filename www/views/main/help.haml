@@ -29,8 +29,11 @@
 
         For the convenience of the user, CImbinator supports two file types for
         importing and exporting data: Tab Separated Value files (TSV) and Excel
-        spreadsheets (XSL or XSLX). Information in these files can also be laid out
-        in several ways: expanded, collapsed columns and collapsed.
+        spreadsheets (XSL or XSLX). Information in these files can also be laid
+        out in several ways: expanded, collapsed columns and collapsed.  In the
+        fully collapsed formats (rows and columns) drugs are separated by
+        hyphens (-), and doses/responses in a vector are separated by the pipe
+        character (|)
 
         | Drug    | Second drug | Drug dose | Sencond drug dose | Response |
         |---------|-------------|----------:|------------------:|---------:|
@@ -69,14 +72,15 @@
         "Import / Export" section and export them to any of these three layouts in
         either TSV or Excel files. When importing the data from files the column
         header row must be present but the text of the headers is ignored, all that
-        matters is the order of the columns. 
+        matters is the order of the columns. On TSV files or when inputing data on the
+        textarea the header line must start with a pound character (#).
 
-        Once the data is Imported you may open the tabs 'Drugs' and 'Combinations' to
+        Once the data is imported you may open the tabs 'Drugs' and 'Combinations' to
         examine the data and produce the plots. The tab 'Configure' allows you to specified
-        the details of how these are produced, as well as issue batch analysis.
+        the details of how these are produced, as well as issue batch analyses.
 
         The data loaded in the 'Drugs' and 'Combinations' tabs is saved on your
-        browsers memory and restored whenever to page is loaded. You may empty it
+        browsers memory, and restored whenever to page is loaded. You may empty it
         using the 'Reset' button, or you might introduce your own data points
         manually.
 
