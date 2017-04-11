@@ -20,12 +20,13 @@ post '/import' do
   scale = prepare_input @clean_params, :scale, :boolean
   content = prepare_input @clean_params, :file, :file
 
-  excel = filename and filename.include?('.xls') ? filename.split(".").last : false
+  excel = (filename && filename.include?('.xls')) ? filename.split(".").last : false
 
   begin
     drug_info, combination_info = CombinationIndex.import(content, excel, scale, invert)
     halt 200, {:drug_info => drug_info, :combination_info => combination_info}.to_json
   rescue
+    Log.exception $!
     halt 500, "Could not parse content"
   end
 end

@@ -1,0 +1,90 @@
+-#:sass
+  .segments
+    .segment
+      max-width: 30%
+  .image
+    height: 120px
+    width: 100% !important
+    img
+      max-width: 30vmax
+
+:sass
+  #footer
+    .ui.segments
+      flex-wrap: wrap
+      .segment
+        width: 100%
+      .segment
+        .image
+          height: 120px
+          width: 30% !important
+          float: left
+          img
+            width: 100%
+        .content
+          width: 60% !important
+          padding-left: 5%
+          float: left
+          font-size: 10h
+      
+  @media screen and (min-width: 768px) 
+    #footer
+      .ui.segments
+        .segment
+          width: 33%
+        .segment
+          .image
+            display: table-cell
+            position: relative
+            height: 150px
+            width: 100% !important
+            img
+              max-width: 300px
+            img:not(.cnio)
+              position: absolute
+              bottom: 62px
+              vertical-align: bottom
+          .content
+            width: 100% !important
+  
+
+.ui.horizontal.segments
+  .ui.segment
+    .image
+      %a(href="http://www.cnio.es/")
+        -#%img(src="/file/cnio.png" height='115px' width='241px')
+        %img.cnio(src="/file/cnio.png")
+    .content
+      .ui.header
+        Spanish National Cancer Research Center
+      .description
+        %span.group Structural Computational Biology Group
+        %br/
+        %span.address Madrid, Spain
+      .meta.contact
+        %span.who miguel.vazquez
+        %span.where cnio.es
+
+  .ui.segment
+    .image
+      %a(href="http://www.ntnu.edu/ikmm/")
+        %img(src="/images/institutions/logo_ntnu_u-slagord2.png")
+    .content
+      .ui.header
+        Norwegian University of Science and Technology
+      .description
+        %span.group Department of Cancer Research and Molecular Biology
+        %br/
+        %span.address Trondheim, Norway
+
+  .ui.segment
+    .image
+      %a(href="https://stolav.no")
+        %img(src="/images/institutions/stolav_eng.png")
+    .content
+      .ui.header
+        St Olav's Hospital
+      .description
+        %span.group The Cancer Clinic
+        %br/
+        %span.address Trondheim, Norway

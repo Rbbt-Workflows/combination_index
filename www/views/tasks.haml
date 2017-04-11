@@ -1,4 +1,6 @@
-
+:sass
+  .tab:not(.active)
+    display: none !important
 :javascript
   var ci = {}
 
@@ -9,7 +11,7 @@
   .ui.item(data-tab="combinations") Combinations 
   .ui.item(data-tab="help") Help 
 
-.ui.bottom.attached.tab.segment.active(data-tab="export")
+.ui.bottom.attached.tab.active.segment(data-tab="export")
   = partial_render('main/import_export')
 .ui.bottom.attached.tab.segment(data-tab="configure")
   .ui.basic.segment#controls

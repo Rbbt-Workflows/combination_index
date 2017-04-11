@@ -55,7 +55,7 @@
           - url = "/" + ["CombinationIndex", dep.task_name, dep.name] * "/"
           %a(href=url)= [blue_dose, red_dose] * "-"
           %br
-          Bliss excess: 
+          HSA excess: 
           - e = dep.info[:hsa_excess].to_f
           == #{"%.3g" % e}
         .ui.description

@@ -78,23 +78,29 @@ ci.combinations.controller = function(){
         var job = this
         job.load().then(ci.combinations.vm.plot.content, job_error)
         var title = "Fit plot for combination: " + blue_drug + " and " + red_drug
-        var caption = blue_drug + " (blue), " + red_drug + " (red) ME curves, and additive combination line (black). The dashed black line is a loess fit across the observed combination values."
+
+        var caption = blue_drug + " (blue), " + red_drug + " (red) ME curves, "
 
         if (info.status == "done"){
           var value 
 
           if (info.CI){
             value = info.CI
-            title = title + '. CI =' + value.toFixed(2)
+            title = title + ' ' + "--" + " CI = " + value.toFixed(2)
+            caption = caption + " and additive combination line (black)."
           }else{
             if (info.bliss_excess){
               value = info.bliss_excess
-              title = title + '. Bliss excess =' + value.toFixed(2)
+              title = title + ' ' + "--" + ' Bliss excess = ' + value.toFixed(2)
+              caption = caption + " and bliss additive line (purple dashed).";
             }else{
               value = info.hsa_excess
-              title = title + '. HSA excess =' + value.toFixed(2)
+              title = title + ' ' + "--" + ' HSA excess = ' + value.toFixed(2)
+              caption = caption + " and highest single agent line (purple dashed)."
             }
           }
+
+          caption = caption + " Combination values at the same dosage ratio are represented (black dots; current one is larger) and fit with loess (black dashed)."
             
           value = parseFloat(value)
 

@@ -15,6 +15,7 @@ CombinationIndex=/$PWD filter="*.rb" {
     fit.rb
     ci.rb
     bliss.rb
+    zip.rb
     hsa.rb
    }
 
@@ -40,11 +41,13 @@ CombinationIndex=/$PWD filter="*.rb" {
    }
 
    main=main{
-    import_export.haml
-    input.haml
-    drugs.haml
-    combinations.haml
     help.haml
+    import_export.haml
+   }
+
+   layout=layout{
+    footer.haml
+    footer.haml.save
    }
 
 

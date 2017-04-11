@@ -210,16 +210,16 @@ module CombinationIndex
 
     good_jobs
 
-    tsv = TSV.setup({}, :key_field => "Combination", :fields => ["Doses", "Response", "Bliss excess"], :type => :double)
+    tsv = TSV.setup({}, :key_field => "Combination", :fields => ["Doses", "Response", "HSA excess"], :type => :double)
     TSV.traverse good_jobs, :type => :array, :into => tsv do |dep|
       blue_drug, red_drug = dep.clean_name.split(CombinationIndex::COMBINATION_SEP)
       blue_dose = dep.inputs[:blue_dose]
       red_dose = dep.inputs[:red_dose]
       response = dep.inputs[:response]
-      bliss = dep.info[:bliss_excess]
+      hsa = dep.info[:hsa_excess]
       doses = [blue_dose, red_dose] * "-"
       combination = [blue_drug, red_drug] * "-"
-      [combination,[doses, response, bliss]]
+      [combination,[doses, response, hsa]]
     end
 
     set_info :jobs, good_jobs.collect{|dep| dep.path }
