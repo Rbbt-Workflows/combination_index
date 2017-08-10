@@ -1,7 +1,7 @@
 require 'rbbt/util/R/model'
 
 Log._ignore_stderr do
-  R.eval_a 'library(drc)'
+  R.eval_a 'rbbt.require("drc")'
 end
 module CombinationIndex
 

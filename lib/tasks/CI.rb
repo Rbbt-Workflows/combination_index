@@ -5,8 +5,8 @@ require 'prawn-svg'
 require 'tasks/CI/fit'
 require 'tasks/CI/ci'
 require 'tasks/CI/bliss'
-require 'tasks/CI/zip'
 require 'tasks/CI/hsa'
+#require 'tasks/CI/zip'
 
 module CombinationIndex
  

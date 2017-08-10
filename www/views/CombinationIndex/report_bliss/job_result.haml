@@ -2,6 +2,10 @@
   .job_control
     = workflow_partial('job_result/job_control', workflow, task, locals)
 
+:sass
+  .combination.menu
+    flex-wrap: wrap
+
 - header "CI", NumericValue
 - header "Bliss excess", NumericValue
 = table do
@@ -62,7 +66,7 @@
           = File.read(dep.path)
   - urls[name] = fragment_code
 
-.ui.top.attached.tabular.menu
+.ui.top.attached.tabular.combination.menu
   - urls.each do |name,code|
     .item(data-tab=name)=name
 
