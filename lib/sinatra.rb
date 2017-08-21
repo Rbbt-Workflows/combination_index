@@ -10,7 +10,7 @@ module NumericValue
   format = ["CI", "CI low", "CI high"]
 end
 
-$title = "CImbinator"
+$title = "CImbinator" if $title == "CombinationIndex"
 
 require 'formats'
 
