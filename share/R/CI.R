@@ -1,4 +1,5 @@
-library(drc)
+rbbt.require('drc')
+rbbt.require('ggplot2')
 
 
 CI.eff_ratio = function(x){ 
