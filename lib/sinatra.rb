@@ -24,6 +24,7 @@ post '/import' do
 
   begin
     drug_info, combination_info = CombinationIndex.import(content, excel, scale, invert)
+    content_type :json
     halt 200, {:drug_info => drug_info, :combination_info => combination_info}.to_json
   rescue
     Log.exception $!

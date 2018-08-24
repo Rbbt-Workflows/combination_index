@@ -63,13 +63,13 @@
 
     form.find('input[type=submit]').click(function(elem){
       var target = form.attr('action')
-      form.ajaxSubmit(function(data,s,xhr){
+      form.ajaxSubmit({dataType: 'json', success:
+      function(data,s,xhr){
         var error
-        if (s != 'success' || xhr.status == 500 || data[0] != '{') error = true
+        if (s != 'success' || xhr.status == 500 ) error = true
         if (error){
           alert("Could not import. Please, check the 'Help' section for information on data formats.")
         }else{
-          data = JSON.parse(data)
           ci.drug_info = data.drug_info;
           ci.combination_info = data.combination_info; 
           ci.drugs.vm.save()
@@ -78,7 +78,7 @@
           ci.combinations.vm.init()
           m.redraw()
         }
-      })
+      }})
       return false
     })
 
