@@ -78,11 +78,11 @@ CombinationIndex=/$PWD filter="*.rb" {
    }
    public=public{
     js=js{
-     rbbt.ci.js
-
+     rbbt.ci.combinations.js
      rbbt.ci.controls.js
      rbbt.ci.drugs.js
-     rbbt.ci.combinations.js
+     rbbt.ci.js
+     require.js
     }
    }
   }

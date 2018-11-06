@@ -172,9 +172,24 @@ module CombinationIndex
     else
       new = TSV.setup({}, :key_field => "Drug", :fields => ["Dose", "Response"], :type => :double)
 
-      TSV.traverse tsv, :into => new do |drug1, values|
+      TSV.traverse tsv, :into => new do |drug1_orig, values|
         res = []
         Misc.zip_fields(values).each do |drug2, dose1, dose2, response|
+          drug1 = drug1_orig
+
+          if dose1.nil? || dose1.to_f == 0.0 
+            drug1 = drug2
+            dose1 = dose2
+            drug2, dose2 = nil, nil
+          end
+
+
+          if dose2.nil? || dose2.to_f == 0.0 
+            drug2, dose2 = nil, nil
+          end
+
+          next if dose1.to_f == 0.0 and dose2.nil?
+
           if drug2
             key = [drug1, drug2] * CombinationIndex::COMBINATION_SEP
             dose = [dose1.to_s, dose2.to_s] * CombinationIndex::COMBINATION_SEP
