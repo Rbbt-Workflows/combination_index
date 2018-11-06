@@ -246,11 +246,11 @@ module CombinationIndex
 
     set_info :jobs, good_jobs.collect{|dep| dep.path }
 
-    FileUtils.mkdir_p file('plots').find
+    Open.mkdir file('plots').find
     good_jobs.each do |dep|
       blue_dose, red_dose, response = dep.inputs.values_at :blue_dose, :red_dose, :response
       name = [dep.clean_name, blue_dose, red_dose, "%3f" % response] * "_"   + '.svg'
-      FileUtils.cp dep.path, file('plots')[name].find
+      Open.cp dep.path, file('plots')[name].find
     end
 
     tsv.slice(tsv.fields - ["File"])
