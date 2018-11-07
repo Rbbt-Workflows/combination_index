@@ -330,7 +330,23 @@ ci.combinations.view.combination_details = function(controller){
       var values = []
       var cinfo = combination_info[combination]
       var len = Object.keys(cinfo).length
-      cinfo = cinfo.sort(function(p1,p2){if (p1[0] == p2[0]){ return(p1[2] - p2[2])} else {return(p1[0] - p2[0])}})
+      var diff_ratios = false
+      cinfo = cinfo.sort(function(p1,p2){
+        if ((p1[0] / p1[1]) == (p2[0] / p2[1])){
+          if (p1[0] == p2[0]){ 
+            if (p1[1] == p2[1]){ 
+              return(p1[2] - p2[2])
+            }else{
+              return(p1[1] - p2[1])
+            }
+          } else {return(p1[0] - p2[0])}
+        }else{
+          diff_ratios = true
+          return((p1[0] / p1[1]) - (p2[0] / p2[1]))
+        }
+
+      })
+
       for (i in cinfo){
         var triplet = cinfo[i]
         var response = triplet[2]

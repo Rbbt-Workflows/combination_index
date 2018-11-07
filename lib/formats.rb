@@ -166,39 +166,51 @@ module CombinationIndex
       tsv = TSV.open(content.strip, :merge => true, :zipped => true, :one2one => true)
     end
 
-    Log.tsv tsv
     if tsv.fields.length < 4
       self.import_expanded(tsv, scale, invert)
     else
       new = TSV.setup({}, :key_field => "Drug", :fields => ["Dose", "Response"], :type => :double)
 
-      TSV.traverse tsv, :into => new do |drug1_orig, values|
+      TSV.traverse tsv, :into => new do |drug1, values|
         res = []
         Misc.zip_fields(values).each do |drug2, dose1, dose2, response|
-          drug1 = drug1_orig
+          dose1 = nil if dose1.to_f == 0
+          dose2 = nil if dose2.to_f == 0
+          next if dose1.nil? and dose2.nil?
 
-          if dose1.nil? || dose1.to_f == 0.0 
-            drug1 = drug2
-            dose1 = dose2
-            drug2, dose2 = nil, nil
-          end
-
-
-          if dose2.nil? || dose2.to_f == 0.0 
-            drug2, dose2 = nil, nil
-          end
-
-          next if dose1.to_f == 0.0 and dose2.nil?
-
-          if drug2
-            key = [drug1, drug2] * CombinationIndex::COMBINATION_SEP
-            dose = [dose1.to_s, dose2.to_s] * CombinationIndex::COMBINATION_SEP
-            res << [key, [dose, response]] 
+          if dose1.nil?
+            key, dose = drug2, dose2
+          elsif dose2.nil?
+            key, dose = drug1, dose1
           else
-            key = drug1
-            dose = dose1
-            res << [key, [dose, response]] 
+            key = [drug1, drug2] * CombinationIndex::COMBINATION_SEP
+            dose = ["%20f" % dose1, "%20f" % dose2] * CombinationIndex::COMBINATION_SEP
           end
+          
+          res << [key, [dose, response]] 
+
+          #if dose1.nil? || dose1.to_f == 0.0 
+          #  drug1 = drug2
+          #  dose1 = dose2
+          #  drug2, dose2 = nil, nil
+          #end
+
+
+          #if dose2.nil? || dose2.to_f == 0.0 
+          #  drug2, dose2 = nil, nil
+          #end
+
+          #next if dose1.to_f == 0.0 and dose2.nil?
+
+          #if drug2
+          #  key = [drug1, drug2] * CombinationIndex::COMBINATION_SEP
+          #  dose = [dose1.to_s, dose2.to_s] * CombinationIndex::COMBINATION_SEP
+          #  res << [key, [dose, response]] 
+          #else
+          #  key = drug1
+          #  dose = dose1
+          #  res << [key, [dose, response]] 
+          #end
         end
         res.extend MultipleResult
         res
