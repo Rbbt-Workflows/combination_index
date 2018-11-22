@@ -24,9 +24,10 @@ CombinationIndex=/$PWD filter="*.rb" {
   }
  }
 
- share=share{
+ share=share filter="*"{
   R=R{
    CI.R
+   svg.R
   }
  }
 
