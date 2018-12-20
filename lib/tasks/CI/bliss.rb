@@ -160,6 +160,7 @@ module CombinationIndex
 
       blue_doses, blue_responses = file[blue_drug]
       red_doses, red_responses = file[red_drug]
+      next if blue_doses.nil? || red_doses.nil?
 
       combination_doses, combination_responses = file[combination]
       Misc.zip_fields([combination_doses, combination_responses]).each do |doses,response|

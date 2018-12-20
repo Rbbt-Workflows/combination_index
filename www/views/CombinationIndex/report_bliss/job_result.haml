@@ -63,7 +63,7 @@
           - e = dep.info[:bliss_excess].to_f
           == #{"%.3g" % e}
         .ui.description
-          = File.read(dep.path)
+          = Open.read(dep.path)
   - urls[name] = fragment_code
 
 .ui.top.attached.tabular.combination.menu
