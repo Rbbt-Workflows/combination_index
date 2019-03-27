@@ -344,7 +344,7 @@ CI.plot_combination <- function(blue_m, blue_dm, blue_dose, red_m, red_dm, red_d
     return(plot)
 }
 
-CI.plot_combination.bliss <- function(blue_dose, red_dose, response, blue_data, red_data, bliss_data, additive_data, fix_ratio=FALSE, more_doses = NULL, more_responses = NULL){
+CI.plot_combination.bliss <- function(blue_dose, red_dose, response, blue_data, red_data, bliss_data, fix_ratio=FALSE, more_doses = NULL, more_responses = NULL, all_bliss_data = NULL){
 
     max = max(c(blue_data$Dose, red_data$Dose))
     min = min(c(blue_data$Dose, red_data$Dose))
@@ -390,18 +390,22 @@ CI.plot_combination.bliss <- function(blue_dose, red_dose, response, blue_data, 
         plot = plot + geom_smooth(aes(x=Dose, y=Response), data=data.frame(Dose=md, Response=me), linetype='dashed', col='black', method="loess", level=0.95, se=FALSE)
     }
     
+    alpha = 0.8
     plot = plot +
         scale_x_log10() + 
         annotation_logticks(side='b') +
         xlab("Dose") +
         ylab("Response") +
-        geom_point(data=blue_data, col='blue',cex=3,alpha=0.8) +
-        geom_point(data=red_data, col='red',cex=3,alpha=0.8) +
-        geom_point(data=bliss_data, col='purple',cex=3,alpha=0.8) +
+        geom_point(data=blue_data, col='blue',cex=3,alpha=alpha) +
+        geom_point(data=red_data, col='red',cex=3,alpha=alpha) +
+        geom_point(data=bliss_data, col='purple',cex=3,alpha=alpha) +
         geom_smooth(data=bliss_data, linetype='dashed', col='purple',method="loess",  level=0.95, se=FALSE) +
+        geom_point(x=log10(blue_dose + red_dose), y=response, col='black',cex=5,alpha=alpha) 
 
-        geom_point(x=log10(blue_dose + red_dose), y=response, col='black',cex=5,alpha=0.8) 
 
+    if (!is.null(all_bliss_data)){
+        plot = plot + geom_point(data=all_bliss_data, col='purple', cex=5, alpha=alpha/2)
+    }
 
     if (!is.null(more_responses)){
         for (i in seq(1, len)){
@@ -412,7 +416,7 @@ CI.plot_combination.bliss <- function(blue_dose, red_dose, response, blue_data, 
     return(plot)
 }
 
-CI.plot_combination.hsa <- function(blue_dose, red_dose, response, blue_data, red_data, hsa_data, additive_data, fix_ratio=FALSE, more_doses = NULL, more_responses = NULL){
+CI.plot_combination.hsa <- function(blue_dose, red_dose, response, blue_data, red_data, hsa_data, fix_ratio=FALSE, more_doses = NULL, more_responses = NULL){
 
     max = max(c(blue_data$Dose, red_data$Dose))
     min = min(c(blue_data$Dose, red_data$Dose))

@@ -21,14 +21,14 @@ module CombinationIndex
     red_responses = red_responses.collect{|v| v.to_f}
 
     blue_dose_responses = {}
-    blue_doses.zip(blue_responses).each{|d,e| blue_dose_responses[d] = blue_dose_responses[d] || []; blue_dose_responses[d] << e}
+    blue_doses.zip(blue_responses).each{|d,e| blue_dose_responses[d] ||= []; blue_dose_responses[d] << e}
     blue_mean_dose_responses = {}
     blue_dose_responses.each do |dose,responses|
       blue_mean_dose_responses[dose] = Misc.mean responses
     end
 
     red_dose_responses = {}
-    red_doses.zip(red_responses).each{|d,e| red_dose_responses[d] = red_dose_responses[d] || []; red_dose_responses[d] << e}
+    red_doses.zip(red_responses).each{|d,e| red_dose_responses[d] ||= []; red_dose_responses[d] << e}
     red_mean_dose_responses = {}
     red_dose_responses.each do |dose,responses|
       red_mean_dose_responses[dose] = Misc.mean responses
@@ -38,12 +38,12 @@ module CombinationIndex
     additive_predictions = {}
     blue_doses.each do |bd|
       rd = red_doses.sort_by{|d| (bd.to_f - combination_ratio * d.to_f).abs}.first
+      cd = bd + rd
       pa = if response_type.to_s == "viability"
              1 - CombinationIndex.predicted_bliss(1 - blue_mean_dose_responses[bd], 1 - red_mean_dose_responses[rd])
            else
              CombinationIndex.predicted_bliss(blue_mean_dose_responses[bd], red_mean_dose_responses[rd])
            end
-      cd = bd + rd
       additive_predictions[cd] = pa
     end
 
@@ -52,94 +52,96 @@ module CombinationIndex
     else
       predicted_additive = CombinationIndex.predicted_bliss(blue_mean_dose_responses[blue_dose], red_mean_dose_responses[red_dose])
     end
+
     excess = response - predicted_additive 
 
     set_info :bliss_excess, excess
     set_info :bliss_prediction, predicted_additive
 
+    #{{{ P-value
+    
+    additive_prediction_all = {}
+    blue_doses.each do |bd|
+      rd = red_doses.sort_by{|d| (bd.to_f - combination_ratio * d.to_f).abs}.first
+      cd = bd + rd
+      blue_dose_responses[bd].each do |br|
+        red_dose_responses[rd].each do |rr|
+          pa = if response_type.to_s == "viability"
+                 1 - CombinationIndex.predicted_bliss(1 - br, 1 - rr)
+               else
+                 CombinationIndex.predicted_bliss(br, rr)
+               end
+          additive_prediction_all[cd] ||= []
+          additive_prediction_all[cd] << pa
+        end
+      end
+    end
+
+    relevant_responses = more_doses.zip(more_responses).select{|d,r| (d.to_f - blue_dose - red_dose).abs < 0.0001 }.collect{|d,r| r.to_f }
+    additive_reponses = additive_prediction_all[blue_dose + red_dose]
+
+    pvalue = R.run(<<-EOF).read.split("\n").last.to_f
+relevant_responses = #{R.ruby2R relevant_responses}
+additive_reponses = #{R.ruby2R additive_reponses}
+p.value = t.test(relevant_responses, additive_reponses)$p.value
+cat(p.value)
+    EOF
+
+    set_info :bliss_pvalue, pvalue
+
     #{{{ MAKE BLISS PLOT
     blue_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
     blue_doses.zip(blue_responses).each do |dose, response|
-      blue_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
+      blue_tsv[Misc.obj2md5(:values => [dose,response] * ":")] = [dose, response]
     end
 
     red_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
     red_doses.zip(red_responses).each do |dose, response|
-      red_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
+      red_tsv[Misc.obj2md5(:values => [dose,response] * ":")] = [dose, response]
     end
 
     bliss_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
     additive_predictions.each do |dose, response|
-      bliss_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
+      bliss_tsv[Misc.obj2md5(:values => [dose,response] * ":")] = [dose, response]
     end
 
-    #blue_m, blue_dm, blue_dose_1, blue_response_1, blue_dose_2, blue_response_2, blue_invert  = blue_step.info.values_at :m, :dm, :dose1, :response1, :dose2, :response2, :invert
-    #blue_modelfile = blue_step.file(:model)
-    #blue_modelfile = nil unless blue_modelfile.exists?
-
-    #red_m, red_dm, red_dose_1, red_response_1, red_dose_2, red_response_2, red_invert  = red_step.info.values_at :m, :dm, :dose1, :response1, :dose2, :response2, :invert
-    #red_modelfile = red_step.file(:model)
-    #red_modelfile = nil unless red_modelfile.exists?
-
+    bliss_tsv_all = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
+    additive_prediction_all.each do |adose, aresponses|
+      aresponses.each do |aresponse|
+        bliss_tsv_all[Misc.obj2md5(:values => [adose,aresponse] * ":")] =  [adose, aresponse]
+      end
+    end
 
 
     log :CI_plot, "Drawing Bliss plot"
-    svg = TmpFile.with_file(nil, false) do |blue_data|
-      Open.write(blue_data, blue_tsv.to_s)
-      TmpFile.with_file(nil, false) do |red_data|
-        Open.write(red_data, red_tsv.to_s)
-      TmpFile.with_file(nil, false) do |bliss_data|
-        Open.write(bliss_data, bliss_tsv.to_s)
-
+    svg = TmpFile.with_file(blue_tsv.to_s) do |blue_data|
+      TmpFile.with_file(red_tsv.to_s) do |red_data|
+      TmpFile.with_file(bliss_tsv.to_s) do |bliss_data|
+      TmpFile.with_file(bliss_tsv_all.to_s) do |bliss_data_all|
 
         plot_script =<<-EOF
-          #blue_m = {R.ruby2R blue_m}
-          #blue_dm = {R.ruby2R blue_dm}
           blue_dose = #{R.ruby2R blue_dose}
-
-          #red_m = {R.ruby2R red_m}
-          #red_dm = {R.ruby2R red_dm}
           red_dose = #{R.ruby2R red_dose}
-
           response = #{R.ruby2R response}
 
           blue_data = rbbt.tsv(file='#{blue_data}')
           red_data = rbbt.tsv(file='#{red_data}')
           bliss_data = rbbt.tsv(file='#{bliss_data}')
-
-          #data.blue_me_points = data.frame(Dose={R.ruby2R [blue_dose_1, blue_dose_2]}, Response={R.ruby2R [blue_response_1, blue_response_2]})
-          #data.red_me_points = data.frame(Dose={R.ruby2R [red_dose_1, red_dose_2]}, Response={R.ruby2R [red_response_1, red_response_2]})
-
-          #blue.modelfile = {R.ruby2R blue_modelfile}
-          #red.modelfile = {R.ruby2R red_modelfile}
-          #least_squares = {lss ? "TRUE" : "FALSE"}
-
-          #blue.invert = {R.ruby2R blue_invert}
-          #red.invert = {R.ruby2R red_invert}
+          all_bliss_data = rbbt.tsv(file='#{bliss_data_all}')
 
           fix_ratio = #{R.ruby2R fix_ratio}
 
           more_doses = #{R.ruby2R more_doses.collect{|v| v.to_f}}
           more_responses = #{R.ruby2R more_responses.collect{|v| v.to_f}}
         
-          #blue.random.samples = {R.ruby2R(blue_random_samples.flatten)}
-          #red.random.samples = {R.ruby2R(red_random_samples.flatten)}
-
-          #blue.fit_dose = {R.ruby2R fit_dose_d1}
-          #red.fit_dose = {R.ruby2R fit_dose_d2}
-
-          #CI.plot_combination.bliss(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, response,
-          #  blue_data, red_data, data.blue_me_points, data.red_me_points, 
-          #  blue.modelfile = blue.modelfile, red.modelfile=red.modelfile, least_squares=least_squares, blue.invert=blue.invert, red.invert=red.invert, 
-          #  fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses, blue.random.samples = blue.random.samples, red.random.samples = red.random.samples, blue.fit_dose = blue.fit_dose, red.fit_dose = red.fit_dose)
-          
           CI.plot_combination.bliss(blue_dose, red_dose, response,
             blue_data, red_data, bliss_data,
-            fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses)
+            fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses, all_bliss_data=all_bliss_data)
         EOF
 
         R::SVG.ggplotSVG nil, plot_script, 5, 5, :R_method => :shell, :source => Rbbt.share.R["CI.R"].find, :debug => true
       end
+    end
     end
     end
   end

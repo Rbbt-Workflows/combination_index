@@ -40,8 +40,10 @@
             - task_info = workflow.task_info 'report'
             - inputs = Workflow.load_inputs(example_dir, task_info[:inputs] + [:invert], task_info[:input_types].merge(:inver => true))
             - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+            - new = {}
+            - inputs.each{|k,v| new[k] = TSV === v ? v.to_s : v }
             :javascript
-              example_inputs["#{ dataset }"] = #{inputs.to_json}
+              example_inputs["#{ dataset }"] = #{new.to_json}
 
             %li
               %a.load_example(href="#" task='report' name=dataset)= name
