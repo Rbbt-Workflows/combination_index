@@ -92,7 +92,12 @@ ci.combinations.controller = function(){
             if (info.bliss_excess){
               value = info.bliss_excess
               title = title + ' ' + "--" + ' Bliss excess = ' + value.toFixed(2)
-              caption = caption + " and bliss additive line (purple dashed).";
+              if (info.bliss_pvalue){
+                pvalue =  info.bliss_pvalue
+                if (pvalue < 0.00001) pvalue = 0.00001
+                title = title + '; P-value = ' + pvalue.toFixed(5)
+              }
+              caption = caption + " and bliss average additive line (purple dashed). Purple points are bliss scores for each pair of blue and red drug responses at those dosages.";
             }else{
               value = info.hsa_excess
               title = title + ' ' + "--" + ' HSA excess = ' + value.toFixed(2)

@@ -78,16 +78,29 @@ module CombinationIndex
     end
 
     relevant_responses = more_doses.zip(more_responses).select{|d,r| (d.to_f - blue_dose - red_dose).abs < 0.0001 }.collect{|d,r| r.to_f }
-    additive_reponses = additive_prediction_all[blue_dose + red_dose]
+    additive_responses = additive_prediction_all[blue_dose + red_dose]
 
-    pvalue = R.run(<<-EOF).read.split("\n").last.to_f
-relevant_responses = #{R.ruby2R relevant_responses}
-additive_reponses = #{R.ruby2R additive_reponses}
-p.value = t.test(relevant_responses, additive_reponses)$p.value
+    begin
+      if relevant_responses.length == 1
+        pvalue = R.run(<<-EOF).read.split("\n").last.to_f
+relevant_response = #{R.ruby2R relevant_responses.first}
+additive_responses = #{R.ruby2R additive_responses}
+p.value=2*pnorm(-abs(relevant_response - mean(additive_responses)), sd = sd(additive_responses))
 cat(p.value)
-    EOF
-
-    set_info :bliss_pvalue, pvalue
+EOF
+      else
+        pvalue = R.run(<<-EOF).read.split("\n").last.to_f
+relevant_responses = #{R.ruby2R relevant_responses}
+additive_responses = #{R.ruby2R additive_responses}
+p.value = t.test(relevant_responses, additive_responses)$p.value
+cat(p.value)
+        EOF
+      end
+      set_info :bliss_pvalue, pvalue
+    rescue
+      Log.exception $!
+      set_info :bliss_pvalue, nil
+    end
 
     #{{{ MAKE BLISS PLOT
     blue_tsv = TSV.setup({}, :key_field => "Measurement", :fields => ["Dose", "Response"], :type => :single)
