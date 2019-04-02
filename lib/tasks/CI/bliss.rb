@@ -81,24 +81,28 @@ module CombinationIndex
     additive_responses = additive_prediction_all[blue_dose + red_dose]
 
     begin
-      if relevant_responses.length == 1
-        pvalue = R.run(<<-EOF).read.split("\n").last.to_f
-relevant_response = #{R.ruby2R relevant_responses.first}
+      pvalue = R.run(<<-EOF).read.split("\n").last.to_f
+relevant_response = #{R.ruby2R response}
 additive_responses = #{R.ruby2R additive_responses}
 p.value=2*pnorm(-abs(relevant_response - mean(additive_responses)), sd = sd(additive_responses))
 cat(p.value)
-EOF
-      else
+      EOF
+      set_info :bliss_single_pvalue, pvalue
+    rescue
+      set_info :bliss_single_pvalue, nil
+    end
+
+    begin
+      if relevant_responses.length > 1
         pvalue = R.run(<<-EOF).read.split("\n").last.to_f
 relevant_responses = #{R.ruby2R relevant_responses}
 additive_responses = #{R.ruby2R additive_responses}
 p.value = t.test(relevant_responses, additive_responses)$p.value
 cat(p.value)
         EOF
+        set_info :bliss_pvalue, pvalue
       end
-      set_info :bliss_pvalue, pvalue
     rescue
-      Log.exception $!
       set_info :bliss_pvalue, nil
     end
 
@@ -223,16 +227,18 @@ cat(p.value)
 
     good_jobs
 
-    tsv = TSV.setup({}, :key_field => "Combination", :fields => ["Doses", "Response", "Bliss excess"], :type => :double)
+    tsv = TSV.setup({}, :key_field => "Combination", :fields => ["Doses", "Response", "Bliss excess", "Single P-value", "P-value"], :type => :double)
     TSV.traverse good_jobs, :type => :array, :into => tsv do |dep|
       blue_drug, red_drug = dep.clean_name.split(CombinationIndex::COMBINATION_SEP)
       blue_dose = dep.inputs[:blue_dose]
       red_dose = dep.inputs[:red_dose]
       response = dep.inputs[:response]
       bliss = dep.info[:bliss_excess]
+      spvalue = dep.info[:bliss_single_pvalue]
+      pvalue = dep.info[:bliss_pvalue]
       doses = [blue_dose, red_dose] * "-"
       combination = [blue_drug, red_drug] * "-"
-      [combination,[doses, response, bliss]]
+      [combination,[doses, response, bliss, spvalue, pvalue]]
     end
 
     set_info :jobs, good_jobs.collect{|dep| dep.path }
