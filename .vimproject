@@ -14,8 +14,8 @@ CombinationIndex=/$PWD filter="*.rb" {
    CI=CI{
     fit.rb
     ci.rb
-    bliss.rb
     zip.rb
+    bliss.rb
     hsa.rb
    }
 

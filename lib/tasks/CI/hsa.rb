@@ -8,12 +8,11 @@ module CombinationIndex
   input :red_dose, :float, "Blue combination dose"
   input :response, :float, "Combination response"
   input :fix_ratio, :boolean, "Fix combination ratio dose", false
-  input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
   input :more_doses, :array, "More combination dose"
   input :more_responses, :array, "More combination responses"
   input :response_type, :select, "Type of response: viability or effect", :viability, :select_options => [:viability, :effect]
   extension :svg
-  task :hsa => :text do |blue_doses,blue_responses,red_doses,red_responses,blue_dose,red_dose,response,fix_ratio,model_type,more_doses,more_responses, response_type|
+  task :hsa => :text do |blue_doses,blue_responses,red_doses,red_responses,blue_dose,red_dose,response,fix_ratio,more_doses,more_responses, response_type|
     #{{{ CALCULATE BLISS
     blue_doses = blue_doses.collect{|v| v.to_f}
     blue_responses = blue_responses.collect{|v| v.to_f}
@@ -147,9 +146,8 @@ module CombinationIndex
 
  
   input :file, :tsv, "Dose response file", nil, :stream => true
-  input :model_type, :select, "Model type for the DRC fit", "least_squares", :select_options => ["least_squares", "LL.2", "LL.3", "LL.4", "LL.5"]
   input :fix_ratio, :boolean, "Fix combination ratio dose", false
-  task :report_hsa => :tsv do |file,model_type,fix_ratio|
+  task :report_hsa => :tsv do |file,fix_ratio|
 
     file = TSV.open(file, :merge => true) unless TSV === file
     treatments = file.keys
@@ -183,7 +181,6 @@ module CombinationIndex
           :more_responses => more_responses,
           :response => response.to_f,
           :fix_ratio => fix_ratio,
-          :model_type => model_type
         }
 
         job = CombinationIndex.job(:hsa, [blue_drug, red_drug] * "-", job_inputs)
