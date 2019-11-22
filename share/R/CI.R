@@ -395,7 +395,7 @@ CI.plot_combination.bliss <- function(blue_dose, red_dose, response, blue_data, 
         scale_x_log10() + 
         annotation_logticks(side='b') +
         xlab("Dose") +
-        ylab("Response") +
+        ylab("Value") +
         geom_point(data=blue_data, col='blue',cex=3,alpha=alpha) +
         geom_point(data=red_data, col='red',cex=3,alpha=alpha) +
         geom_point(data=bliss_data, col='purple',cex=3,alpha=alpha) +
@@ -466,7 +466,7 @@ CI.plot_combination.hsa <- function(blue_dose, red_dose, response, blue_data, re
         scale_x_log10() + 
         annotation_logticks(side='b') +
         xlab("Dose") +
-        ylab("Response") +
+        ylab("Value") +
         geom_point(data=blue_data, col='blue',cex=3,alpha=0.8) +
         geom_point(data=red_data, col='red',cex=3,alpha=0.8) +
         geom_point(data=hsa_data, col='purple',cex=3,alpha=0.8) +
