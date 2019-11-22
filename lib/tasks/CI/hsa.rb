@@ -38,9 +38,9 @@ module CombinationIndex
     blue_doses.each do |bd|
       rd = red_doses.sort_by{|d| (bd.to_f - combination_ratio * d.to_f).abs}.first
       pa = if response_type.to_s == "viability"
-             CombinationIndex.predicted_hsa(blue_mean_dose_responses[bd], red_mean_dose_responses[rd])
-           else
              1 - CombinationIndex.predicted_hsa(1 - blue_mean_dose_responses[bd], 1 - red_mean_dose_responses[rd])
+           else
+             CombinationIndex.predicted_hsa(blue_mean_dose_responses[bd], red_mean_dose_responses[rd])
            end
       cd = bd + rd
       additive_predictions[cd] = pa
@@ -72,17 +72,6 @@ module CombinationIndex
       hsa_tsv[Misc.hash2md5(:values => [dose,response] * ":")] = [dose, response]
     end
 
-    #blue_m, blue_dm, blue_dose_1, blue_response_1, blue_dose_2, blue_response_2, blue_invert  = blue_step.info.values_at :m, :dm, :dose1, :response1, :dose2, :response2, :invert
-    #blue_modelfile = blue_step.file(:model)
-    #blue_modelfile = nil unless blue_modelfile.exists?
-
-    #red_m, red_dm, red_dose_1, red_response_1, red_dose_2, red_response_2, red_invert  = red_step.info.values_at :m, :dm, :dose1, :response1, :dose2, :response2, :invert
-    #red_modelfile = red_step.file(:model)
-    #red_modelfile = nil unless red_modelfile.exists?
-
-    #lss = true if model_type =~ /least_squares/
-
-
     log :CI_plot, "Drawing HSA plot"
     svg = TmpFile.with_file(nil, false) do |blue_data|
       Open.write(blue_data, blue_tsv.to_s)
@@ -93,12 +82,8 @@ module CombinationIndex
 
 
         plot_script =<<-EOF
-          #blue_m = {R.ruby2R blue_m}
-          #blue_dm = {R.ruby2R blue_dm}
           blue_dose = #{R.ruby2R blue_dose}
 
-          #red_m = {R.ruby2R red_m}
-          #red_dm = {R.ruby2R red_dm}
           red_dose = #{R.ruby2R red_dose}
 
           response = #{R.ruby2R response}
@@ -107,32 +92,11 @@ module CombinationIndex
           red_data = rbbt.tsv(file='#{red_data}')
           hsa_data = rbbt.tsv(file='#{hsa_data}')
 
-          #data.blue_me_points = data.frame(Dose={R.ruby2R [blue_dose_1, blue_dose_2]}, Response={R.ruby2R [blue_response_1, blue_response_2]})
-          #data.red_me_points = data.frame(Dose={R.ruby2R [red_dose_1, red_dose_2]}, Response={R.ruby2R [red_response_1, red_response_2]})
-
-          #blue.modelfile = {R.ruby2R blue_modelfile}
-          #red.modelfile = {R.ruby2R red_modelfile}
-          #least_squares = {lss ? "TRUE" : "FALSE"}
-
-          #blue.invert = {R.ruby2R blue_invert}
-          #red.invert = {R.ruby2R red_invert}
-
           fix_ratio = #{R.ruby2R fix_ratio}
 
           more_doses = #{R.ruby2R more_doses.collect{|v| v.to_f}}
           more_responses = #{R.ruby2R more_responses.collect{|v| v.to_f}}
         
-          #blue.random.samples = {R.ruby2R(blue_random_samples.flatten)}
-          #red.random.samples = {R.ruby2R(red_random_samples.flatten)}
-
-          #blue.fit_dose = {R.ruby2R fit_dose_d1}
-          #red.fit_dose = {R.ruby2R fit_dose_d2}
-
-          #CI.plot_combination.bliss(blue_m, blue_dm, blue_dose, red_m, red_dm, red_dose, response,
-          #  blue_data, red_data, data.blue_me_points, data.red_me_points, 
-          #  blue.modelfile = blue.modelfile, red.modelfile=red.modelfile, least_squares=least_squares, blue.invert=blue.invert, red.invert=red.invert, 
-          #  fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses, blue.random.samples = blue.random.samples, red.random.samples = red.random.samples, blue.fit_dose = blue.fit_dose, red.fit_dose = red.fit_dose)
-          
           CI.plot_combination.hsa(blue_dose, red_dose, response,
             blue_data, red_data, hsa_data,
             fix_ratio=fix_ratio, more_doses = more_doses, more_responses = more_responses)
