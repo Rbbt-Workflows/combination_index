@@ -271,7 +271,7 @@ module CombinationIndex
   end
 
   def self.predicted_hsa(response_d1, response_d2)
-    response_d1 < response_d2 ? response_d1 : response_d2
+    response_d1 > response_d2 ? response_d1 : response_d2
   end
 
   def self.combination_index(dose_d1_1, response_d1_1, dose_d1_2, response_d1_2, 
